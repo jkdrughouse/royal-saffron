@@ -6,49 +6,117 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { products } from "./lib/products";
 import { Leaf, Award, ShieldCheck } from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const featuredProducts = products.slice(0, 3);
+  
+  // Hero images array
+  const heroImages = [
+    {
+      src: "/hero-clean.png",
+      alt: "Royal Saffron Hero",
+      title: "The Gold of",
+      subtitle: "Spices",
+      description: "Discover the unmatched aroma and color of our premium Super Negin saffron. Hand-harvested for the purest culinary experience."
+    },
+    {
+      src: "/hero-saffron-premium.png",
+      alt: "Premium Kashmiri Saffron",
+      title: "PREMIUM",
+      subtitle: "KASHMIRI SAFFRON",
+      description: "The Gold of Spices. Experience the finest quality saffron from the valleys of Kashmir."
+    },
+    {
+      src: "/hero-shilajit.png",
+      alt: "Kashmir Shilajit",
+      title: "EXPERIENCE",
+      subtitle: "PURE VITALITY",
+      description: "100% Pure Kashmiri Shilajit. Sourced from the highest altitudes of the Himalayas."
+    }
+  ];
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Auto-rotate images every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
+    }, 10000); // 10 seconds
+
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
+  const currentHero = heroImages[currentImageIndex];
 
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
       <section className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/hero-clean.png"
-            className="w-full h-full object-cover brightness-[0.8]"
-            alt="Royal Saffron Hero"
-          />
+          {heroImages.map((hero, index) => (
+            <motion.img
+              key={index}
+              src={hero.src}
+              className="absolute inset-0 w-full h-full object-cover brightness-[0.8]"
+              alt={hero.alt}
+              initial={{ opacity: 0 }}
+              animate={{ 
+                opacity: index === currentImageIndex ? 1 : 0,
+                scale: index === currentImageIndex ? 1 : 1.05
+              }}
+              transition={{ duration: 1, ease: "easeInOut" }}
+            />
+          ))}
         </div>
-        <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <h1 className="font-serif text-6xl md:text-8xl mb-8 text-white leading-tight">
-              The Gold of <br />
-              <span className="italic font-light">Spices</span>
-            </h1>
-            <p className="text-xl text-white/90 mb-10 max-w-xl font-light leading-relaxed">
-              Discover the unmatched aroma and color of our premium Super Negin saffron. Hand-harvested for the purest culinary experience.
-            </p>
-            <div className="flex gap-4">
-              <Link href="/shop">
-                <Button size="lg" className="rounded-full px-8 py-6 text-lg bg-saffron-crimson hover:bg-estate-gold border-none text-pure-ivory font-medium shadow-lg hover:shadow-xl transition-all">
-                  Shop Collection
-                </Button>
-              </Link>
-              <Link href="#our-story">
-                <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg text-pure-ivory border-pure-ivory bg-transparent hover:bg-pure-ivory/10 font-medium">
-                  Our Story
-                </Button>
-              </Link>
-            </div>
-          </motion.div>
+        
+        {/* Navigation dots */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentImageIndex(index)}
+              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                index === currentImageIndex 
+                  ? "bg-pure-ivory w-8" 
+                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75"
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
+
+        {currentImageIndex === 0 && (
+          <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              key={currentImageIndex}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="max-w-3xl"
+            >
+              <h1 className="font-serif text-6xl md:text-8xl mb-8 text-white leading-tight">
+                {currentHero.title} <br />
+                <span className="italic font-light">{currentHero.subtitle}</span>
+              </h1>
+              <p className="text-xl text-white/90 mb-10 max-w-xl font-light leading-relaxed">
+                {currentHero.description}
+              </p>
+              <div className="flex gap-4">
+                <Link href="/shop">
+                  <Button size="lg" className="rounded-full px-8 py-6 text-lg bg-saffron-crimson hover:bg-estate-gold border-none text-pure-ivory font-medium shadow-lg hover:shadow-xl transition-all">
+                    Shop Collection
+                  </Button>
+                </Link>
+                <Link href="#our-story">
+                  <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg text-pure-ivory border-pure-ivory bg-transparent hover:bg-pure-ivory/10 font-medium">
+                    Our Story
+                  </Button>
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </section>
 
       {/* Trust Signals */}
@@ -120,22 +188,25 @@ export default function Home() {
       </section>
 
       {/* Legacy Section */}
-      <section id="our-story" className="py-32 bg-parchment-cream text-center border-b border-pure-ivory">
+      <section id="our-story" className="py-32 bg-saffron-crimson text-center">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-saffron-crimson mb-6 flex justify-center">
+          <div className="text-pure-ivory mb-6 flex justify-center">
             <Award size={40} strokeWidth={1} />
           </div>
-          <h2 className="font-serif text-5xl md:text-6xl mb-8 text-ink-charcoal">A Legacy of Purity</h2>
-          <p className="text-saffron-crimson text-lg leading-relaxed mb-12 font-sans">
+          <h2 className="font-serif text-5xl md:text-6xl mb-8 text-pure-ivory">A Legacy of Purity</h2>
+          <p className="text-pure-ivory/90 text-lg leading-relaxed mb-12 font-sans">
             Saffron is more than just a spice; it's a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
           </p>
           <Link href="/shop">
-            <Button variant="outline" size="lg" className="rounded-lg px-8 py-6 bg-pure-ivory text-saffron-crimson border-saffron-crimson hover:bg-saffron-crimson hover:text-pure-ivory transition-all uppercase tracking-wide text-sm font-medium">
+            <Button variant="outline" size="lg" className="rounded-lg px-8 py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-sm font-medium">
               Read Our Full Story
             </Button>
           </Link>
         </div>
       </section>
+
+      {/* White Space Section */}
+      <section className="py-16 bg-parchment-cream"></section>
     </div>
   );
 }
