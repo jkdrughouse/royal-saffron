@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Saffron | Purest Red Gold</title>
+
+    <!-- Google Fonts: Playfair Display for Luxury, Lato for Body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors/Fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        saffron: {
+                            light: '#fcd34d', // Amber 300
+                            gold: '#f59e0b',  // Amber 500
+                            base: '#b45309',  // Amber 700
+                            red: '#7f1d1d',   // Red 900
+                            dark: '#450a0a',  // Red 950
+                        },
+                        stone: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            800: '#292524',
+                            900: '#1c1917',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'pattern': "url('https://www.transparenttextures.com/patterns/cream-paper.png')",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Styles for nuances not covered by utilities */
+        body {
+            background-color: #fafaf9;
+            /* Stone 50 */
+            color: #292524;
+            /* Stone 800 */
+        }
+
+        .hero-gradient {
+            background: linear-gradient(rgba(28, 25, 23, 0.4), rgba(28, 25, 23, 0.6)), url('https://images.unsplash.com/photo-1598511726623-d237300438c6?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            /* Parallax effect */
+        }
+
+        .flower-icon {
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        /* Smooth fade-in animation for cards */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 transition-all duration-300"
+        id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i data-lucide="flower-2" class="h-8 w-8 text-saffron-red"></i>
+                    <span class="font-serif text-2xl font-bold text-stone-900 tracking-wide">Royal<span
+                            class="text-saffron-red">Saffron</span></span>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home"
+                        class="text-stone-600 hover:text-saffron-red transition-colors text-sm uppercase tracking-widest font-semibold">Home</a>
+                    <a href="#about"
+                        class="text-stone-600 hover:text-saffron-red transition-colors text-sm uppercase tracking-widest font-semibold">Our
+                        Harvest</a>
+                    <a href="#products"
+                        class="text-stone-600 hover:text-saffron-red transition-colors text-sm uppercase tracking-widest font-semibold">Shop</a>
+                    <a href="#benefits"
+                        class="text-stone-600 hover:text-saffron-red transition-colors text-sm uppercase tracking-widest font-semibold">Benefits</a>
+                    <a href="#contact"
+                        class="px-6 py-2 bg-saffron-red text-white rounded-none hover:bg-saffron-dark transition-colors font-serif italic text-lg shadow-lg">Contact
+                        Us</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-stone-600 hover:text-saffron-red focus:outline-none">
+                        <i data-lucide="menu" class="h-8 w-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-stone-50 border-t border-stone-200 absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-2 text-center">
+                <a href="#home"
+                    class="block px-3 py-2 text-stone-800 hover:text-saffron-red font-serif text-xl">Home</a>
+                <a href="#about" class="block px-3 py-2 text-stone-800 hover:text-saffron-red font-serif text-xl">Our
+                    Harvest</a>
+                <a href="#products"
+                    class="block px-3 py-2 text-stone-800 hover:text-saffron-red font-serif text-xl">Shop</a>
+                <a href="#contact" class="block px-3 py-2 text-saffron-red font-bold font-serif text-xl">Contact Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center hero-gradient text-white">
+        <div class="absolute inset-0 bg-black/30"></div> <!-- Overlay darken -->
+        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
+            <div class="mb-4 flex justify-center">
+                <span
+                    class="inline-block py-1 px-3 border border-saffron-gold text-saffron-gold text-xs tracking-[0.2em] uppercase bg-black/40 backdrop-blur-sm">Premium
+                    Grade A++</span>
+            </div>
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+                The Red Gold <br> <span class="text-saffron-light italic font-normal">of the Earth</span>
+            </h1>
+            <p class="text-lg md:text-xl text-stone-200 mb-10 font-light tracking-wide max-w-2xl mx-auto">
+                Hand-picked strands from the pristine fields. Experience the aroma, color, and purity of the world's
+                finest spice.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#products"
+                    class="px-8 py-4 bg-saffron-red hover:bg-saffron-dark text-white font-serif text-lg transition-all transform hover:scale-105 shadow-xl border border-transparent">
+                    View Collection
+                </a>
+                <a href="#about"
+                    class="px-8 py-4 bg-transparent hover:bg-white hover:text-stone-900 text-white border border-white font-serif text-lg transition-all">
+                    Our Story
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <a href="#about" class="text-white opacity-70 hover:opacity-100">
+                <i data-lucide="chevron-down" class="h-10 w-10"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About / Story Section -->
+    <section id="about" class="py-24 bg-stone-50 relative overflow-hidden">
+        <!-- Background decorative element -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-saffron-gold/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 bg-saffron-red/5 rounded-full blur-3xl"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="relative">
+                    <div class="absolute inset-0 bg-saffron-red transform translate-x-4 translate-y-4"></div>
+                    <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=2070&auto=format&fit=crop"
+                        alt="Saffron Flowers"
+                        class="relative z-10 w-full h-[500px] object-cover shadow-2xl grayscale hover:grayscale-0 transition-all duration-700">
+                </div>
+
+                <div class="space-y-6">
+                    <h4 class="text-saffron-red font-bold tracking-widest uppercase text-sm">Tradition & Purity</h4>
+                    <h2 class="font-serif text-4xl md:text-5xl text-stone-900 leading-tight">Harvested with Patience,
+                        <br><span class="italic text-saffron-base">Delivered with Pride.</span></h2>
+                    <p class="text-stone-600 text-lg leading-relaxed">
+                        Our saffron begins its journey in nutrient-rich soil, nurtured by the perfect climate. Each
+                        delicate stigma is hand-picked at dawn before the sun warms the petals, ensuring the essential
+                        oils and aroma are preserved at their peak.
+                    </p>
+                    <p class="text-stone-600 text-lg leading-relaxed">
+                        We believe in 100% traceability. From the farm to your kitchen, our "Red Gold" is untouched by
+                        additives, preservatives, or artificial colors.
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-stone-200">
+                        <div class="text-center">
+                            <h3 class="font-serif text-3xl text-saffron-red">100%</h3>
+                            <p class="text-xs text-stone-500 uppercase tracking-widest mt-1">Organic</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-serif text-3xl text-saffron-red">ISO</h3>
+                            <p class="text-xs text-stone-500 uppercase tracking-widest mt-1">Certified</p>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="font-serif text-3xl text-saffron-red">24h</h3>
+                            <p class="text-xs text-stone-500 uppercase tracking-widest mt-1">Processing</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <i data-lucide="gem" class="mx-auto h-10 w-10 text-saffron-gold mb-4"></i>
+                <h2 class="font-serif text-4xl md:text-5xl text-stone-900 mb-4">Our Premium Collection</h2>
+                <div class="w-24 h-1 bg-saffron-red mx-auto"></div>
+                <p class="mt-4 text-stone-600 max-w-2xl mx-auto">Choose from our selection of premium saffron grades,
+                    perfect for culinary masterpieces, teas, and gifts.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <!-- Product 1 -->
+                <div
+                    class="group relative bg-stone-50 border border-stone-100 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden mb-6 bg-white relative">
+                        <div class="absolute top-4 right-4 z-20">
+                            <span class="bg-saffron-red text-white text-xs px-2 py-1 uppercase tracking-widest">Best
+                                Seller</span>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1615485500704-8e99099928b3?q=80&w=2070&auto=format&fit=crop"
+                            alt="Premium Threads"
+                            class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-2xl text-stone-900 mb-2">Super Negin Threads</h3>
+                        <p class="text-stone-500 text-sm mb-4">Long, crimson threads with intense aroma.</p>
+                        <p class="text-saffron-red font-bold text-xl mb-6">$25.00 <span
+                                class="text-stone-400 text-sm font-normal">/ 1g</span></p>
+                        <button
+                            class="w-full py-3 border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-colors uppercase text-sm tracking-widest font-semibold">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div
+                    class="group relative bg-stone-50 border border-stone-100 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden mb-6 bg-white">
+                        <img src="https://plus.unsplash.com/premium_photo-1671379051866-932d88d2238c?q=80&w=1974&auto=format&fit=crop"
+                            alt="Saffron Powder"
+                            class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-2xl text-stone-900 mb-2">Pure Saffron Powder</h3>
+                        <p class="text-stone-500 text-sm mb-4">Finely ground for instant color release.</p>
+                        <p class="text-saffron-red font-bold text-xl mb-6">$30.00 <span
+                                class="text-stone-400 text-sm font-normal">/ 2g</span></p>
+                        <button
+                            class="w-full py-3 border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-colors uppercase text-sm tracking-widest font-semibold">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div
+                    class="group relative bg-stone-50 border border-stone-100 p-6 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden mb-6 bg-white">
+                        <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=1971&auto=format&fit=crop"
+                            alt="Gift Box"
+                            class="w-full h-64 object-cover object-center group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-2xl text-stone-900 mb-2">Royal Gift Box</h3>
+                        <p class="text-stone-500 text-sm mb-4">An elegant wooden box with 5g of Saffron.</p>
+                        <p class="text-saffron-red font-bold text-xl mb-6">$120.00</p>
+                        <button
+                            class="w-full py-3 border border-stone-900 text-stone-900 hover:bg-stone-900 hover:text-white transition-colors uppercase text-sm tracking-widest font-semibold">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us / Benefits -->
+    <section id="benefits" class="py-24 bg-stone-900 text-stone-100 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h4 class="text-saffron-gold font-bold tracking-widest uppercase text-sm mb-2">The Golden Spice</h4>
+                    <h2 class="font-serif text-4xl text-white mb-6">More Than Just a Spice</h2>
+                    <p class="text-stone-400 text-lg mb-8">
+                        For centuries, saffron has been revered not just for its unique flavor and color, but for its
+                        medicinal properties. Our saffron is packed with antioxidants.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 p-3 bg-stone-800 rounded-full">
+                                <i data-lucide="heart" class="text-saffron-red h-6 w-6"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-serif text-white">Heart Health</h3>
+                                <p class="text-stone-400">Rich in antioxidants like crocin that support cardiovascular
+                                    health.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 p-3 bg-stone-800 rounded-full">
+                                <i data-lucide="smile" class="text-saffron-gold h-6 w-6"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-serif text-white">Mood Enhancer</h3>
+                                <p class="text-stone-400">Traditionally used to lift spirits and reduce stress
+                                    naturally.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 p-3 bg-stone-800 rounded-full">
+                                <i data-lucide="utensils" class="text-white h-6 w-6"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-serif text-white">Culinary Excellence</h3>
+                                <p class="text-stone-400">Transform rice, paella, tea, and desserts into golden
+                                    masterpieces.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative">
+                    <!-- Decorative border -->
+                    <div
+                        class="absolute inset-0 border-2 border-saffron-gold transform rotate-3 translate-x-2 translate-y-2 opacity-50">
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1541544537156-21c2a0686c16?q=80&w=2069&auto=format&fit=crop"
+                        alt="Saffron Tea" class="w-full relative z-10 shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-24 bg-stone-50">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <i data-lucide="quote" class="h-12 w-12 text-saffron-red/20 mx-auto mb-6"></i>
+            <h2 class="font-serif text-3xl md:text-4xl italic text-stone-900 mb-8">
+                "The aroma filled my kitchen the moment I opened the jar. This is the only saffron I will use for my
+                restaurant's signature paella."
+            </h2>
+            <div class="flex items-center justify-center gap-4">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop"
+                    class="w-16 h-16 rounded-full object-cover border-2 border-saffron-gold" alt="Chef">
+                <div class="text-left">
+                    <p class="font-bold text-stone-900">Elena Rodriguez</p>
+                    <p class="text-saffron-red text-sm uppercase tracking-wide">Executive Chef, Madrid</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white border-t border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16">
+                <div>
+                    <h4 class="text-saffron-red font-bold tracking-widest uppercase text-sm mb-2">Get in Touch</h4>
+                    <h2 class="font-serif text-4xl text-stone-900 mb-6">Partner With Us</h2>
+                    <p class="text-stone-600 mb-8">
+                        Whether you are a chef looking for bulk supply or an individual seeking the finest spice for
+                        your home, we are here to help.
+                    </p>
+
+                    <div class="space-y-4 text-stone-600">
+                        <p class="flex items-center gap-3"><i data-lucide="map-pin" class="text-saffron-gold"></i> 123
+                            Spice Route, Pampore, Kashmir</p>
+                        <p class="flex items-center gap-3"><i data-lucide="phone" class="text-saffron-gold"></i> +1
+                            (555) 123-4567</p>
+                        <p class="flex items-center gap-3"><i data-lucide="mail" class="text-saffron-gold"></i>
+                            hello@royalsaffron.com</p>
+                    </div>
+
+                    <div class="mt-10">
+                        <h5 class="font-serif text-xl mb-4">Follow our journey</h5>
+                        <div class="flex gap-4">
+                            <a href="#"
+                                class="p-2 bg-stone-100 rounded-full hover:bg-saffron-red hover:text-white transition-colors"><i
+                                    data-lucide="instagram" class="w-5 h-5"></i></a>
+                            <a href="#"
+                                class="p-2 bg-stone-100 rounded-full hover:bg-saffron-red hover:text-white transition-colors"><i
+                                    data-lucide="facebook" class="w-5 h-5"></i></a>
+                            <a href="#"
+                                class="p-2 bg-stone-100 rounded-full hover:bg-saffron-red hover:text-white transition-colors"><i
+                                    data-lucide="twitter" class="w-5 h-5"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-stone-50 p-8 border border-stone-100 shadow-lg">
+                    <form class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Name</label>
+                            <input type="text"
+                                class="w-full bg-white border border-stone-300 px-4 py-3 focus:outline-none focus:border-saffron-red transition-colors"
+                                placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Email</label>
+                            <input type="email"
+                                class="w-full bg-white border border-stone-300 px-4 py-3 focus:outline-none focus:border-saffron-red transition-colors"
+                                placeholder="john@example.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-stone-700 mb-1">Message</label>
+                            <textarea rows="4"
+                                class="w-full bg-white border border-stone-300 px-4 py-3 focus:outline-none focus:border-saffron-red transition-colors"
+                                placeholder="I'm interested in wholesale pricing..."></textarea>
+                        </div>
+                        <button type="button"
+                            class="w-full bg-saffron-red text-white font-serif py-4 text-lg hover:bg-saffron-dark transition-colors shadow-md">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-400 py-12 border-t border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <i data-lucide="flower-2" class="h-6 w-6 text-saffron-red"></i>
+                <span class="font-serif text-xl font-bold text-stone-100">Royal<span
+                        class="text-saffron-red">Saffron</span></span>
+            </div>
+            <div class="text-sm">
+                &copy; 2024 Royal Saffron Business. All rights reserved.
+            </div>
+            <div class="flex gap-6 text-sm">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Navbar Transition on Scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.replace('py-4', 'py-0'); // Compact
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+
+</html>
