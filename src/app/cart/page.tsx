@@ -105,79 +105,81 @@ export default function Cart() {
 
     if (items.length === 0 && !isCheckingOut) {
         return (
-            <div className="container mx-auto px-4 py-24 text-center">
-                <h2 className="font-serif text-3xl mb-4">Your cart is empty</h2>
+            <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 text-center">
+                <h2 className="font-serif text-2xl sm:text-3xl mb-4 sm:mb-6">Your cart is empty</h2>
                 <Link href="/shop">
-                    <Button>Continue Shopping</Button>
+                    <Button className="w-full sm:w-auto">Continue Shopping</Button>
                 </Link>
             </div>
         );
     }
 
     return (
-        <div className="container mx-auto px-4 py-16 grid lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2 space-y-6">
-                <h1 className="font-serif text-4xl mb-8">Shopping Cart</h1>
+        <div className="container mx-auto px-4 py-8 sm:py-12 md:py-16 grid lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
+            <div className="lg:col-span-2 space-y-4 sm:space-y-6">
+                <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-8">Shopping Cart</h1>
                 {items.map((item) => (
-                    <Card key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex gap-6 p-6 items-center">
-                        <Link href={`/products/${item.id}`} className="h-24 w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 hover:opacity-80 transition-opacity">
+                    <Card key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
+                        <Link href={`/products/${item.id}`} className="h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 hover:opacity-80 transition-opacity self-center sm:self-auto">
                             <img src={item.image} className="h-full w-full object-contain mix-blend-multiply" alt={item.name} />
                         </Link>
-                        <div className="flex-1">
-                            <Link href={`/products/${item.id}`}>
-                                <h3 className="font-serif text-lg hover:text-saffron-crimson transition-colors">{item.name}</h3>
-                            </Link>
-                            <div className="flex gap-4 text-sm text-muted-foreground mt-1">
-                                {item.selectedVariant && (
-                                    <span>Size: {item.selectedVariant} {item.unit || 'g'}</span>
-                                )}
-                                <span>Price: ₹{item.price}</span>
-                            </div>
-                            {/* Quantity Controls */}
-                            <div className="flex items-center gap-3 mt-3">
-                                <span className="text-sm text-muted-foreground">Quantity:</span>
-                                <div className="flex items-center gap-2 border border-gray-200 rounded-lg">
-                                    <button
-                                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedVariant)}
-                                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                                    >
-                                        <Minus className="w-4 h-4" />
-                                    </button>
-                                    <span className="w-8 text-center font-medium">{item.quantity}</span>
-                                    <button
-                                        onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedVariant)}
-                                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
-                                    >
-                                        <Plus className="w-4 h-4" />
-                                    </button>
+                        <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">
+                            <div className="flex-1">
+                                <Link href={`/products/${item.id}`}>
+                                    <h3 className="font-serif text-base sm:text-lg hover:text-saffron-crimson transition-colors">{item.name}</h3>
+                                </Link>
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground mt-1">
+                                    {item.selectedVariant && (
+                                        <span>Size: {item.selectedVariant} {item.unit || 'g'}</span>
+                                    )}
+                                    <span>Price: ₹{item.price}</span>
+                                </div>
+                                {/* Quantity Controls */}
+                                <div className="flex items-center gap-3 mt-3">
+                                    <span className="text-xs sm:text-sm text-muted-foreground">Quantity:</span>
+                                    <div className="flex items-center gap-2 border border-gray-200 rounded-lg">
+                                        <button
+                                            onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedVariant)}
+                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                        >
+                                            <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                                        </button>
+                                        <span className="w-6 sm:w-8 text-center font-medium text-sm sm:text-base">{item.quantity}</span>
+                                        <button
+                                            onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedVariant)}
+                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                        >
+                                            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="text-right">
-                            <p className="font-mono font-medium mb-2">₹{(item.price * item.quantity).toFixed(2)}</p>
-                            <button
-                                onClick={() => removeItem(item.id, item.selectedVariant)}
-                                className="text-red-500 hover:text-red-600 flex items-center gap-1 text-sm ml-auto"
-                            >
-                                <Trash2 size={14} /> Remove
-                            </button>
+                            <div className="flex items-center justify-between sm:flex-col sm:items-end sm:justify-start gap-4">
+                                <p className="font-mono font-medium text-base sm:text-lg">₹{(item.price * item.quantity).toFixed(2)}</p>
+                                <button
+                                    onClick={() => removeItem(item.id, item.selectedVariant)}
+                                    className="text-red-500 hover:text-red-600 flex items-center gap-1 text-xs sm:text-sm"
+                                >
+                                    <Trash2 size={12} className="sm:w-3.5 sm:h-3.5" /> Remove
+                                </button>
+                            </div>
                         </div>
                     </Card>
                 ))}
             </div>
-            <div className="h-fit sticky top-24">
-                <Card className="p-6">
-                    <h3 className="font-serif text-2xl mb-6">Summary</h3>
-                    <div className="space-y-4 mb-6">
-                        <div className="flex justify-between text-muted-foreground">
+            <div className="h-fit lg:sticky lg:top-24">
+                <Card className="p-4 sm:p-6">
+                    <h3 className="font-serif text-xl sm:text-2xl mb-4 sm:mb-6">Summary</h3>
+                    <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
+                        <div className="flex justify-between text-sm sm:text-base text-muted-foreground">
                             <span>Subtotal</span>
                             <span>₹{cartTotal.toFixed(2)}</span>
                         </div>
-                        <div className="flex justify-between text-muted-foreground">
+                        <div className="flex justify-between text-sm sm:text-base text-muted-foreground">
                             <span>Shipping</span>
                             <span>{cartTotal >= 1000 ? "Free" : "₹50"}</span>
                         </div>
-                        <div className="border-t pt-4 flex justify-between text-lg font-medium">
+                        <div className="border-t pt-3 sm:pt-4 flex justify-between text-base sm:text-lg font-medium">
                             <span>Total</span>
                             <span>₹{(cartTotal + (cartTotal >= 1000 ? 0 : 50)).toFixed(2)}</span>
                         </div>

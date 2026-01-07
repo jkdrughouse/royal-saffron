@@ -52,14 +52,17 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[85vh] min-h-[600px] flex items-center overflow-hidden bg-black">
+      <section className="relative h-[60vh] sm:h-[70vh] md:h-[85vh] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden bg-black">
         <div className="absolute inset-0 z-0">
           {heroImages.map((hero, index) => (
             <motion.img
               key={index}
               src={hero.src}
-              className="absolute inset-0 w-full h-full object-cover brightness-[0.8]"
+              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.8]"
               alt={hero.alt}
+              style={{
+                objectPosition: 'center center'
+              }}
               initial={{ opacity: 0 }}
               animate={{ 
                 opacity: index === currentImageIndex ? 1 : 0,
@@ -71,15 +74,15 @@ export default function Home() {
         </div>
         
         {/* Navigation dots */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-3">
+        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
           {heroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
                 index === currentImageIndex 
-                  ? "bg-pure-ivory w-8" 
-                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75"
+                  ? "bg-pure-ivory w-6 sm:w-8" 
+                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75 w-1.5 sm:w-2"
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -95,21 +98,21 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               className="max-w-3xl"
             >
-              <h1 className="font-serif text-6xl md:text-8xl mb-8 text-white leading-tight">
+              <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-8xl mb-4 sm:mb-6 md:mb-8 text-white leading-tight">
                 {currentHero.title} <br />
                 <span className="italic font-light">{currentHero.subtitle}</span>
               </h1>
-              <p className="text-xl text-white/90 mb-10 max-w-xl font-light leading-relaxed">
+              <p className="text-sm sm:text-base md:text-xl text-white/90 mb-6 sm:mb-8 md:mb-10 max-w-xl font-light leading-relaxed">
                 {currentHero.description}
               </p>
-              <div className="flex gap-4">
-                <Link href="/shop">
-                  <Button size="lg" className="rounded-full px-8 py-6 text-lg bg-saffron-crimson hover:bg-estate-gold border-none text-pure-ivory font-medium shadow-lg hover:shadow-xl transition-all">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <Link href="/shop" className="w-full sm:w-auto">
+                  <Button size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg bg-saffron-crimson hover:bg-estate-gold border-none text-pure-ivory font-medium shadow-lg hover:shadow-xl transition-all">
                     Shop Collection
                   </Button>
                 </Link>
-                <Link href="#our-story">
-                  <Button variant="outline" size="lg" className="rounded-full px-8 py-6 text-lg text-pure-ivory border-pure-ivory bg-transparent hover:bg-pure-ivory/10 font-medium">
+                <Link href="#our-story" className="w-full sm:w-auto">
+                  <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg text-pure-ivory border-pure-ivory bg-transparent hover:bg-pure-ivory/10 font-medium">
                     Our Story
                   </Button>
                 </Link>
@@ -120,28 +123,28 @@ export default function Home() {
       </section>
 
       {/* Trust Signals */}
-      <section className="py-24 bg-parchment-cream">
+      <section className="py-12 sm:py-16 md:py-24 bg-parchment-cream">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-pure-ivory rounded-xl p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-20 h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Leaf size={40} strokeWidth={1.5} className="text-saffron-crimson" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-pure-ivory rounded-xl p-6 sm:p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Leaf size={32} strokeWidth={1.5} className="text-saffron-crimson sm:w-10 sm:h-10" />
               </div>
-              <h3 className="font-serif text-2xl text-ink-charcoal mb-3">100% Organic</h3>
+              <h3 className="font-serif text-xl sm:text-2xl text-ink-charcoal mb-2 sm:mb-3">100% Organic</h3>
               <p className="text-deep-taupe font-light text-sm leading-relaxed">Grown without pesticides, harvested by hand.</p>
             </div>
-            <div className="bg-pure-ivory rounded-xl p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-20 h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <Award size={40} strokeWidth={1.5} className="text-saffron-crimson" />
+            <div className="bg-pure-ivory rounded-xl p-6 sm:p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Award size={32} strokeWidth={1.5} className="text-saffron-crimson sm:w-10 sm:h-10" />
               </div>
-              <h3 className="font-serif text-2xl text-ink-charcoal mb-3">Premium Grade A+</h3>
+              <h3 className="font-serif text-xl sm:text-2xl text-ink-charcoal mb-2 sm:mb-3">Premium Grade A+</h3>
               <p className="text-deep-taupe font-light text-sm leading-relaxed">Certified Super Negin quality with max potency.</p>
             </div>
-            <div className="bg-pure-ivory rounded-xl p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-              <div className="w-20 h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
-                <ShieldCheck size={40} strokeWidth={1.5} className="text-saffron-crimson" />
+            <div className="bg-pure-ivory rounded-xl p-6 sm:p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
+                <ShieldCheck size={32} strokeWidth={1.5} className="text-saffron-crimson sm:w-10 sm:h-10" />
               </div>
-              <h3 className="font-serif text-2xl text-ink-charcoal mb-3">Lab Tested</h3>
+              <h3 className="font-serif text-xl sm:text-2xl text-ink-charcoal mb-2 sm:mb-3">Lab Tested</h3>
               <p className="text-deep-taupe font-light text-sm leading-relaxed">Verified for purity, color, and aroma strength.</p>
             </div>
           </div>
@@ -149,25 +152,25 @@ export default function Home() {
       </section>
 
       {/* Best Sellers */}
-      <section className="py-24 bg-parchment-cream">
+      <section className="py-12 sm:py-16 md:py-24 bg-parchment-cream">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
             <div>
-              <h2 className="font-serif text-4xl mb-4 text-ink-charcoal">Best Sellers</h2>
-              <p className="text-deep-taupe">Our most loved saffron products</p>
+              <h2 className="font-serif text-3xl sm:text-4xl mb-2 sm:mb-4 text-ink-charcoal">Best Sellers</h2>
+              <p className="text-deep-taupe text-sm sm:text-base">Our most loved saffron products</p>
             </div>
-            <Link href="/shop" className="text-saffron-crimson font-medium hover:text-estate-gold transition-colors flex items-center gap-2">
+            <Link href="/shop" className="text-saffron-crimson font-medium hover:text-estate-gold transition-colors flex items-center gap-2 text-sm sm:text-base">
               View all products →
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {featuredProducts.map((product) => (
               <Link key={product.id} href="/shop">
                 <div className="group cursor-pointer">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-pure-ivory mb-6 shadow-sm group-hover:shadow-md transition-all">
-                    <div className="absolute top-4 left-4 z-10">
-                      <span className="bg-pure-ivory/90 backdrop-blur px-3 py-1 text-xs font-bold tracking-widest uppercase rounded-full">Threads</span>
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-pure-ivory mb-4 sm:mb-6 shadow-sm group-hover:shadow-md transition-all">
+                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                      <span className="bg-pure-ivory/90 backdrop-blur px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full">Threads</span>
                     </div>
                     <img
                       src={product.image}
@@ -175,9 +178,9 @@ export default function Home() {
                       alt={product.name}
                     />
                   </div>
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-serif text-xl text-ink-charcoal group-hover:text-saffron-crimson transition-colors max-w-[70%] leading-tight">{product.name}</h3>
-                    <span className="font-mono text-lg font-medium text-ink-charcoal">₹{product.price}</span>
+                  <div className="flex justify-between items-start gap-2">
+                    <h3 className="font-serif text-lg sm:text-xl text-ink-charcoal group-hover:text-saffron-crimson transition-colors flex-1 leading-tight">{product.name}</h3>
+                    <span className="font-mono text-base sm:text-lg font-medium text-ink-charcoal whitespace-nowrap">₹{product.price}</span>
                   </div>
                   <p className="text-sm text-deep-taupe mt-2 line-clamp-2">{product.description}</p>
                 </div>
@@ -188,17 +191,17 @@ export default function Home() {
       </section>
 
       {/* Legacy Section */}
-      <section id="our-story" className="py-32 bg-saffron-crimson text-center">
+      <section id="our-story" className="py-16 sm:py-24 md:py-32 bg-saffron-crimson text-center">
         <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-pure-ivory mb-6 flex justify-center">
-            <Award size={40} strokeWidth={1} />
+          <div className="text-pure-ivory mb-4 sm:mb-6 flex justify-center">
+            <Award size={32} strokeWidth={1} className="sm:w-10 sm:h-10" />
           </div>
-          <h2 className="font-serif text-5xl md:text-6xl mb-8 text-pure-ivory">A Legacy of Purity</h2>
-          <p className="text-pure-ivory/90 text-lg leading-relaxed mb-12 font-sans">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 sm:mb-8 text-pure-ivory">A Legacy of Purity</h2>
+          <p className="text-pure-ivory/90 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 font-sans px-2">
             Saffron is more than just a spice; it's a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
           </p>
           <Link href="/shop">
-            <Button variant="outline" size="lg" className="rounded-lg px-8 py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-sm font-medium">
+            <Button variant="outline" size="lg" className="rounded-lg px-6 sm:px-8 py-4 sm:py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-xs sm:text-sm font-medium w-full sm:w-auto">
               Read Our Full Story
             </Button>
           </Link>
@@ -206,7 +209,7 @@ export default function Home() {
       </section>
 
       {/* White Space Section */}
-      <section className="py-16 bg-parchment-cream"></section>
+      <section className="py-8 sm:py-12 md:py-16 bg-parchment-cream"></section>
     </div>
   );
 }
