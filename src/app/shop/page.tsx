@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShoppingCart } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { products } from "../lib/products";
@@ -36,16 +37,25 @@ export default function Shop() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
                 {filteredProducts.map((product) => (
                     <Card key={product.id} className="flex flex-col h-full border-muted/20 shadow-sm hover:shadow-md transition-shadow">
-                        <div className="aspect-square p-4 sm:p-6 bg-muted/10 rounded-t-lg">
-                            <img src={product.image} className="w-full h-full object-contain mix-blend-multiply" alt={product.name} />
-                        </div>
-                        <CardContent className="flex-grow pt-4 sm:pt-6">
-                            <h3 className="font-serif text-lg sm:text-xl mb-2">{product.name}</h3>
-                            <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{product.description}</p>
-                        </CardContent>
+                        <Link href={`/product/${product.id}`} className="flex flex-col h-full">
+                            <div className="aspect-square p-4 sm:p-6 bg-muted/10 rounded-t-lg cursor-pointer">
+                                <img src={product.image} className="w-full h-full object-contain mix-blend-multiply" alt={product.name} />
+                            </div>
+                            <CardContent className="flex-grow pt-4 sm:pt-6">
+                                <h3 className="font-serif text-lg sm:text-xl mb-2 hover:text-primary transition-colors">{product.name}</h3>
+                                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">{product.description}</p>
+                            </CardContent>
+                        </Link>
                         <CardFooter className="flex justify-between items-center border-t p-4 sm:p-6 bg-muted/5">
                             <span className="font-mono text-base sm:text-lg font-medium">₹{product.price}</span>
-                            <Button onClick={() => addItem(product)} size="sm" className="gap-2 text-xs sm:text-sm">
+                            <Button 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    addItem(product);
+                                }} 
+                                size="sm" 
+                                className="gap-2 text-xs sm:text-sm"
+                            >
                                 <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" /> Add
                             </Button>
                         </CardFooter>
