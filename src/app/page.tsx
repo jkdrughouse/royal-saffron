@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { products } from "./lib/products";
 import { Leaf, Award, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
+import { LeadCaptureBanner } from "@/components/lead-capture-banner";
 
 export default function Home() {
   const featuredProducts = products.slice(0, 3);
@@ -52,16 +53,17 @@ export default function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[60vh] sm:h-[70vh] md:h-[85vh] min-h-[400px] sm:min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden bg-black">
+      <section className="relative h-[70vh] sm:h-[75vh] md:h-[85vh] min-h-[500px] sm:min-h-[550px] md:min-h-[600px] flex items-center overflow-hidden bg-white">
         <div className="absolute inset-0 z-0">
           {heroImages.map((hero, index) => (
             <motion.img
               key={index}
               src={hero.src}
-              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.8]"
+              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.85]"
               alt={hero.alt}
               style={{
-                objectPosition: 'center center'
+                objectPosition: 'center center',
+                objectFit: 'cover'
               }}
               initial={{ opacity: 0 }}
               animate={{ 
@@ -123,7 +125,7 @@ export default function Home() {
       </section>
 
       {/* Trust Signals */}
-      <section className="py-12 sm:py-16 md:py-24 bg-parchment-cream">
+      <section className="py-12 sm:py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="bg-pure-ivory rounded-xl p-6 sm:p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
@@ -152,7 +154,7 @@ export default function Home() {
       </section>
 
       {/* Best Sellers */}
-      <section className="py-12 sm:py-16 md:py-24 bg-parchment-cream">
+      <section className="py-12 sm:py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
             <div>
@@ -190,6 +192,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Lead Capture Banner */}
+      <LeadCaptureBanner />
+
       {/* Legacy Section */}
       <section id="our-story" className="py-16 sm:py-24 md:py-32 bg-saffron-crimson text-center">
         <div className="container mx-auto px-4 max-w-4xl">
@@ -209,7 +214,7 @@ export default function Home() {
       </section>
 
       {/* White Space Section */}
-      <section className="py-8 sm:py-12 md:py-16 bg-parchment-cream"></section>
+      <section className="py-8 sm:py-12 md:py-16 bg-white"></section>
     </div>
   );
 }

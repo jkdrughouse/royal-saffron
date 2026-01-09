@@ -16,9 +16,8 @@ const config: Config = {
         },
         extend: {
             fontFamily: {
-                sans: ["var(--font-montserrat)", "var(--font-inter)", "sans-serif"],
-                serif: ["var(--font-cormorant)", "var(--font-playfair)", "serif"],
-                bellefair: ["var(--font-bellefair)", "serif"],
+                sans: ["var(--font-sans)", "Montserrat", "sans-serif"],
+                serif: ["var(--font-serif)", "Cormorant Garamond", "serif"],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -54,14 +53,12 @@ const config: Config = {
                     DEFAULT: "hsl(var(--card))",
                     foreground: "hsl(var(--card-foreground))",
                 },
-                /* Brand Identity Colors */
+                /* Legacy brand colors for backward compatibility */
                 "saffron-crimson": "hsl(var(--saffron-crimson))",
                 "estate-gold": "hsl(var(--estate-gold))",
-                /* Background & Surface */
                 "parchment-cream": "hsl(var(--parchment-cream))",
                 "champagne-sand": "hsl(var(--champagne-sand))",
                 "pure-ivory": "hsl(var(--pure-ivory))",
-                /* Typography & UI */
                 "ink-charcoal": "hsl(var(--ink-charcoal))",
                 "deep-taupe": "hsl(var(--deep-taupe))",
                 "soft-silk-border": "hsl(var(--soft-silk-border))",

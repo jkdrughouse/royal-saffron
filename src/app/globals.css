@@ -4,41 +4,53 @@
 
 @layer base {
   :root {
-    /* 🎨 Brand Identity Colors */
-    --saffron-crimson: 12 85% 50%; /* #C03221 - Primary logo, main buttons, announcement bar */
-    --estate-gold: 40 60% 52%; /* #D4AF37 - Hover states, icons, premium badge borders */
+    /* Backgrounds */
+    --background: 40 20% 97%; /* Parchment Cream #F9F7F2 */
+    --foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
     
-    /* 🏛️ Background & Surface Palette */
-    --parchment-cream: 40 20% 97%; /* #F9F7F2 - Main page background */
-    --champagne-sand: 40 20% 92%; /* #EFEBE0 - Secondary sections, card backgrounds, footer */
-    --pure-ivory: 0 0% 100%; /* #FFFFFF - Product cards and active dropdown menus */
+    /* Cards & Popovers */
+    --card: 0 0% 100%; /* Pure Ivory #FFFFFF */
+    --card-foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
+    --popover: 0 0% 100%; /* Pure Ivory #FFFFFF */
+    --popover-foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
     
-    /* ✒️ Typography & UI Accents */
-    --ink-charcoal: 20 10% 20%; /* #2B2522 - Primary headings and main body text */
-    --deep-taupe: 20 5% 45%; /* #7B736E - Sub-headings, muted descriptions, product weight labels */
-    --soft-silk-border: 40 20% 90%; /* #E6E2D9 - Thin borders and separators */
+    /* Primary (Saffron Red) */
+    --primary: 12 85% 50%; /* Saffron Red #C03221 */
+    --primary-foreground: 40 20% 97%; /* Parchment Cream #F9F7F2 */
     
-    /* System colors mapped to design system */
-    --background: 40 20% 97%; /* parchment-cream */
-    --foreground: 20 10% 20%; /* ink-charcoal */
-    --card: 0 0% 100%; /* pure-ivory */
-    --card-foreground: 20 10% 20%; /* ink-charcoal */
-    --popover: 0 0% 100%; /* pure-ivory */
-    --popover-foreground: 20 10% 20%; /* ink-charcoal */
-    --primary: 12 85% 50%; /* saffron-crimson */
-    --primary-foreground: 0 0% 100%; /* pure-ivory */
-    --secondary: 40 20% 92%; /* champagne-sand */
-    --secondary-foreground: 20 10% 20%; /* ink-charcoal */
-    --muted: 40 20% 92%; /* champagne-sand */
-    --muted-foreground: 20 5% 45%; /* deep-taupe */
-    --accent: 40 60% 52%; /* estate-gold */
-    --accent-foreground: 20 10% 20%; /* ink-charcoal */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 40 20% 90%; /* soft-silk-border */
-    --input: 40 20% 90%; /* soft-silk-border */
-    --ring: 12 85% 50%; /* saffron-crimson */
-    --radius: 0.25rem;
+    /* Secondary (Champagne Gold) */
+    --secondary: 40 60% 90%; /* Champagne Gold #EFEBE0 */
+    --secondary-foreground: 12 85% 40%; /* Dark Saffron #993322 */
+    
+    /* Muted (Earth Tones) */
+    --muted: 40 20% 92%; /* Muted Earth #EFEBE0 */
+    --muted-foreground: 20 5% 45%; /* Clay Gray #7B736E */
+    
+    /* Accent (Soft Gold) */
+    --accent: 40 50% 94%; /* Soft Gold Accent #F5F2E8 */
+    --accent-foreground: 12 85% 50%; /* Saffron Red #C03221 */
+    
+    /* Destructive */
+    --destructive: 0 84% 60%; /* Destructive Red #E84040 */
+    --destructive-foreground: 0 0% 98%; /* Light Text #FAFAFA */
+    
+    /* Borders & Inputs */
+    --border: 40 20% 90%; /* Silk Border #E6E2D9 */
+    --input: 40 20% 90%; /* Input Border #E6E2D9 */
+    --ring: 12 85% 50%; /* Focus Ring (Saffron Red) #C03221 */
+    
+    /* Border Radius */
+    --radius: 0.5rem;
+    
+    /* Legacy brand colors for backward compatibility */
+    --saffron-crimson: 12 85% 50%; /* Saffron Red */
+    --estate-gold: 40 60% 90%; /* Champagne Gold */
+    --parchment-cream: 40 20% 97%; /* Parchment Cream */
+    --champagne-sand: 40 60% 90%; /* Champagne Gold */
+    --pure-ivory: 0 0% 100%; /* Pure Ivory */
+    --ink-charcoal: 20 10% 20%; /* Ink Charcoal */
+    --deep-taupe: 20 5% 45%; /* Clay Gray */
+    --soft-silk-border: 40 20% 90%; /* Silk Border */
   }
 }
 
@@ -48,7 +60,12 @@
   }
 
   body {
-    @apply bg-parchment-cream text-foreground;
+    @apply bg-background text-foreground;
     position: relative;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
   }
 }

@@ -1,11 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Menu, X, User, Package } from "lucide-react";
 
 export function MobileMenu() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  const fetchUser = async () => {
+    try {
+      const response = await fetch("/api/auth/me");
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+      }
+    } catch (error) {
+      // User not logged in
+    }
+  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -45,10 +64,52 @@ export function MobileMenu() {
               <Link
                 href="#our-story"
                 onClick={closeMenu}
-                className="px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase"
+                className="px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase border-b border-soft-silk-border"
               >
                 Our Story
               </Link>
+              <Link
+                href="/contact"
+                onClick={closeMenu}
+                className="px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase border-b border-soft-silk-border"
+              >
+                Contact
+              </Link>
+              {user ? (
+                <>
+                  <button
+                    onClick={() => {
+                      router.push("/account");
+                      closeMenu();
+                    }}
+                    className="w-full px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase border-b border-soft-silk-border flex items-center gap-2 text-left"
+                  >
+                    <User className="w-4 h-4" />
+                    My Account
+                  </button>
+                  <button
+                    onClick={() => {
+                      router.push("/orders");
+                      closeMenu();
+                    }}
+                    className="w-full px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase flex items-center gap-2 text-left"
+                  >
+                    <Package className="w-4 h-4" />
+                    My Orders
+                  </button>
+                </>
+              ) : (
+                <button
+                  onClick={() => {
+                    router.push("/login");
+                    closeMenu();
+                  }}
+                  className="w-full px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase flex items-center gap-2 text-left"
+                >
+                  <User className="w-4 h-4" />
+                  Login
+                </button>
+              )}
             </div>
           </nav>
         </>

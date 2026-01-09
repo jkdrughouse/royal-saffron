@@ -1,27 +1,106 @@
 "use client";
 
-import { Trash2, Plus, Minus, MessageCircle } from "lucide-react";
+import { Trash2, Plus, Minus, MessageCircle, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "../lib/cart-context";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { sendOrderViaWhatsApp } from "../lib/whatsapp";
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  phone: string;
+  shippingAddress?: {
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+  billingAddress?: {
+    name: string;
+    phone: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+  };
+}
 
 export default function Cart() {
+    const router = useRouter();
     const { items, removeItem, updateQuantity, cartTotal, clearCart } = useCart();
+    const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
     const [isCheckingOut, setIsCheckingOut] = useState(false);
-
     const [showCheckoutForm, setShowCheckoutForm] = useState(false);
+    
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         phone: "",
         address: "",
         city: "",
+        state: "",
         pincode: "",
     });
+    
+    const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
+    const [billingData, setBillingData] = useState({
+        name: "",
+        phone: "",
+        address: "",
+        city: "",
+        state: "",
+        pincode: "",
+    });
+    
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+    useEffect(() => {
+        fetchUser();
+    }, []);
+
+    const fetchUser = async () => {
+        try {
+            const response = await fetch("/api/auth/me");
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data.user);
+                
+                // Pre-fill form with user data if available
+                if (data.user.shippingAddress) {
+                    setFormData({
+                        name: data.user.shippingAddress.name,
+                        email: data.user.email,
+                        phone: data.user.shippingAddress.phone,
+                        address: data.user.shippingAddress.address,
+                        city: data.user.shippingAddress.city,
+                        state: data.user.shippingAddress.state,
+                        pincode: data.user.shippingAddress.pincode,
+                    });
+                } else if (data.user) {
+                    setFormData({
+                        name: data.user.name,
+                        email: data.user.email,
+                        phone: data.user.phone,
+                        address: "",
+                        city: "",
+                        state: "",
+                        pincode: "",
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const validateForm = () => {
         const errors: Record<string, string> = {};
@@ -32,13 +111,37 @@ export default function Cart() {
         else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) errors.phone = "Invalid phone number";
         if (!formData.address.trim()) errors.address = "Address is required";
         if (!formData.city.trim()) errors.city = "City is required";
+        if (!formData.state.trim()) errors.state = "State is required";
         if (!formData.pincode.trim()) errors.pincode = "Pincode is required";
         else if (!/^\d{6}$/.test(formData.pincode)) errors.pincode = "Invalid pincode";
+        
+        if (!billingSameAsShipping) {
+            if (!billingData.name.trim()) errors.billingName = "Billing name is required";
+            if (!billingData.phone.trim()) errors.billingPhone = "Billing phone is required";
+            if (!billingData.address.trim()) errors.billingAddress = "Billing address is required";
+            if (!billingData.city.trim()) errors.billingCity = "Billing city is required";
+            if (!billingData.state.trim()) errors.billingState = "Billing state is required";
+            if (!billingData.pincode.trim()) errors.billingPincode = "Billing pincode is required";
+        }
+        
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
+        // If user is not logged in, redirect to login
+        if (!user) {
+            router.push("/login?redirect=/cart");
+            return;
+        }
+
+        // If user has saved address, skip form
+        if (user.shippingAddress && !showCheckoutForm) {
+            await placeOrder(user.shippingAddress, user.billingAddress || user.shippingAddress);
+            return;
+        }
+
+        // Show form for new customers or if address needs update
         if (!showCheckoutForm) {
             setShowCheckoutForm(true);
             return;
@@ -48,33 +151,64 @@ export default function Cart() {
             return;
         }
 
+        const shippingAddress = {
+            name: formData.name,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            pincode: formData.pincode,
+        };
+
+        const billingAddress = billingSameAsShipping ? shippingAddress : {
+            name: billingData.name,
+            phone: billingData.phone,
+            address: billingData.address,
+            city: billingData.city,
+            state: billingData.state,
+            pincode: billingData.pincode,
+        };
+
+        await placeOrder(shippingAddress, billingAddress);
+    };
+
+    const placeOrder = async (shippingAddress: any, billingAddress: any) => {
         setIsCheckingOut(true);
-        
-        // Generate order ID
-        const orderId = `JK${Date.now()}`;
-        
-        // Send order via WhatsApp if phone number is provided
-        if (formData.phone) {
-            sendOrderViaWhatsApp({
-                customerPhone: formData.phone,
-                orderId: orderId,
-                items: items.map(item => ({
-                    name: item.name,
-                    quantity: item.quantity,
-                    price: item.price
-                })),
-                total: cartTotal + (cartTotal >= 1000 ? 0 : 50),
-                customerName: formData.name
+
+        try {
+            const orderItems = items.map(item => ({
+                productId: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity,
+                variant: item.selectedVariant,
+                unit: item.unit,
+            }));
+
+            const response = await fetch("/api/orders", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    items: orderItems,
+                    shippingAddress,
+                    billingAddress,
+                }),
             });
-        }
-        
-        setTimeout(() => {
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || "Failed to place order");
+            }
+
+            // Clear cart and redirect
             clearCart();
-            setShowCheckoutForm(false);
-            setFormData({ name: "", email: "", phone: "", address: "", city: "", pincode: "" });
-            alert("Order placed successfully! We'll contact you soon for payment confirmation.");
+            router.push(`/orders?order=${data.order.id}`);
+        } catch (error: any) {
+            alert(error.message || "Failed to place order. Please try again.");
+        } finally {
             setIsCheckingOut(false);
-        }, 2000);
+        }
     };
 
     const handleWhatsAppCheckout = () => {
@@ -103,6 +237,14 @@ export default function Cart() {
         window.open(whatsappUrl, '_blank');
     };
 
+    if (loading) {
+        return (
+            <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 text-center">
+                <p className="text-deep-taupe">Loading...</p>
+            </div>
+        );
+    }
+
     if (items.length === 0 && !isCheckingOut) {
         return (
             <div className="container mx-auto px-4 py-12 sm:py-16 md:py-24 text-center">
@@ -114,27 +256,31 @@ export default function Cart() {
         );
     }
 
+    const needsAddressForm = !user || !user.shippingAddress || showCheckoutForm;
+    const shipping = cartTotal >= 1000 ? 0 : 50;
+    const total = cartTotal + shipping;
+
     return (
         <div className="container mx-auto px-4 py-8 sm:py-12 md:py-16 grid lg:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
             <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-                <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl mb-6 sm:mb-8">Shopping Cart</h1>
+                <div className="flex items-center justify-between">
+                    <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl">Shopping Cart</h1>
+                </div>
+                
                 {items.map((item) => (
                     <Card key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
-                        <Link href={`/products/${item.id}`} className="h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 hover:opacity-80 transition-opacity self-center sm:self-auto">
+                        <div className="h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 hover:opacity-80 transition-opacity self-center sm:self-auto">
                             <img src={item.image} className="h-full w-full object-contain mix-blend-multiply" alt={item.name} />
-                        </Link>
+                        </div>
                         <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">
                             <div className="flex-1">
-                                <Link href={`/products/${item.id}`}>
-                                    <h3 className="font-serif text-base sm:text-lg hover:text-saffron-crimson transition-colors">{item.name}</h3>
-                                </Link>
+                                <h3 className="font-serif text-base sm:text-lg hover:text-saffron-crimson transition-colors">{item.name}</h3>
                                 <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground mt-1">
                                     {item.selectedVariant && (
                                         <span>Size: {item.selectedVariant} {item.unit || 'g'}</span>
                                     )}
                                     <span>Price: ₹{item.price}</span>
                                 </div>
-                                {/* Quantity Controls */}
                                 <div className="flex items-center gap-3 mt-3">
                                     <span className="text-xs sm:text-sm text-muted-foreground">Quantity:</span>
                                     <div className="flex items-center gap-2 border border-gray-200 rounded-lg">
@@ -167,6 +313,7 @@ export default function Cart() {
                     </Card>
                 ))}
             </div>
+            
             <div className="h-fit lg:sticky lg:top-24">
                 <Card className="p-4 sm:p-6">
                     <h3 className="font-serif text-xl sm:text-2xl mb-4 sm:mb-6">Summary</h3>
@@ -177,17 +324,35 @@ export default function Cart() {
                         </div>
                         <div className="flex justify-between text-sm sm:text-base text-muted-foreground">
                             <span>Shipping</span>
-                            <span>{cartTotal >= 1000 ? "Free" : "₹50"}</span>
+                            <span>{shipping === 0 ? "Free" : `₹${shipping}`}</span>
                         </div>
                         <div className="border-t pt-3 sm:pt-4 flex justify-between text-base sm:text-lg font-medium">
                             <span>Total</span>
-                            <span>₹{(cartTotal + (cartTotal >= 1000 ? 0 : 50)).toFixed(2)}</span>
+                            <span>₹{total.toFixed(2)}</span>
                         </div>
                     </div>
 
-                    {showCheckoutForm && (
+                    {needsAddressForm && showCheckoutForm && (
                         <div className="mb-6 space-y-4 border-t pt-6">
                             <h4 className="font-serif text-lg mb-4">Shipping Information</h4>
+                            
+                            {user && user.shippingAddress && (
+                                <div className="p-3 bg-muted/30 rounded-lg mb-4">
+                                    <p className="text-sm text-deep-taupe mb-2">Saved Address:</p>
+                                    <p className="text-sm text-ink-charcoal">
+                                        {user.shippingAddress.name}<br />
+                                        {user.shippingAddress.address}<br />
+                                        {user.shippingAddress.city}, {user.shippingAddress.state} - {user.shippingAddress.pincode}
+                                    </p>
+                                    <button
+                                        onClick={() => setShowCheckoutForm(false)}
+                                        className="text-xs text-saffron-crimson hover:text-estate-gold mt-2"
+                                    >
+                                        Use this address
+                                    </button>
+                                </div>
+                            )}
+
                             <div>
                                 <label className="block text-sm font-medium mb-1">Full Name *</label>
                                 <input
@@ -240,16 +405,101 @@ export default function Cart() {
                                     {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">Pincode *</label>
+                                    <label className="block text-sm font-medium mb-1">State *</label>
                                     <input
                                         type="text"
-                                        value={formData.pincode}
-                                        onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                                        className={`w-full px-3 py-2 border rounded-lg ${formErrors.pincode ? "border-red-500" : "border-gray-200"}`}
+                                        value={formData.state}
+                                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                                        className={`w-full px-3 py-2 border rounded-lg ${formErrors.state ? "border-red-500" : "border-gray-200"}`}
                                     />
-                                    {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
+                                    {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
                                 </div>
                             </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">Pincode *</label>
+                                <input
+                                    type="text"
+                                    value={formData.pincode}
+                                    onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                                    className={`w-full px-3 py-2 border rounded-lg ${formErrors.pincode ? "border-red-500" : "border-gray-200"}`}
+                                />
+                                {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
+                            </div>
+
+                            <div className="flex items-center gap-2 pt-2">
+                                <input
+                                    type="checkbox"
+                                    id="billingSame"
+                                    checked={billingSameAsShipping}
+                                    onChange={(e) => setBillingSameAsShipping(e.target.checked)}
+                                    className="w-4 h-4"
+                                />
+                                <label htmlFor="billingSame" className="text-sm text-ink-charcoal">
+                                    Billing address same as shipping
+                                </label>
+                            </div>
+
+                            {!billingSameAsShipping && (
+                                <div className="space-y-4 pt-4 border-t">
+                                    <h5 className="font-semibold text-sm">Billing Address</h5>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Name *</label>
+                                        <input
+                                            type="text"
+                                            value={billingData.name}
+                                            onChange={(e) => setBillingData({ ...billingData, name: e.target.value })}
+                                            className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingName ? "border-red-500" : "border-gray-200"}`}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Phone *</label>
+                                        <input
+                                            type="tel"
+                                            value={billingData.phone}
+                                            onChange={(e) => setBillingData({ ...billingData, phone: e.target.value })}
+                                            className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingPhone ? "border-red-500" : "border-gray-200"}`}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Address *</label>
+                                        <textarea
+                                            value={billingData.address}
+                                            onChange={(e) => setBillingData({ ...billingData, address: e.target.value })}
+                                            rows={2}
+                                            className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingAddress ? "border-red-500" : "border-gray-200"}`}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-medium mb-1">City *</label>
+                                            <input
+                                                type="text"
+                                                value={billingData.city}
+                                                onChange={(e) => setBillingData({ ...billingData, city: e.target.value })}
+                                                className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingCity ? "border-red-500" : "border-gray-200"}`}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium mb-1">State *</label>
+                                            <input
+                                                type="text"
+                                                value={billingData.state}
+                                                onChange={(e) => setBillingData({ ...billingData, state: e.target.value })}
+                                                className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingState ? "border-red-500" : "border-gray-200"}`}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium mb-1">Pincode *</label>
+                                        <input
+                                            type="text"
+                                            value={billingData.pincode}
+                                            onChange={(e) => setBillingData({ ...billingData, pincode: e.target.value })}
+                                            className={`w-full px-3 py-2 border rounded-lg ${formErrors.billingPincode ? "border-red-500" : "border-gray-200"}`}
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 

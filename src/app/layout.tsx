@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Cormorant_Garamond, Bellefair, Beau_Rivage } from "next/font/google";
+import { Montserrat, Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
 import { CartProvider } from "./lib/cart-context";
@@ -8,28 +8,19 @@ import { CartIcon } from "@/components/cart-icon";
 import { Footer } from "@/components/footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { MobileMenu } from "@/components/mobile-menu";
+import { UserAccount } from "@/components/user-account";
 
 const montserrat = Montserrat({ 
   subsets: ["latin"], 
-  variable: "--font-montserrat",
+  variable: "--font-sans",
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 const cormorant = Cormorant_Garamond({ 
   subsets: ["latin"], 
-  variable: "--font-cormorant",
+  variable: "--font-serif",
   weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
-const bellefair = Bellefair({
-  subsets: ["latin"],
-  variable: "--font-bellefair",
-  weight: ["400"],
-  display: "swap",
-});
-const beauRivage = Beau_Rivage({
-  subsets: ["latin"],
-  variable: "--font-beau-rivage",
-  weight: ["400"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -49,14 +40,14 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${montserrat.variable} ${cormorant.variable} ${bellefair.variable} font-sans bg-background text-foreground`}>
+      <body className={`${montserrat.variable} ${cormorant.variable} font-sans bg-background text-foreground`}>
         <CartProvider>
           {/* Top Announcement Bar */}
-          <div className="bg-saffron-crimson text-pure-ivory text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase">
+          <div className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase">
             Free shipping on all orders over ₹1000
           </div>
 
-          <header className="sticky top-0 z-50 w-full bg-pure-ivory/95 backdrop-blur-sm shadow-sm border-b border-soft-silk-border">
+          <header className="sticky top-0 z-50 w-full bg-card/95 backdrop-blur-sm shadow-sm border-b border-border">
             <div className="container flex h-16 sm:h-[68px] items-center justify-between px-4 sm:px-6 relative">
               <Link 
                 href="/" 
@@ -92,18 +83,21 @@ export default function RootLayout({
                     unoptimized
                   />
                 </div>
-                <span className="font-bellefair text-lg sm:text-2xl font-bold text-saffron-crimson tracking-tight hidden xs:inline">Jhelum Kesar Co.</span>
+                <span className="font-serif text-lg sm:text-2xl font-bold text-primary tracking-tight">Jhelum Kesar Co.</span>
               </Link>
 
               <nav className="hidden md:flex items-center gap-10 absolute left-1/2 transform -translate-x-1/2">
-                <Link href="/" className="text-xs font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson transition-colors uppercase">
+                <Link href="/" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
                   Home
                 </Link>
-                <Link href="/shop" className="text-xs font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson transition-colors uppercase">
+                <Link href="/shop" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
                   Shop
                 </Link>
-                <Link href="#our-story" className="text-xs font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson transition-colors uppercase">
+                <Link href="#our-story" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
                   Our Story
+                </Link>
+                <Link href="/contact" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
+                  Contact
                 </Link>
               </nav>
 
@@ -111,6 +105,7 @@ export default function RootLayout({
                 <div className="md:hidden">
                   <MobileMenu />
                 </div>
+                <UserAccount />
                 <div>
                   <CartIcon />
                 </div>
