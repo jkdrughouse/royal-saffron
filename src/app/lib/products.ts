@@ -27,6 +27,7 @@ export const products: Product[] = [
         image: '/products/choco-almond-rocks.png',
         category: 'Nuts',
         description: "Premium quality Choco Almond Rocks from Jehlum Kesar Co.",
+        detailedDescription: "Description Choco Almond Rocks Choco Almond Rocks are a delightful fusion of crunchy premium almonds and rich, velvety chocolate , crafted into irresistible bite-sized clusters. Each rock delivers the perfect balance of nutty crunch and smooth chocolate indulgence , making it a treat you’ll keep coming back to. Made using high-quality almonds and premium chocolate , these rocks are ideal for satisfying sweet cravings while enjoying the goodness of nuts. Why Choose Choco Almond Rocks? 🍫 Rich, premium chocolate coating 🌰 Crunchy roasted almonds inside 😋 Perfect balance of sweet & nutty ✨ Premium quality & indulgent taste 🎁 Ideal for gifting & celebrations Perfect For Everyday indulgence Festive gifting & hampers Dessert toppings & party treats Tea-time & special occasions Enjoy Choco Almond Rocks as a luxury snack or sweet treat —a little crunch, a lot of chocolate, and pure happiness in every bite.",
         weightMl: '500g',
     },
     {
@@ -37,6 +38,7 @@ export const products: Product[] = [
         image: '/products/dried-kiwi.png',
         category: 'Nuts',
         description: "Premium quality Dried Kiwi from Jehlum Kesar Co.",
+        detailedDescription: "Description Dried Kiwi Dried Kiwi is a deliciously tangy and naturally sweet dried fruit , carefully dehydrated to preserve the vibrant color, tropical flavor, and essential nutrients of fresh kiwi. Soft, chewy, and refreshing, it makes a perfect healthy snack for all ages. Rich in vitamin C, fiber, and antioxidants , dried kiwi supports immunity, digestion, and overall wellness while satisfying sweet cravings in a natural way. Why Choose Dried Kiwi? 🥝 Naturally dried for rich flavor 💚 High in Vitamin C & antioxidants 🌿 No artificial colors or preservatives 😋 Soft, chewy & refreshing taste ✨ Premium quality fruit slices Health Benefits Boosts immunity Supports digestive health Promotes healthy skin Natural energy booster Perfect for snacking, breakfast bowls, baking, desserts, trail mixes, and gifting , Dried Kiwi adds a refreshing twist of flavor and nutrition to your day.",
         weightMl: '500g',
     },
     {
@@ -47,6 +49,7 @@ export const products: Product[] = [
         image: '/products/cherry.png',
         category: 'Nuts',
         description: "Premium quality Cherry from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Dried Cherry is a naturally sun-dried premium fruit , made from handpicked cherries grown in the cool valleys of Kashmir. Carefully dried to preserve their deep red color, tangy-sweet flavor, and rich nutritional value , these cherries are a delicious and healthy treat. Free from artificial colors and preservatives, Kashmiri dried cherries retain their natural antioxidants, vitamins, and minerals , making them perfect for both snacking and culinary use. Why Choose Kashmiri Dried Cherry? 🍒 Authentic Kashmiri origin ☀️ Naturally sun-dried 😋 Perfect balance of sweet & tangy taste 🌿 No artificial colors or preservatives ✨ Premium quality & rich flavor Health Benefits Rich in antioxidants for immunity Supports heart & joint health Aids digestion Natural energy booster Ideal for healthy snacking, baking, desserts, salads, cereals, and gifting , Kashmiri Dried Cherry brings the pure taste of Kashmir to every bite.",
         weightMl: '500g',
     },
     {
@@ -57,6 +60,7 @@ export const products: Product[] = [
         image: '/products/macadamia-nuts-in-shell.png',
         category: 'Nuts',
         description: "Premium quality Macadamia Nuts In Shell from Jehlum Kesar Co.",
+        detailedDescription: "Description Macadamia Nuts In Shell (Premium Whole Nuts) Macadamia Nuts In Shell are luxury-grade whole nuts , naturally protected inside their hard shell to lock in freshness, flavor, and nutrition . Known for their rich, buttery taste and smooth crunch , macadamias are among the most premium and nutritious nuts in the world. Keeping them in shell helps preserve their natural oils and quality , ensuring you enjoy the nut at its freshest once cracked. Why Choose Macadamia Nuts In Shell? 🥜 Naturally protected for longer freshness 🧈 Rich, buttery flavor with premium texture 💪 High in healthy monounsaturated fats 🌿 No processing, no additives ✨ Premium quality whole nuts Health Benefits Supports heart health Boosts energy & metabolism Rich in antioxidants, minerals & good fats Helps maintain skin & hair health Ideal for healthy snacking, gourmet cooking, gifting, or roasting at home , Macadamia Nuts In Shell offer a pure, premium nut experience straight from nature.",
         weightMl: '400g',
     },
     {
@@ -67,6 +71,7 @@ export const products: Product[] = [
         image: '/products/beetroot-lip-butter.png',
         category: 'Beauty',
         description: "Premium quality Beetroot Lip Butter from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Beetroot Lip Butter Kashmiri Beetroot Lip Butter is a natural, nourishing lip care essential infused with the goodness of fresh Kashmiri beetroot extracts and rich plant-based butters . Specially crafted to moisturize and revive dry lips, it delivers a soft natural pink tint while keeping lips healthy, smooth, and supple. Packed with antioxidants and vitamins , beetroot helps enhance the natural lip color and protects against dullness, making this lip butter perfect for everyday use. Key Benefits 💋 Deeply moisturizes & repairs dry lips 🌸 Gives a natural rosy tint 🌿 Beetroot-infused for lip brightening 🛡️ Protects from dryness & chapping 🚫 Free from parabens, petroleum & harsh chemicals Natural Ingredients Kashmiri beetroot extract Shea butter / cocoa butter Natural oils (almond, coconut, or jojoba) Vitamin E Perfect for daily wear, overnight lip care, and all seasons , Kashmiri Beetroot Lip Butter adds a touch of natural color with deep nourishment—pure, gentle, and beautifully Kashmiri.",
         weightMl: '15ml',
     },
     {
@@ -77,6 +82,7 @@ export const products: Product[] = [
         image: '/products/rosemary-essential-oil.png',
         category: 'Beauty',
         description: "Premium quality Rosemary Essential Oil from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri rose essence typically refers to essential oil extracted from high-quality rose petals, especially varieties like Rosa damascena grown in Kashmir’s cool climate — known for its rich aroma and therapeutic qualities . Benefits of rose essential oil include: 🌸 Calming & stress relief — inhaling its scent is soothing. 🧘‍♀️ Aromatherapy & mood enhancement — adds warmth and relaxation to diffusers. 💆‍♀️ Skin benefits (when diluted) — can help soothe inflammation, promote hydration, and revitalize skin tone",
         weightMl: '15ml',
     },
     {
@@ -85,8 +91,9 @@ export const products: Product[] = [
         price: 350,
         originalPrice: 399,
         image: '/products/saffron-lip-butter.png',
-        category: 'Beauty',
+        category: 'Saffron',
         description: "Premium quality Saffron Lip Butter from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Saffron Lip Butter Kashmiri Saffron Lip Butter is a luxurious, natural lip care product made with premium Kashmiri saffron and nourishing botanical butters . This rich, creamy formula hydrates, softens, and protects your lips while delivering the antioxidant and soothing benefits of saffron . Crafted with gentle, skin-loving ingredients, it’s perfect for daily use to keep your lips smooth, supple, and naturally radiant — especially in dry or cold climates like Kashmir’s. Key Benefits 💋 Deep hydration & nourishment — keeps lips soft and healthy 🌿 Saffron-infused — helps brighten and rejuvenate 🛡️ Protects against dryness & cracking 🍯 Natural and gentle — free from harsh chemicals 🪄 Light, luxurious texture — non-sticky and smooth Typical Ingredients Kashmiri saffron (rich in antioxidants) Shea butter / cocoa butter (for deep moisture) Natural oils (like coconut, almond, jojoba) Vitamin E (for repair and protection) Use it as a daily lip balm, especially before sleep or outdoor activities , for irresistibly soft and healthy lips.",
         weightMl: '10g',
     },
     {
@@ -97,6 +104,7 @@ export const products: Product[] = [
         image: '/products/white-oud.png',
         category: 'Fragrance',
         description: "Premium quality White Oud from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmir White Oud (Premium Fragrance Essence) Kashmir White Oud is a rare and refined aromatic treasure , admired for its soft, clean, and slightly sweet woody fragrance . Lighter and more delicate than traditional dark oud, White Oud offers a smooth, calming scent that feels elegant, fresh, and luxurious. Sourced and prepared with great care, this premium oud is ideal for those who prefer a subtle yet long-lasting aroma . It is widely used in perfumery, incense burning, meditation, and spiritual rituals , creating an atmosphere of peace and sophistication. Why Choose Kashmir White Oud? 🤍 Soft, clean & elegant oud fragrance 🌿 Light woody notes with gentle sweetness 🕯️ Perfect for daily use, meditation & prayer 👑 Premium quality with lasting aroma 🚫 No synthetic fragrance or chemicals Perfect for personal fragrance, calm indoor ambiance, or thoughtful gifting , Kashmir White Oud reflects purity, grace, and timeless Kashmiri luxury.",
         weightMl: '7ml',
     },
     {
@@ -107,6 +115,7 @@ export const products: Product[] = [
         image: '/products/golden-oud.png',
         category: 'Fragrance',
         description: "Premium quality Golden Oud from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmir Golden Oud (Premium Fragrance Essence) Kashmir Golden Oud is a rare and luxurious aromatic treasure , known for its deep, warm, woody, and slightly sweet fragrance . Carefully sourced and refined, this premium oud captures the essence of timeless elegance and spiritual richness associated with Kashmir’s heritage. Highly prized in perfumery and traditional rituals, Golden Oud is cherished for its long-lasting aroma, calming effect, and royal character . Just a small amount releases a rich scent that lingers beautifully, making it a symbol of luxury and purity. Why Choose Kashmir Golden Oud? 🌟 Premium-grade, rich oud aroma 🌿 Deep woody, warm & elegant fragrance 🕯️ Ideal for incense, perfumery & meditation 👑 Luxurious & long-lasting scent 🚫 Free from synthetic additives Perfect for personal fragrance use, spiritual rituals, meditation, or gifting , Kashmir Golden Oud offers an experience of refined luxury and soulful calm—straight from the heart of Kashmir.",
         weightMl: '7ml',
     },
     {
@@ -117,6 +126,7 @@ export const products: Product[] = [
         image: '/products/acacia-honey.png',
         category: 'Honey',
         description: "Premium quality Acacia Honey from Jehlum Kesar Co.",
+        detailedDescription: "Description Acacia Honey Pure, light, and naturally refined — Acacia Honey is prized for its crystal-clear appearance, silky texture, and delicate floral sweetness. Sourced from the nectar of acacia blossoms, this premium honey is naturally slow to crystallize and loved for its clean, mild taste. Rich in natural antioxidants and gentle on digestion, acacia honey is an ideal everyday sweetener. Its subtle flavor makes it perfect for tea, warm water, desserts, salad dressings, and drizzling over fruits or yogurt without overpowering other ingredients. Why you’ll love it: 🌼 Light, mild & naturally sweet 🍯 Slow to crystallize, smooth texture 🌿 100% pure & naturally sourced ☕ Perfect for tea, desserts & daily use A simple, elegant honey — pure nature in every drop. 🍯✨",
         weightMl: '500ml',
     },
     {
@@ -127,6 +137,7 @@ export const products: Product[] = [
         image: '/products/gulkhand.webp',
         category: 'Kashmiri Special',
         description: "Premium quality Gulkhand from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Gulkhand (Rose Petal Preserve) Kashmiri Gulkhand is a traditional Ayurvedic delicacy made from handpicked Kashmiri rose petals , slowly preserved with natural sweeteners to retain their aroma, flavor, and therapeutic benefits. Prepared using age-old methods, this gulkhand is pure, chemical-free, and richly fragrant . Known for its cooling properties , Kashmiri Gulkhand helps balance body heat, supports digestion, boosts energy, and promotes overall wellness. Its naturally sweet taste and soft texture make it both delicious and medicinal . Why Choose Kashmiri Gulkhand? 🌹 Made from premium Kashmiri rose petals ❄️ Natural body coolant 🌿 Aids digestion & gut health 💖 Supports heart & skin health 🚫 No artificial colors, flavors, or preservatives Enjoy Kashmiri Gulkhand directly by the spoon, mixed with milk, added to desserts, or used in traditional drinks —a timeless taste of Kashmir’s natural purity.",
         weightMl: '500g',
     },
     {
@@ -134,8 +145,9 @@ export const products: Product[] = [
         name: 'Kashmiri Mamra Badam',
         price: 1000,
         image: '/products/kashmiri-mamra-badam.png',
-        category: 'Nuts',
+        category: 'Other',
         description: "Premium quality Kashmiri Mamra Badam from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Mamra Badam (Premium Almonds) Kashmiri Mamra Badam are naturally grown, premium almonds sourced from the pristine valleys of Kashmir. Unlike regular almonds, Mamra Badam are small, irregular in shape, and rich in natural oil , which makes them more nutritious and flavorful. These almonds are 100% natural, non-polished, and chemical-free , retaining their original taste and health benefits. Highly valued in Ayurveda, Mamra Badam are known for boosting brain health, immunity, energy, and overall vitality . Why Choose Kashmiri Mamra Badam? 🌰 Authentic Kashmiri origin 💪 High in healthy fats, protein & antioxidants 🧠 Supports brain & memory health 🌱 Naturally grown, no artificial processing ✨ Rich taste with crunchy texture Perfect for daily consumption, soaking overnight, or gifting , Kashmiri Mamra Badam are a true symbol of purity and wellness.",
         weightMl: '1kg',
         sku: 'CBM22',
         variants: [
@@ -149,7 +161,8 @@ export const products: Product[] = [
         price: 350,
         image: '/products/kashmiri-saffron.png',
         category: 'Saffron',
-        description: "The Red Gold of Kashmir. Indulge in the luxury of authentic Kashmiri Saffron. Unlike other varieties, Kashmiri Kesar is prized for having the highest levels of Crocin (color), Picrocrocin (flavor), and Safranal (aroma). Our saffron is hand-harvested in the autumn chill of the Kashmir Valley. We laboriously separate the deep red stigmas (Mongra) from the flower to ensure you get only the most potent part of the spice.",
+        description: "Premium quality Kashmiri Saffron from Jehlum Kesar Co.",
+        detailedDescription: "Description The Red Gold of Kashmir Indulge in the luxury of authentic Kashmiri Saffron. Unlike other varieties, Kashmiri Kesar is prized for having the highest levels of Crocin (color), Picrocrocin (flavor), and Safranal (aroma). Our saffron is hand-harvested in the autumn chill of the Kashmir Valley. We laboriously separate the deep red stigmas (Mongra) from the flower to ensure you get only the most potent part of the spice. Just a few strands are enough to transform your culinary creations or beauty rituals. Why Choose Our Saffron? Single Origin: Sourced directly from local growers in Pampore. Lab Tested: Certified for purity and Grade A quality. Zero Adulteration: No artificial colors, no moisture weight, no floral waste. 4. Key Features & Benefits Use this for bullet points: Distinctive Aroma: A sweet, floral scent that instantly fills the room. Potent Color: Deep maroon strands that release a rich golden-yellow hue when soaked. Health Powerhouse: Rich in antioxidants; known to boost immunity, aid digestion, and support skin health. Pregnancy Safe: Pure and natural, making it a trusted choice for expectant mothers (consult a doctor). Versatile Use: Ideal for Kashmiri Kahwa , Biryani , Kheer , or face masks for glowing skin.",
         sku: 'CBM21',
         variants: [
             { weight: 1, price: 350 },
@@ -169,6 +182,7 @@ export const products: Product[] = [
         image: '/products/mix-dry-fruits.png',
         category: 'Nuts',
         description: "Premium quality Mix Dry Fruits from Jehlum Kesar Co.",
+        detailedDescription: "Description Premium Mix Dry Fruits Our Mix Dry Fruits is a carefully curated blend of premium-quality nuts and dried fruits , sourced for their freshness, taste, and nutritional value. This wholesome mix typically includes almonds, cashews, walnuts, raisins, pistachios, and other select dry fruits , offering the perfect balance of crunch, sweetness, and energy. Naturally rich in proteins, healthy fats, fiber, vitamins, and antioxidants , this mix is ideal for boosting immunity, improving digestion, and maintaining daily energy levels. Why Choose Our Mix Dry Fruits? 🌰 Handpicked premium dry fruits 💪 High in nutrition & natural energy 🌱 No artificial colors or preservatives 🧼 Hygienically cleaned & packed 🎁 Perfect for daily snacking & gifting Enjoy it as a healthy snack, breakfast topping, festive treat, or gift hamper essential —a delicious way to stay healthy every day.",
         weightMl: '500g',
         sku: 'CBM23',
     },
@@ -180,6 +194,7 @@ export const products: Product[] = [
         image: '/products/rose-water.webp',
         category: 'Beauty',
         description: "Premium quality Rose Water from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Rose Water Refresh your senses with pure Kashmiri Rose Water , carefully distilled from fresh handpicked roses grown in the serene valleys of Kashmir. Prepared using traditional steam-distillation methods, this rose water retains its natural floral aroma, purity, and soothing properties —free from alcohol, chemicals, and artificial fragrances. Renowned for its cooling, calming, and hydrating benefits , Kashmiri rose water is ideal for skin care, culinary use, and daily wellness rituals . Whether used as a natural facial toner, mixed in drinks and desserts, or applied for relaxation, it delivers gentle freshness and authentic quality. 🌹 Why Choose Kashmiri Rose Water? 100% pure & naturally distilled Made from fresh Kashmiri roses Alcohol-free, chemical-free & preservative-free Soothes skin, refreshes mind & cools the body Suitable for skincare, food & traditional use Experience timeless purity— soft, fragrant, and naturally refreshing , straight from Kashmir.",
         weightMl: '200ml',
     },
     {
@@ -190,6 +205,7 @@ export const products: Product[] = [
         image: '/products/safroon-honey.png',
         category: 'Honey',
         description: "Premium quality Safroon Honey from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Saffron Honey Indulge in the royal richness of Kashmiri Saffron Honey , a rare blend of pure natural honey infused with authentic Kashmiri saffron (Kesar) . Crafted with care, this golden elixir combines the natural sweetness of raw honey with the delicate aroma, color, and wellness properties of hand-harvested saffron from Kashmir. Naturally rich in antioxidants and nutrients, Kashmiri saffron honey is known to boost immunity, improve digestion, enhance energy levels, and promote overall vitality . Its smooth texture and floral taste make it perfect for daily consumption, warm milk, herbal teas, desserts, or traditional remedies . 🍯 Why Choose Kashmiri Saffron Honey? Made with pure natural honey & authentic Kashmiri saffron No added sugar, chemicals, or preservatives Rich in antioxidants & immunity-boosting properties Enhances energy, digestion & overall wellness Ideal for daily use, gifting & traditional health routines Taste the luxury of Kashmir in every spoon— pure, aromatic, and naturally nourishing .",
         weightMl: '500g',
     },
     {
@@ -200,6 +216,7 @@ export const products: Product[] = [
         image: '/products/shahi-heeing.png',
         category: 'Kashmiri Special',
         description: "Premium quality Shahi Heeing from Jehlum Kesar Co.",
+        detailedDescription: "Description Rich, aromatic, and exceptionally potent — Shahi Heeng (Asafoetida) is a premium spice treasured for its strong flavor and powerful digestive benefits. Sourced and processed with care, this royal-grade heeng requires only a tiny pinch to transform everyday dishes with deep, authentic taste. Known for enhancing digestion and reducing bloating, Shahi Heeng is a staple in traditional Indian cooking. Its bold aroma mellows beautifully when cooked, adding depth to dals, curries, vegetables, and tempering without overpowering the dish. Why you’ll love it: 👑 Premium, high-potency quality 🌿 Pure & carefully processed 🍲 Enhances flavor with just a pinch 🌱 Supports digestion & gut health A little goes a long way — Shahi Heeng is the secret touch behind truly flavorful, wholesome meals. ✨🌿",
         weightMl: '300g',
     },
     {
@@ -210,6 +227,7 @@ export const products: Product[] = [
         image: '/products/shahi-kehwa.webp',
         category: 'Tea',
         description: "Premium quality Shahi Kehwa from Jehlum Kesar Co.",
+        detailedDescription: "Description Shahi Kehwa A royal blend rooted in Kashmiri tradition, Shahi Kehwa is an aromatic green tea infused with exotic spices and precious saffron. This timeless beverage is known for its warm, soothing flavor and luxurious fragrance that reflects the rich heritage of the valley. Carefully crafted with green tea leaves, cardamom, cinnamon, almonds, and saffron, Shahi Kehwa is light on the palate yet deeply comforting. Traditionally enjoyed during cold mornings and special gatherings, it aids digestion, refreshes the body, and gently energizes the mind. Why you’ll love it: 👑 Royal Kashmiri heritage blend 🌸 Infused with saffron & aromatic spices 🍃 Light, soothing & refreshing ☕ Perfect for mornings & after meals A cup of Shahi Kehwa is not just tea — it’s a warm taste of Kashmir’s royal hospitality. 🍵✨",
         weightMl: '250g',
         sku: 'N/A',
     },
@@ -221,6 +239,7 @@ export const products: Product[] = [
         image: '/products/shilajit.png',
         category: 'Kashmiri Special',
         description: "Premium quality Shilajit from Jehlum Kesar Co.",
+        detailedDescription: "Description Pure Kashmiri Mongra Saffron – The Crimson Gold of Pampore Unlock the Secret of Royal Kitchens Open the jar and let the aroma take over. There is saffron, and then there is Kashmiri Mongra Saffron . Harvested from the legendary fields of Pampore, this is the rarest and most potent variety of saffron in the world. Unlike common market varieties, our saffron is purely the deep red stigmas (Mongra), with absolutely no yellow floral waste or artificial dyes. Each strand is a labor of love, handpicked at dawn to preserve its natural oils and distinct flavor profile. The Sensory Experience: Sight: Deep, dark mahogany red strands that turn golden-yellow when steeped. Smell: A strong, exotic floral bouquet that hints of honey and hay. Taste: A complex, slightly bitter-sweet earthiness that elevates any dish. Why This is the World’s Best: Highest Potency: Rich in Crocin (color) and Safranal (aroma), far exceeding Iranian or Spanish varieties. 100% Pure: No additives, no oil, no moisture weight. Just pure, dry stigma. Health & Wellness: Perfect for pregnant women (consult your doctor), skincare routines, and boosting immunity. How to Enjoy: Steep 10-15 strands in warm water or milk for 20 minutes to release the “Golden Elixir.” Perfect for Biryani, Kheer, or a soothing cup of Kashmiri Kahwa. 2. Product: Himalayan Kashmiri Shilajit (Resin) Best for: Selling vitality, strength, and health. Title: Original Himalayan Shilajit Resin – 100% Purified & Sun-Dried Description: Reclaim Your Prime Energy Feeling drained? It’s time to tap into the ancient energy of the Himalayas. Our Kashmiri Shilajit is not a mass-produced powder; it is a raw, potent resin oozing with vitality. Sourced from the high-altitude rocks of Kashmir (16,000+ ft), this is nature’s ultimate multivitamin. We use the traditional Surya Tapi (sun-drying) method, a slow process that takes weeks but preserves the delicate bioactive compounds that heat-processing destroys. The result? A pure, tar-like resin packed with Fulvic Acid and over 84 trace minerals. What It Does for You: Infinite Energy: Combats chronic fatigue and naturally boosts mitochondrial energy. Peak Performance: Supports muscle recovery, stamina, and strength. Mental Clarity: Clears brain fog and improves focus. The Purity Test: Our resin dissolves completely in warm water without leaving any residue—the hallmark of authentic, unadulterated Shilajit. How to Use: Using the included spoon, take a pea-sized amount (approx. 300-500mg). Dissolve it in warm water, milk, or green tea. Drink every morning on an empty stomach to fuel your day.",
         weightMl: '300g',
     },
     {
@@ -231,6 +250,7 @@ export const products: Product[] = [
         image: '/products/walnut-oil.png',
         category: 'Nuts',
         description: "Premium quality Walnut Oil from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Walnut Oil Discover the purity of cold-pressed Kashmiri Walnut Oil , extracted from premium walnuts grown in the pristine valleys of Kashmir. Made using traditional cold-press methods, this oil retains its natural aroma, nutrients, and rich golden color , delivering unmatched quality and authenticity. Renowned for its high Omega-3 content and powerful antioxidants , Kashmiri walnut oil supports heart health, brain function, and overall wellness. Its light texture and nutty flavor make it ideal for daily consumption, salads, drizzling, and wellness use , while its nourishing properties are also perfect for skin and hair care . 🌰 Why Choose Kashmiri Walnut Oil? 100% pure & cold-pressed Made from premium Kashmiri walnuts Rich in Omega-3 & essential fatty acids No chemicals, additives, or preservatives Suitable for edible, therapeutic & cosmetic use Experience nature’s finest oil— pure, aromatic, and wholesome , straight from Kashmir’s orchards to your home.",
         weightMl: '500ml',
     },
     {
@@ -241,6 +261,7 @@ export const products: Product[] = [
         image: '/products/walnut-with-shells.png',
         category: 'Nuts',
         description: "Premium quality Walnut with Shells from Jehlum Kesar Co.",
+        detailedDescription: "Description Kashmiri Walnuts (Akhrot) Experience the pure richness of authentic Kashmiri Walnuts , handpicked from the pristine valleys of Kashmir. Naturally grown in the cool Himalayan climate, these walnuts are known for their light color, crisp texture, and superior taste compared to ordinary varieties. Our Kashmiri walnuts are 100% natural, non-GMO, and free from chemicals or preservatives , making them a perfect choice for daily nutrition. Carefully cleaned and packed to retain freshness, every kernel delivers a rich, nutty flavor and powerful health benefits. 🌰 Why Choose Kashmiri Walnuts? Premium quality, naturally grown in Kashmir Rich in Omega-3, antioxidants & essential nutrients Fresh, crunchy, and full-bodied taste Supports brain health, heart health & immunity Ideal for snacking, baking, cooking & gifting Add a handful of Kashmiri walnuts to your daily diet and enjoy nature’s gift of purity, taste, and wellness —straight from Kashmir to your home.",
         weightMl: '1000g',
     },
 ];

@@ -22,6 +22,9 @@ export default function ProductPage() {
         product?.variants && product.variants.length > 0 ? product.variants[0] : null
     );
     
+    // State for active tab
+    const [activeTab, setActiveTab] = useState<'description' | 'additional' | 'reviews'>('description');
+    
     if (!product) {
         return (
             <div className="container mx-auto px-4 py-16 text-center">
@@ -136,13 +139,6 @@ export default function ProductPage() {
                         </div>
                     )}
                     
-                    <div className="mb-6 sm:mb-8">
-                        <h2 className="font-serif text-xl sm:text-2xl mb-3 sm:mb-4">Description</h2>
-                        <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
-                            {product.detailedDescription || product.description}
-                        </p>
-                    </div>
-                    
                     <div className="mt-auto pt-6 border-t">
                         <Button 
                             onClick={handleAddToCart}
@@ -153,6 +149,147 @@ export default function ProductPage() {
                             Add to Cart
                         </Button>
                     </div>
+                </div>
+            </div>
+            
+            {/* Product Tabs */}
+            <div className="mt-12 sm:mt-16">
+                <div className="border-b border-muted">
+                    <nav className="flex gap-4 sm:gap-8 -mb-px">
+                        <button
+                            onClick={() => setActiveTab('description')}
+                            className={`pb-4 px-2 sm:px-4 font-medium text-sm sm:text-base transition-colors border-b-2 ${
+                                activeTab === 'description'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
+                            Description
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('additional')}
+                            className={`pb-4 px-2 sm:px-4 font-medium text-sm sm:text-base transition-colors border-b-2 ${
+                                activeTab === 'additional'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
+                            Additional Information
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('reviews')}
+                            className={`pb-4 px-2 sm:px-4 font-medium text-sm sm:text-base transition-colors border-b-2 ${
+                                activeTab === 'reviews'
+                                    ? 'border-primary text-primary'
+                                    : 'border-transparent text-muted-foreground hover:text-foreground'
+                            }`}
+                        >
+                            Reviews (0)
+                        </button>
+                    </nav>
+                </div>
+                
+                <div className="mt-6 sm:mt-8">
+                    {activeTab === 'description' && (
+                        <div className="prose prose-sm sm:prose-base max-w-none">
+                            <div className="text-muted-foreground leading-relaxed">
+                                {product.detailedDescription ? (
+                                    <div className="space-y-4">
+                                        {product.detailedDescription
+                                            .replace(/Description\s+/g, '') // Remove "Description" prefix
+                                            .split(/(?=[A-Z][a-z]+:)/) // Split on headings like "Why Choose"
+                                            .map((section, sectionIdx) => {
+                                                if (!section.trim()) return null;
+                                                
+                                                // Check if it's a heading (ends with ? or : and is short)
+                                                if (section.match(/^[A-Z][^.!?]*[?:]$/)) {
+                                                    return (
+                                                        <div key={sectionIdx} className="mt-6 mb-4">
+                                                            <h3 className="font-serif text-xl sm:text-2xl font-bold text-foreground mb-4">
+                                                                {section.replace(/[?:]$/, '')}
+                                                            </h3>
+                                                        </div>
+                                                    );
+                                                }
+                                                
+                                                // Split into paragraphs
+                                                const paragraphs = section.split(/(?=\n|$)/).filter(p => p.trim());
+                                                return (
+                                                    <div key={sectionIdx} className="space-y-3">
+                                                        {paragraphs.map((paragraph, pIdx) => {
+                                                            const trimmed = paragraph.trim();
+                                                            if (!trimmed) return null;
+                                                            
+                                                            // Check for bullet points (emoji or •)
+                                                            if (trimmed.match(/^[🌼🍯🌿☕💋🌸🛡️🚫🥝💚😋✨🍒☀️🥜🧈💪🌰🧠🌱🌹🍫🎁🧼•]/)) {
+                                                                const cleanText = trimmed.replace(/^[🌼🍯🌿☕💋🌸🛡️🚫🥝💚😋✨🍒☀️🥜🧈💪🌰🧠🌱🌹🍫🎁🧼•]\s*/, '');
+                                                                return (
+                                                                    <p key={pIdx} className="flex items-start gap-2">
+                                                                        <span className="text-primary mt-1">•</span>
+                                                                        <span>{cleanText}</span>
+                                                                    </p>
+                                                                );
+                                                            }
+                                                            
+                                                            // Regular paragraph
+                                                            return <p key={pIdx} className="mb-3">{trimmed}</p>;
+                                                        })}
+                                                    </div>
+                                                );
+                                            })}
+                                    </div>
+                                ) : (
+                                    <p>{product.description}</p>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                    
+                    {activeTab === 'additional' && (
+                        <div className="space-y-4">
+                            <table className="w-full border-collapse">
+                                <tbody className="divide-y divide-muted">
+                                    {product.weightMl && (
+                                        <tr>
+                                            <th className="text-left py-3 px-4 font-semibold text-foreground border-r border-muted w-1/3">
+                                                Weight
+                                            </th>
+                                            <td className="py-3 px-4 text-muted-foreground">
+                                                {product.weightMl}
+                                            </td>
+                                        </tr>
+                                    )}
+                                    {product.sku && (
+                                        <tr>
+                                            <th className="text-left py-3 px-4 font-semibold text-foreground border-r border-muted w-1/3">
+                                                SKU
+                                            </th>
+                                            <td className="py-3 px-4 text-muted-foreground">
+                                                {product.sku}
+                                            </td>
+                                        </tr>
+                                    )}
+                                    <tr>
+                                        <th className="text-left py-3 px-4 font-semibold text-foreground border-r border-muted w-1/3">
+                                            Category
+                                        </th>
+                                        <td className="py-3 px-4 text-muted-foreground">
+                                            {product.category}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                    
+                    {activeTab === 'reviews' && (
+                        <div className="text-center py-12">
+                            <p className="text-muted-foreground mb-4">There are no reviews yet.</p>
+                            <p className="text-sm text-muted-foreground">
+                                Be the first to review "{product.name}"
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
             
