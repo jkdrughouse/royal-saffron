@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
 
 export default function ContactPage() {
-  const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "919876543210";
+  const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247";
   const whatsappUrl = `https://wa.me/${whatsappPhone.replace(/\D/g, "")}?text=${encodeURIComponent("Hello! I'd like to know more about Jhelum Kesar Co. products.")}`;
 
   return (

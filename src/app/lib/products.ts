@@ -13,6 +13,8 @@ export type Product = {
     category: string;
     description: string;
     detailedDescription?: string;
+    weightMl?: string; // weight or volume (e.g., '500g', '250ml')
+    sku?: string;
     variants?: ProductVariant[]; // weight-based variants with prices
 };
 
@@ -25,6 +27,7 @@ export const products: Product[] = [
         image: '/products/choco-almond-rocks.png',
         category: 'Nuts',
         description: "Premium quality Choco Almond Rocks from Jehlum Kesar Co.",
+        weightMl: '500g',
     },
     {
         id: 'dried-kiwi',
@@ -34,6 +37,7 @@ export const products: Product[] = [
         image: '/products/dried-kiwi.png',
         category: 'Nuts',
         description: "Premium quality Dried Kiwi from Jehlum Kesar Co.",
+        weightMl: '500g',
     },
     {
         id: 'cherry',
@@ -43,6 +47,7 @@ export const products: Product[] = [
         image: '/products/cherry.png',
         category: 'Nuts',
         description: "Premium quality Cherry from Jehlum Kesar Co.",
+        weightMl: '500g',
     },
     {
         id: 'macadamia-nuts-in-shell',
@@ -52,6 +57,7 @@ export const products: Product[] = [
         image: '/products/macadamia-nuts-in-shell.png',
         category: 'Nuts',
         description: "Premium quality Macadamia Nuts In Shell from Jehlum Kesar Co.",
+        weightMl: '400g',
     },
     {
         id: 'beetroot-lip-butter',
@@ -61,6 +67,7 @@ export const products: Product[] = [
         image: '/products/beetroot-lip-butter.png',
         category: 'Beauty',
         description: "Premium quality Beetroot Lip Butter from Jehlum Kesar Co.",
+        weightMl: '15ml',
     },
     {
         id: 'rosemary-essential-oil',
@@ -70,6 +77,7 @@ export const products: Product[] = [
         image: '/products/rosemary-essential-oil.png',
         category: 'Beauty',
         description: "Premium quality Rosemary Essential Oil from Jehlum Kesar Co.",
+        weightMl: '15ml',
     },
     {
         id: 'saffron-lip-butter',
@@ -79,6 +87,7 @@ export const products: Product[] = [
         image: '/products/saffron-lip-butter.png',
         category: 'Beauty',
         description: "Premium quality Saffron Lip Butter from Jehlum Kesar Co.",
+        weightMl: '10g',
     },
     {
         id: 'white-oud',
@@ -88,6 +97,7 @@ export const products: Product[] = [
         image: '/products/white-oud.png',
         category: 'Fragrance',
         description: "Premium quality White Oud from Jehlum Kesar Co.",
+        weightMl: '7ml',
     },
     {
         id: 'golden-oud',
@@ -97,6 +107,7 @@ export const products: Product[] = [
         image: '/products/golden-oud.png',
         category: 'Fragrance',
         description: "Premium quality Golden Oud from Jehlum Kesar Co.",
+        weightMl: '7ml',
     },
     {
         id: 'acacia-honey',
@@ -106,6 +117,7 @@ export const products: Product[] = [
         image: '/products/acacia-honey.png',
         category: 'Honey',
         description: "Premium quality Acacia Honey from Jehlum Kesar Co.",
+        weightMl: '500ml',
     },
     {
         id: 'gulkhand',
@@ -115,6 +127,7 @@ export const products: Product[] = [
         image: '/products/gulkhand.webp',
         category: 'Kashmiri Special',
         description: "Premium quality Gulkhand from Jehlum Kesar Co.",
+        weightMl: '500g',
     },
     {
         id: 'kashmiri-mamra-badam',
@@ -123,6 +136,8 @@ export const products: Product[] = [
         image: '/products/kashmiri-mamra-badam.png',
         category: 'Nuts',
         description: "Premium quality Kashmiri Mamra Badam from Jehlum Kesar Co.",
+        weightMl: '1kg',
+        sku: 'CBM22',
         variants: [
             { weight: 250, price: 1000 },
             { weight: 500, price: 2000 },
@@ -135,6 +150,7 @@ export const products: Product[] = [
         image: '/products/kashmiri-saffron.png',
         category: 'Saffron',
         description: "The Red Gold of Kashmir. Indulge in the luxury of authentic Kashmiri Saffron. Unlike other varieties, Kashmiri Kesar is prized for having the highest levels of Crocin (color), Picrocrocin (flavor), and Safranal (aroma). Our saffron is hand-harvested in the autumn chill of the Kashmir Valley. We laboriously separate the deep red stigmas (Mongra) from the flower to ensure you get only the most potent part of the spice.",
+        sku: 'CBM21',
         variants: [
             { weight: 1, price: 350 },
             { weight: 2, price: 700 },
@@ -153,6 +169,8 @@ export const products: Product[] = [
         image: '/products/mix-dry-fruits.png',
         category: 'Nuts',
         description: "Premium quality Mix Dry Fruits from Jehlum Kesar Co.",
+        weightMl: '500g',
+        sku: 'CBM23',
     },
     {
         id: 'rose-water',
@@ -162,6 +180,7 @@ export const products: Product[] = [
         image: '/products/rose-water.webp',
         category: 'Beauty',
         description: "Premium quality Rose Water from Jehlum Kesar Co.",
+        weightMl: '200ml',
     },
     {
         id: 'safroon-honey',
@@ -171,6 +190,7 @@ export const products: Product[] = [
         image: '/products/safroon-honey.png',
         category: 'Honey',
         description: "Premium quality Safroon Honey from Jehlum Kesar Co.",
+        weightMl: '500g',
     },
     {
         id: 'shahi-heeing',
@@ -180,6 +200,7 @@ export const products: Product[] = [
         image: '/products/shahi-heeing.png',
         category: 'Kashmiri Special',
         description: "Premium quality Shahi Heeing from Jehlum Kesar Co.",
+        weightMl: '300g',
     },
     {
         id: 'shahi-kehwa',
@@ -189,6 +210,8 @@ export const products: Product[] = [
         image: '/products/shahi-kehwa.webp',
         category: 'Tea',
         description: "Premium quality Shahi Kehwa from Jehlum Kesar Co.",
+        weightMl: '250g',
+        sku: 'N/A',
     },
     {
         id: 'shilajit',
@@ -198,6 +221,7 @@ export const products: Product[] = [
         image: '/products/shilajit.png',
         category: 'Kashmiri Special',
         description: "Premium quality Shilajit from Jehlum Kesar Co.",
+        weightMl: '300g',
     },
     {
         id: 'walnut-oil',
@@ -207,6 +231,7 @@ export const products: Product[] = [
         image: '/products/walnut-oil.png',
         category: 'Nuts',
         description: "Premium quality Walnut Oil from Jehlum Kesar Co.",
+        weightMl: '500ml',
     },
     {
         id: 'walnut-with-shells',
@@ -216,5 +241,6 @@ export const products: Product[] = [
         image: '/products/walnut-with-shells.png',
         category: 'Nuts',
         description: "Premium quality Walnut with Shells from Jehlum Kesar Co.",
+        weightMl: '1000g',
     },
 ];

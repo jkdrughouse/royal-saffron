@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     await DB.saveLeads(leads);
 
     // Send WhatsApp notification
-    const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "919876543210";
+    const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247";
     const message = `🎯 New Lead - Jhelum Kesar Co.\n\n` +
       `Name: ${lead.name}\n` +
       `Email: ${lead.email}\n` +

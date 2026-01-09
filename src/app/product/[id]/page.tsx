@@ -117,6 +117,25 @@ export default function ProductPage() {
                         </div>
                     )}
                     
+                    {(product.weightMl || product.sku) && (
+                        <div className="mb-6 sm:mb-8 p-4 bg-muted/10 rounded-lg">
+                            <div className="grid grid-cols-2 gap-4">
+                                {product.weightMl && (
+                                    <div>
+                                        <span className="text-sm text-muted-foreground">Weight/Volume</span>
+                                        <p className="font-medium">{product.weightMl}</p>
+                                    </div>
+                                )}
+                                {product.sku && (
+                                    <div>
+                                        <span className="text-sm text-muted-foreground">SKU</span>
+                                        <p className="font-medium">{product.sku}</p>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                    
                     <div className="mb-6 sm:mb-8">
                         <h2 className="font-serif text-xl sm:text-2xl mb-3 sm:mb-4">Description</h2>
                         <p className="text-muted-foreground leading-relaxed whitespace-pre-line">

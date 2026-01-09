@@ -93,6 +93,9 @@ export default function RootLayout({
                 <Link href="/shop" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
                   Shop
                 </Link>
+                <Link href="/categories" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
+                  Categories
+                </Link>
                 <Link href="#our-story" className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase">
                   Our Story
                 </Link>
@@ -116,7 +119,7 @@ export default function RootLayout({
           <Footer />
           {/* WhatsApp Floating Button - Add your phone number here */}
           <WhatsAppButton 
-            phoneNumber={process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "919876543210"} 
+            phoneNumber={process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247"} 
             message="Hello! I'm interested in Jhelum Kesar Co. products."
           />
         </CartProvider>

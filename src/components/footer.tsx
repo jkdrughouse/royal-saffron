@@ -116,7 +116,7 @@ export function Footer() {
                                 <Twitter className="w-5 h-5" />
                             </a>
                             <a
-                                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\D/g, '') || '919876543210'}?text=${encodeURIComponent("Hello! I'm interested in Jhelum Kesar Co. products.")}`}
+                                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\D/g, '') || '917889852247'}?text=${encodeURIComponent("Hello! I'm interested in Jhelum Kesar Co. products.")}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-secondary-foreground hover:text-[#25D366] transition-colors"

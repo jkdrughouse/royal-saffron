@@ -215,7 +215,7 @@ export default function Cart() {
         if (items.length === 0) return;
         
         const orderId = `JK${Date.now()}`;
-        const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "919876543210";
+        const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247";
         
         let message = `🎉 New Order - Jhelum Kesar Co.\n\n`;
         message += `Order ID: ${orderId}\n\n`;

@@ -62,6 +62,13 @@ export function MobileMenu() {
                 Shop
               </Link>
               <Link
+                href="/categories"
+                onClick={closeMenu}
+                className="px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase border-b border-soft-silk-border"
+              >
+                Categories
+              </Link>
+              <Link
                 href="#our-story"
                 onClick={closeMenu}
                 className="px-6 py-4 text-sm font-bold tracking-widest text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors uppercase border-b border-soft-silk-border"
