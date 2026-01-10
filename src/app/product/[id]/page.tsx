@@ -1,18 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { products, ProductVariant } from "@/app/lib/products";
 import { useCart } from "@/app/lib/cart-context";
+import { useWishlist } from "@/app/lib/wishlist-context";
+import { ProductReviews } from "@/components/product-reviews";
+import { Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function ProductPage() {
     const params = useParams();
     const { addItem } = useCart();
+    const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
     
     const productId = params.id as string;
     const product = products.find(p => p.id === productId);
@@ -24,6 +28,30 @@ export default function ProductPage() {
     
     // State for active tab
     const [activeTab, setActiveTab] = useState<'description' | 'additional' | 'reviews'>('description');
+    
+    // State for current user and review count
+    const [currentUserId, setCurrentUserId] = useState<string | undefined>();
+    const [reviewCount, setReviewCount] = useState(0);
+    
+    useEffect(() => {
+        // Fetch current user
+        fetch('/api/auth/me')
+            .then(res => res.json())
+            .then(data => {
+                if (data.user) {
+                    setCurrentUserId(data.user.id);
+                }
+            })
+            .catch(() => {});
+        
+        // Fetch review count
+        fetch(`/api/reviews?productId=${productId}`)
+            .then(res => res.json())
+            .then(data => {
+                setReviewCount(data.totalReviews || 0);
+            })
+            .catch(() => {});
+    }, [productId]);
     
     if (!product) {
         return (
@@ -139,14 +167,29 @@ export default function ProductPage() {
                         </div>
                     )}
                     
-                    <div className="mt-auto pt-6 border-t">
+                    <div className="mt-auto pt-6 border-t flex gap-3">
                         <Button 
                             onClick={handleAddToCart}
                             size="lg"
-                            className="w-full sm:w-auto gap-2 text-base sm:text-lg px-8 py-6"
+                            className="flex-1 sm:flex-none gap-2 text-base sm:text-lg px-8 py-6"
                         >
                             <ShoppingCart className="w-5 h-5" />
                             Add to Cart
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                if (isInWishlist(product.id)) {
+                                    removeFromWishlist(product.id);
+                                } else {
+                                    addToWishlist(product);
+                                }
+                            }}
+                            variant="outline"
+                            size="lg"
+                            className="px-6 py-6"
+                            aria-label={isInWishlist(product.id) ? "Remove from wishlist" : "Add to wishlist"}
+                        >
+                            <Heart className={`w-5 h-5 ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : ''}`} />
                         </Button>
                     </div>
                 </div>
@@ -184,7 +227,7 @@ export default function ProductPage() {
                                     : 'border-transparent text-muted-foreground hover:text-foreground'
                             }`}
                         >
-                            Reviews (0)
+                            Reviews ({reviewCount})
                         </button>
                     </nav>
                 </div>
@@ -283,12 +326,7 @@ export default function ProductPage() {
                     )}
                     
                     {activeTab === 'reviews' && (
-                        <div className="text-center py-12">
-                            <p className="text-muted-foreground mb-4">There are no reviews yet.</p>
-                            <p className="text-sm text-muted-foreground">
-                                Be the first to review "{product.name}"
-                            </p>
-                        </div>
+                        <ProductReviews productId={productId} currentUserId={currentUserId} />
                     )}
                 </div>
             </div>

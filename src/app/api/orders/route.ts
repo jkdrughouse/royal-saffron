@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { getCurrentUser } from '@/app/lib/auth';
+import { sendEmail, getOrderConfirmationEmailHTML } from '@/app/lib/email';
 
 export interface OrderItem {
   productId: string;
@@ -95,6 +96,19 @@ export async function POST(request: NextRequest) {
     const orders: Order[] = await DB.orders();
     orders.push(order);
     await DB.saveOrders(orders);
+
+    // Send order confirmation email
+    try {
+      const userEmail = user.email;
+      await sendEmail({
+        to: userEmail,
+        subject: `Order Confirmation #${order.id} - Royal Saffron`,
+        html: getOrderConfirmationEmailHTML(order),
+      });
+    } catch (emailError) {
+      // Don't fail the order if email fails
+      console.error('Failed to send order confirmation email:', emailError);
+    }
 
     return NextResponse.json(
       { message: 'Order created successfully', order },

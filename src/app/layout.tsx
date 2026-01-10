@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 import { Montserrat, Cormorant_Garamond } from "next/font/google";
 import Image from "next/image";
+import Script from "next/script";
 import "./globals.css";
 import { CartProvider } from "./lib/cart-context";
+import { WishlistProvider } from "./lib/wishlist-context";
 import Link from "next/link";
 import { CartIcon } from "@/components/cart-icon";
 import { Footer } from "@/components/footer";
 import { WhatsAppButton } from "@/components/whatsapp-button";
 import { MobileMenu } from "@/components/mobile-menu";
 import { UserAccount } from "@/components/user-account";
+import { WishlistIcon } from "@/components/wishlist-icon";
+import { Analytics } from "@/components/analytics";
 
 const montserrat = Montserrat({ 
   subsets: ["latin"], 
@@ -38,10 +42,29 @@ export default function RootLayout({
   // Top bar: Orange #FF4F1B (approx)
   // Text: White
 
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
   return (
     <html lang="en">
+      {gaId && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${gaId}');
+            `}
+          </Script>
+        </>
+      )}
       <body className={`${montserrat.variable} ${cormorant.variable} font-sans bg-background text-foreground`}>
         <CartProvider>
+          <WishlistProvider>
           {/* Top Announcement Bar */}
           <div className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase">
             Free shipping on all orders over ₹1000
@@ -108,6 +131,7 @@ export default function RootLayout({
                 <div className="md:hidden">
                   <MobileMenu />
                 </div>
+                <WishlistIcon />
                 <UserAccount />
                 <div>
                   <CartIcon />
@@ -122,6 +146,8 @@ export default function RootLayout({
             phoneNumber={process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247"} 
             message="Hello! I'm interested in Jhelum Kesar Co. products."
           />
+          <Analytics />
+        </WishlistProvider>
         </CartProvider>
       </body>
     </html>

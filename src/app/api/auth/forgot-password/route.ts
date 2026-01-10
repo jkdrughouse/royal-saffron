@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { generateOTP, storeOTP, getOTP } from '@/app/lib/otp';
+import { sendEmail, getOTPEmailHTML } from '@/app/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,19 +36,24 @@ export async function POST(request: NextRequest) {
     const otp = generateOTP();
     storeOTP(email.toLowerCase(), otp);
 
-    // In production, send OTP via email/SMS service
-    // For now, we'll return it in development (remove in production!)
+    // Send OTP via email
+    const emailSent = await sendEmail({
+      to: email,
+      subject: 'Password Reset OTP - Royal Saffron',
+      html: getOTPEmailHTML(otp, user.name),
+    });
+
+    // In development, also log/return OTP if email fails
     const isDevelopment = process.env.NODE_ENV !== 'production';
     
-    // TODO: Integrate with email service (SendGrid, AWS SES, etc.)
-    // await sendOTPEmail(email, otp);
-    
-    console.log(`[DEV] OTP for ${email}: ${otp}`); // Remove in production
+    if (!emailSent && isDevelopment) {
+      console.log(`[DEV] OTP for ${email}: ${otp}`);
+    }
 
     return NextResponse.json({
       message: 'If an account exists with this email, an OTP has been sent.',
-      // Only return OTP in development
-      ...(isDevelopment && { otp, email: email.toLowerCase() }),
+      // Only return OTP in development if email wasn't sent
+      ...(isDevelopment && !emailSent && { otp, email: email.toLowerCase() }),
     });
   } catch (error) {
     console.error('Forgot password error:', error);

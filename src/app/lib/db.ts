@@ -41,7 +41,9 @@ export const DB = {
   users: async () => readDataFile<any[]>('users.json', []),
   orders: async () => readDataFile<any[]>('orders.json', []),
   leads: async () => readDataFile<any[]>('leads.json', []),
+  reviews: async () => readDataFile<any[]>('reviews.json', []),
   saveUsers: (data: any[]) => writeDataFile('users.json', data),
   saveOrders: (data: any[]) => writeDataFile('orders.json', data),
   saveLeads: (data: any[]) => writeDataFile('leads.json', data),
+  saveReviews: (data: any[]) => writeDataFile('reviews.json', data),
 };
