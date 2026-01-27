@@ -133,9 +133,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
               <div className="lg:hidden">
                 <MobileMenu />
               </div>
-              <div className="hidden lg:block">
-                <WishlistIcon />
-              </div>
+              <WishlistIcon />
               <div className="hidden lg:block">
                 <UserAccount />
               </div>
