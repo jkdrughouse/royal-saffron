@@ -38,7 +38,7 @@ export function StickyAddToCart({
 
     return (
         <div
-            className={`fixed bottom-0 left-0 right-0 z-40 lg:hidden transform transition-transform duration-300 ${isVisible ? "translate-y-0" : "translate-y-full"
+            className={`fixed bottom-16 left-0 right-0 z-45 lg:bottom-0 lg:z-40 transform transition-transform duration-300 ${isVisible ? "translate-y-0" : "translate-y-full"
                 }`}
         >
             <div className="bg-white border-t shadow-2xl">
