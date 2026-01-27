@@ -130,12 +130,16 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
             </nav>
 
             <div className="flex items-center gap-4">
-              <div className="md:hidden">
+              <div className="lg:hidden">
                 <MobileMenu />
               </div>
-              <WishlistIcon />
-              <UserAccount />
-              <div>
+              <div className="hidden lg:block">
+                <WishlistIcon />
+              </div>
+              <div className="hidden lg:block">
+                <UserAccount />
+              </div>
+              <div className="hidden lg:block">
                 <CartIcon />
               </div>
             </div>
