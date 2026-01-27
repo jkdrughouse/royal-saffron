@@ -7,28 +7,29 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
+import { WhatsAppLogo } from "@/components/whatsapp-logo";
 
 interface User {
-  id: string;
-  email: string;
-  name: string;
-  phone: string;
-  shippingAddress?: {
+    id: string;
+    email: string;
     name: string;
     phone: string;
-    address: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
-  billingAddress?: {
-    name: string;
-    phone: string;
-    address: string;
-    city: string;
-    state: string;
-    pincode: string;
-  };
+    shippingAddress?: {
+        name: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        pincode: string;
+    };
+    billingAddress?: {
+        name: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        pincode: string;
+    };
 }
 
 export default function Cart() {
@@ -38,7 +39,7 @@ export default function Cart() {
     const [loading, setLoading] = useState(true);
     const [isCheckingOut, setIsCheckingOut] = useState(false);
     const [showCheckoutForm, setShowCheckoutForm] = useState(false);
-    
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -48,7 +49,7 @@ export default function Cart() {
         state: "",
         pincode: "",
     });
-    
+
     const [billingSameAsShipping, setBillingSameAsShipping] = useState(true);
     const [billingData, setBillingData] = useState({
         name: "",
@@ -58,7 +59,7 @@ export default function Cart() {
         state: "",
         pincode: "",
     });
-    
+
     const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
     useEffect(() => {
@@ -71,7 +72,7 @@ export default function Cart() {
             if (response.ok) {
                 const data = await response.json();
                 setUser(data.user);
-                
+
                 // Pre-fill form with user data if available
                 if (data.user.shippingAddress) {
                     setFormData({
@@ -114,7 +115,7 @@ export default function Cart() {
         if (!formData.state.trim()) errors.state = "State is required";
         if (!formData.pincode.trim()) errors.pincode = "Pincode is required";
         else if (!/^\d{6}$/.test(formData.pincode)) errors.pincode = "Invalid pincode";
-        
+
         if (!billingSameAsShipping) {
             if (!billingData.name.trim()) errors.billingName = "Billing name is required";
             if (!billingData.phone.trim()) errors.billingPhone = "Billing phone is required";
@@ -123,7 +124,7 @@ export default function Cart() {
             if (!billingData.state.trim()) errors.billingState = "Billing state is required";
             if (!billingData.pincode.trim()) errors.billingPincode = "Billing pincode is required";
         }
-        
+
         setFormErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -146,7 +147,7 @@ export default function Cart() {
             setShowCheckoutForm(true);
             return;
         }
-        
+
         if (!validateForm()) {
             return;
         }
@@ -213,26 +214,26 @@ export default function Cart() {
 
     const handleWhatsAppCheckout = () => {
         if (items.length === 0) return;
-        
+
         const orderId = `JK${Date.now()}`;
         const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247";
-        
+
         let message = `🎉 New Order - Jhelum Kesar Co.\n\n`;
         message += `Order ID: ${orderId}\n\n`;
         message += `Items:\n`;
-        
+
         items.forEach(item => {
             message += `• ${item.name}${item.selectedVariant ? ` (${item.selectedVariant}${item.unit || 'g'})` : ''} x${item.quantity} - ₹${item.price * item.quantity}\n`;
         });
-        
+
         const shipping = cartTotal >= 1000 ? 0 : 50;
         const total = cartTotal + shipping;
-        
+
         message += `\nSubtotal: ₹${cartTotal.toFixed(2)}`;
         message += `\nShipping: ₹${shipping.toFixed(2)}`;
         message += `\nTotal: ₹${total.toFixed(2)}`;
         message += `\n\nPlease confirm this order.`;
-        
+
         const whatsappUrl = `https://wa.me/${whatsappPhone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
     };
@@ -266,7 +267,7 @@ export default function Cart() {
                 <div className="flex items-center justify-between">
                     <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl">Shopping Cart</h1>
                 </div>
-                
+
                 {items.map((item) => (
                     <Card key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
                         <div className="h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 hover:opacity-80 transition-opacity self-center sm:self-auto">
@@ -313,7 +314,7 @@ export default function Cart() {
                     </Card>
                 ))}
             </div>
-            
+
             <div className="h-fit lg:sticky lg:top-24">
                 <Card className="p-4 sm:p-6">
                     <h3 className="font-serif text-xl sm:text-2xl mb-4 sm:mb-6">Summary</h3>
@@ -335,7 +336,7 @@ export default function Cart() {
                     {needsAddressForm && showCheckoutForm && (
                         <div className="mb-6 space-y-4 border-t pt-6">
                             <h4 className="font-serif text-lg mb-4">Shipping Information</h4>
-                            
+
                             {user && user.shippingAddress && (
                                 <div className="p-3 bg-muted/30 rounded-lg mb-4">
                                     <p className="text-sm text-deep-taupe mb-2">Saved Address:</p>

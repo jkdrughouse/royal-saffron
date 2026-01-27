@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+export const dynamic = 'force-dynamic';
+
 interface UserData {
   id: string;
   email: string;
@@ -499,12 +501,11 @@ export default function AccountPage() {
                         })}
                       </p>
                     </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      order.status === "delivered" ? "bg-green-100 text-green-800" :
-                      order.status === "shipped" ? "bg-blue-100 text-blue-800" :
-                      order.status === "cancelled" ? "bg-red-100 text-red-800" :
-                      "bg-orange-100 text-orange-800"
-                    }`}>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${order.status === "delivered" ? "bg-green-100 text-green-800" :
+                        order.status === "shipped" ? "bg-blue-100 text-blue-800" :
+                          order.status === "cancelled" ? "bg-red-100 text-red-800" :
+                            "bg-orange-100 text-orange-800"
+                      }`}>
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </span>
                   </div>
