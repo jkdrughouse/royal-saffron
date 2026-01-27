@@ -171,7 +171,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
             {featuredProducts.map((product) => (
-              <Link key={product.id} href="/shop">
+              <Link key={product.id} href={`/product/${product.id}`}>
                 <div className="group cursor-pointer">
                   <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-pure-ivory mb-4 sm:mb-6 shadow-sm group-hover:shadow-md transition-all">
                     <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
