@@ -1,9 +1,10 @@
 "use client";
 
-import { MapPin, Phone, Mail, Clock, MessageCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
+import { WhatsAppLogo } from "@/components/whatsapp-logo";
 
 export default function ContactPage() {
   const whatsappPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "917889852247";
@@ -35,7 +36,7 @@ export default function ContactPage() {
                 <h2 className="font-serif text-2xl sm:text-3xl text-ink-charcoal mb-6">
                   Contact Information
                 </h2>
-                
+
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-saffron-crimson/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -58,7 +59,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-ink-charcoal mb-1">Phone</h3>
-                      <a 
+                      <a
                         href={`tel:${whatsappPhone}`}
                         className="text-saffron-crimson hover:text-estate-gold transition-colors text-sm sm:text-base"
                       >
@@ -73,7 +74,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <h3 className="font-semibold text-ink-charcoal mb-1">Email</h3>
-                      <a 
+                      <a
                         href="mailto:info@jhelumkesarco.com"
                         className="text-saffron-crimson hover:text-estate-gold transition-colors text-sm sm:text-base"
                       >
@@ -102,7 +103,7 @@ export default function ContactPage() {
                     className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
                     size="lg"
                   >
-                    <MessageCircle className="w-5 h-5 mr-2" />
+                    <WhatsAppLogo className="w-5 h-5 mr-2" />
                     Chat on WhatsApp
                   </Button>
                 </div>
@@ -128,7 +129,7 @@ export default function ContactPage() {
                   />
                 </div>
                 <p className="text-sm text-deep-taupe mt-4 text-center">
-                  <a 
+                  <a
                     href="https://maps.google.com/?q=Srinagar+Jammu+and+Kashmir"
                     target="_blank"
                     rel="noopener noreferrer"

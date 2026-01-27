@@ -10,8 +10,12 @@ import { useState, useEffect } from "react";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
 
 export default function Home() {
-  const featuredProducts = products.slice(0, 3);
-  
+  const featuredProducts = [
+    products.find(p => p.id === 'kashmiri-saffron'),
+    products.find(p => p.id === 'acacia-honey'),
+    products.find(p => p.id === 'shilajit'),
+  ].filter((p): p is NonNullable<typeof p> => p !== undefined); // Remove any undefined products
+
   // Hero images array
   const heroImages = [
     {
@@ -66,7 +70,7 @@ export default function Home() {
                 objectFit: 'cover'
               }}
               initial={{ opacity: 0 }}
-              animate={{ 
+              animate={{
                 opacity: index === currentImageIndex ? 1 : 0,
                 scale: index === currentImageIndex ? 1 : 1.05
               }}
@@ -74,18 +78,17 @@ export default function Home() {
             />
           ))}
         </div>
-        
+
         {/* Navigation dots */}
         <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
           {heroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                index === currentImageIndex 
-                  ? "bg-pure-ivory w-6 sm:w-8" 
-                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75 w-1.5 sm:w-2"
-              }`}
+              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
+                ? "bg-pure-ivory w-6 sm:w-8"
+                : "bg-pure-ivory/50 hover:bg-pure-ivory/75 w-1.5 sm:w-2"
+                }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

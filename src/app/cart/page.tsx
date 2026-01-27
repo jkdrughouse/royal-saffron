@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2, Plus, Minus, MessageCircle, LogIn } from "lucide-react";
+import { Trash2, Plus, Minus, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "../lib/cart-context";
 import { useState, useEffect } from "react";
@@ -512,7 +512,7 @@ export default function Cart() {
                                 variant="outline"
                                 style={{ borderColor: '#25D366', color: '#25D366' }}
                             >
-                                <MessageCircle className="w-4 h-4 mr-2" />
+                                <WhatsAppLogo className="w-4 h-4 mr-2" />
                                 Order via WhatsApp
                             </Button>
                         )}
