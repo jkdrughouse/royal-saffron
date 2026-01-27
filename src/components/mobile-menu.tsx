@@ -44,7 +44,7 @@ export function MobileMenu() {
 
       {/* Slide-in Menu Panel */}
       <nav
-        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl z-[70] md:hidden overflow-y-auto transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 bottom-0 h-screen w-[85%] max-w-sm bg-white shadow-2xl z-[70] md:hidden overflow-y-auto transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
         {/* Header */}
@@ -67,8 +67,8 @@ export function MobileMenu() {
               href="/"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors border-b border-gray-100 ${pathname === "/"
-                  ? "text-red-600 bg-red-50 font-semibold"
-                  : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
+                ? "text-red-600 bg-red-50 font-semibold"
+                : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
                 }`}
               style={{ display: 'flex', visibility: 'visible' }}
             >
@@ -81,8 +81,8 @@ export function MobileMenu() {
               href="/categories"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors border-b border-gray-100 ${pathname === "/categories"
-                  ? "text-red-600 bg-red-50 font-semibold"
-                  : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
+                ? "text-red-600 bg-red-50 font-semibold"
+                : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
                 }`}
               style={{ display: 'flex', visibility: 'visible' }}
             >
@@ -106,8 +106,8 @@ export function MobileMenu() {
               href="/contact"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors border-b border-gray-100 ${pathname === "/contact"
-                  ? "text-red-600 bg-red-50 font-semibold"
-                  : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
+                ? "text-red-600 bg-red-50 font-semibold"
+                : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
                 }`}
               style={{ display: 'flex', visibility: 'visible' }}
             >
