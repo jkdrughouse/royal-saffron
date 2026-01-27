@@ -55,14 +55,14 @@ export function MobileMenu() {
       {/* Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 md:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] md:hidden"
           onClick={closeMenu}
         />
       )}
 
       {/* Slide-in Menu Panel */}
       <nav
-        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl z-50 md:hidden transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl z-[70] md:hidden overflow-hidden transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "translate-x-full"
           }`}
       >
         {/* Header */}
@@ -78,14 +78,14 @@ export function MobileMenu() {
         </div>
 
         {/* Navigation Links */}
-        <div className="flex flex-col overflow-y-auto h-[calc(100%-88px)]">
-          <div className="flex-1 py-4">
+        <div className="flex flex-col overflow-y-auto h-[calc(100%-88px)] bg-white">
+          <div className="flex-1 py-4 bg-white">
             <Link
               href="/"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/"
-                  ? "text-saffron-crimson bg-parchment-cream"
-                  : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                ? "text-saffron-crimson bg-parchment-cream"
+                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
                 }`}
             >
               <Home className="w-5 h-5" />
@@ -96,8 +96,8 @@ export function MobileMenu() {
               href="/shop"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname.startsWith("/shop")
-                  ? "text-saffron-crimson bg-parchment-cream"
-                  : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                ? "text-saffron-crimson bg-parchment-cream"
+                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
                 }`}
             >
               <ShoppingBag className="w-5 h-5" />
@@ -108,8 +108,8 @@ export function MobileMenu() {
               href="/categories"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/categories"
-                  ? "text-saffron-crimson bg-parchment-cream"
-                  : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                ? "text-saffron-crimson bg-parchment-cream"
+                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
                 }`}
             >
               <Grid3x3 className="w-5 h-5" />
@@ -131,8 +131,8 @@ export function MobileMenu() {
               href="/contact"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/contact"
-                  ? "text-saffron-crimson bg-parchment-cream"
-                  : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                ? "text-saffron-crimson bg-parchment-cream"
+                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
                 }`}
             >
               <MessageCircle className="w-5 h-5" />
