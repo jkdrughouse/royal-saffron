@@ -284,19 +284,21 @@ export default function Cart() {
                                 </div>
                                 <div className="flex items-center gap-3 mt-3">
                                     <span className="text-xs sm:text-sm text-muted-foreground">Quantity:</span>
-                                    <div className="flex items-center gap-2 border border-gray-200 rounded-lg">
+                                    <div className="flex items-center gap-1 border border-gray-200 rounded-lg overflow-hidden">
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity - 1, item.selectedVariant)}
-                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            className="w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-50 active:bg-gray-100 transition-all active:scale-95 touch-manipulation"
+                                            aria-label="Decrease quantity"
                                         >
-                                            <Minus className="w-3 h-3 sm:w-4 sm:h-4" />
+                                            <Minus className="w-4 h-4 sm:w-4 sm:h-4" />
                                         </button>
-                                        <span className="w-6 sm:w-8 text-center font-medium text-sm sm:text-base">{item.quantity}</span>
+                                        <span className="min-w-[3rem] text-center font-medium text-sm sm:text-base px-2 select-none">{item.quantity}</span>
                                         <button
                                             onClick={() => updateQuantity(item.id, item.quantity + 1, item.selectedVariant)}
-                                            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            className="w-11 h-11 sm:w-10 sm:h-10 flex items-center justify-center hover:bg-gray-50 active:bg-gray-100 transition-all active:scale-95 touch-manipulation"
+                                            aria-label="Increase quantity"
                                         >
-                                            <Plus className="w-3 h-3 sm:w-4 sm:h-4" />
+                                            <Plus className="w-4 h-4 sm:w-4 sm:h-4" />
                                         </button>
                                     </div>
                                 </div>
