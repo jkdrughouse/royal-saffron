@@ -81,7 +81,7 @@ export function FrequentlyBoughtTogether({
     const totalSavings = calculateTotalSavings();
 
     return (
-        <Card className="border-2 border-saffron-crimson/20 bg-gradient-to-br from-white to-[#FFF8F0]">
+        <Card className="relative z-0 border-2 border-saffron-crimson/20 bg-gradient-to-br from-white to-[#FFF8F0]">
             <CardContent className="p-6 sm:p-8">
                 <h3 className="font-serif text-2xl sm:text-3xl mb-6 text-ink-charcoal">
                     Frequently Bought Together
@@ -94,8 +94,8 @@ export function FrequentlyBoughtTogether({
                             {/* Product Card */}
                             <div
                                 className={`relative border-2 rounded-lg overflow-hidden transition-all cursor-pointer ${selectedProducts.has(product.id)
-                                        ? "border-saffron-crimson ring-2 ring-saffron-crimson/30"
-                                        : "border-gray-200 hover:border-gray-300"
+                                    ? "border-saffron-crimson ring-2 ring-saffron-crimson/30"
+                                    : "border-gray-200 hover:border-gray-300"
                                     } ${product.id === currentProduct.id ? "opacity-100" : "opacity-90"}`}
                                 onClick={() => toggleProduct(product.id)}
                             >
