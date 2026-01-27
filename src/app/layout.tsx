@@ -48,7 +48,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
     <CartProvider>
       <WishlistProvider>
         {/* Top Announcement Bar */}
-        <div className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase">
+        <div className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase w-full max-w-full overflow-x-hidden">
           Free shipping on all orders over ₹1000
         </div>
 
@@ -172,7 +172,10 @@ export default function RootLayout({
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
   return (
-    <html lang="en">
+    <html lang="en" className="overflow-x-hidden">
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes" />
+      </head>
       {gaId && (
         <>
           <Script
@@ -190,7 +193,7 @@ export default function RootLayout({
         </>
       )}
       <body
-        className={`${montserrat.variable} ${cormorant.variable} font-sans bg-background text-foreground`}
+        className={`${montserrat.variable} ${cormorant.variable} font-sans bg-background text-foreground overflow-x-hidden`}
       >
         <RootLayoutContent>{children}</RootLayoutContent>
       </body>

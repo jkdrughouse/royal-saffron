@@ -1,0 +1,25 @@
+
+> royal_saffron@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 13.8s
+  Running TypeScript ...
+  Collecting page data using 3 workers ...
+  Generating static pages using 3 workers (0/25) ...
+⨯ useSearchParams() should be wrapped in a suspense boundary at page "/404". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+    at Q (/home/leo/Desktop/JKC cursor/.next/server/chunks/ssr/node_modules_next_920e7746._.js:2:2111)
+    at o (/home/leo/Desktop/JKC cursor/.next/server/chunks/ssr/node_modules_next_920e7746._.js:4:5284)
+    at e (/home/leo/Desktop/JKC cursor/.next/server/chunks/ssr/_cd38c6f3._.js:6:7265)
+    at an (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:84360)
+    at ai (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:86179)
+    at ai (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:104708)
+    at al (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:107953)
+    at as (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:105368)
+    at am (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:112882)
+    at au (/home/leo/Desktop/JKC cursor/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:109985)
+Error occurred prerendering page "/_not-found". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /_not-found/page: /_not-found, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null

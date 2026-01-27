@@ -23,8 +23,8 @@ export function BottomNav() {
     };
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white border-t border-border shadow-lg pb-safe">
-            <div className="grid grid-cols-4 h-16">
+        <nav className="fixed bottom-0 left-0 right-0 z-40 lg:hidden bg-white border-t border-border shadow-lg safe-area-inset-bottom">
+            <div className="grid grid-cols-4 h-16 w-full max-w-full">
                 {navItems.map((item) => {
                     const Icon = item.icon;
                     const active = isActive(item.href);
@@ -33,9 +33,9 @@ export function BottomNav() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center gap-1 transition-colors relative ${active
-                                    ? "text-saffron-crimson"
-                                    : "text-muted-foreground hover:text-saffron-crimson"
+                            className={`flex flex-col items-center justify-center gap-0.5 transition-colors relative ${active
+                                ? "text-saffron-crimson"
+                                : "text-muted-foreground hover:text-saffron-crimson"
                                 }`}
                         >
                             <div className="relative">
