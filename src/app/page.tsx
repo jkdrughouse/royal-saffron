@@ -19,21 +19,21 @@ export default function Home() {
   // Hero images array
   const heroImages = [
     {
-      src: "/hero-clean.png",
+      src: "/hero-clean.webp",
       alt: "Royal Saffron Hero",
       title: "The Gold of",
       subtitle: "Spices",
       description: "Discover the unmatched aroma and color of our premium Super Negin saffron. Hand-harvested for the purest culinary experience."
     },
     {
-      src: "/hero-saffron-premium.png",
+      src: "/hero-saffron-premium.webp",
       alt: "Premium Kashmiri Saffron",
       title: "PREMIUM",
       subtitle: "KASHMIRI SAFFRON",
       description: "The Gold of Spices. Experience the finest quality saffron from the valleys of Kashmir."
     },
     {
-      src: "/hero-shilajit.png",
+      src: "/hero-shilajit.webp",
       alt: "Kashmir Shilajit",
       title: "EXPERIENCE",
       subtitle: "PURE VITALITY",
