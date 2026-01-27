@@ -2,18 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { Menu, X, User, Package, Home, ShoppingBag, Grid3x3, MessageCircle, BookOpen } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { Menu, X, Home, Grid3x3, MessageCircle, BookOpen } from "lucide-react";
 
 export function MobileMenu() {
-  const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -26,18 +20,6 @@ export function MobileMenu() {
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const fetchUser = async () => {
-    try {
-      const response = await fetch("/api/auth/me");
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-      }
-    } catch (error) {
-      // User not logged in
-    }
-  };
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
@@ -93,18 +75,6 @@ export function MobileMenu() {
             </Link>
 
             <Link
-              href="/shop"
-              onClick={closeMenu}
-              className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname.startsWith("/shop")
-                ? "text-saffron-crimson bg-parchment-cream"
-                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
-                }`}
-            >
-              <ShoppingBag className="w-5 h-5" />
-              <span>Shop</span>
-            </Link>
-
-            <Link
               href="/categories"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/categories"
@@ -115,8 +85,6 @@ export function MobileMenu() {
               <Grid3x3 className="w-5 h-5" />
               <span>Categories</span>
             </Link>
-
-            <div className="my-4 border-t border-soft-silk-border" />
 
             <Link
               href="/#our-story"
@@ -138,45 +106,6 @@ export function MobileMenu() {
               <MessageCircle className="w-5 h-5" />
               <span>Contact Us</span>
             </Link>
-          </div>
-
-          {/* User Section */}
-          <div className="border-t border-soft-silk-border bg-parchment-cream/30">
-            {user ? (
-              <>
-                <button
-                  onClick={() => {
-                    router.push("/account");
-                    closeMenu();
-                  }}
-                  className="w-full flex items-center gap-4 px-6 py-4 text-base font-medium text-deep-taupe hover:text-saffron-crimson transition-colors text-left"
-                >
-                  <User className="w-5 h-5" />
-                  <span>My Account</span>
-                </button>
-                <button
-                  onClick={() => {
-                    router.push("/orders");
-                    closeMenu();
-                  }}
-                  className="w-full flex items-center gap-4 px-6 py-4 text-base font-medium text-deep-taupe hover:text-saffron-crimson transition-colors text-left"
-                >
-                  <Package className="w-5 h-5" />
-                  <span>My Orders</span>
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={() => {
-                  router.push("/login");
-                  closeMenu();
-                }}
-                className="w-full flex items-center gap-4 px-6 py-4 text-base font-medium text-deep-taupe hover:text-saffron-crimson transition-colors text-left"
-              >
-                <User className="w-5 h-5" />
-                <span>Login</span>
-              </button>
-            )}
           </div>
         </div>
       </nav>
