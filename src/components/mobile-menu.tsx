@@ -28,7 +28,7 @@ export function MobileMenu() {
     <>
       <button
         onClick={toggleMenu}
-        className="p-2 text-ink-charcoal hover:text-saffron-crimson transition-colors"
+        className="p-2 text-gray-800 hover:text-red-600 transition-colors"
         aria-label="Toggle menu"
       >
         <Menu size={24} />
@@ -48,11 +48,11 @@ export function MobileMenu() {
           }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-soft-silk-border">
-          <h2 className="font-serif text-2xl font-bold text-saffron-crimson">Menu</h2>
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+          <h2 className="font-serif text-2xl font-bold text-red-600">Menu</h2>
           <button
             onClick={closeMenu}
-            className="p-2 text-ink-charcoal hover:text-saffron-crimson transition-colors rounded-full hover:bg-parchment-cream"
+            className="p-2 text-gray-800 hover:text-red-600 transition-colors rounded-full hover:bg-gray-100"
             aria-label="Close menu"
           >
             <X size={24} />
@@ -66,8 +66,8 @@ export function MobileMenu() {
               href="/"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/"
-                ? "text-saffron-crimson bg-parchment-cream"
-                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                  ? "text-red-600 bg-red-50"
+                  : "text-gray-700 hover:text-red-600 hover:bg-gray-50"
                 }`}
             >
               <Home className="w-5 h-5" />
@@ -78,8 +78,8 @@ export function MobileMenu() {
               href="/categories"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/categories"
-                ? "text-saffron-crimson bg-parchment-cream"
-                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                  ? "text-red-600 bg-red-50"
+                  : "text-gray-700 hover:text-red-600 hover:bg-gray-50"
                 }`}
             >
               <Grid3x3 className="w-5 h-5" />
@@ -89,7 +89,7 @@ export function MobileMenu() {
             <Link
               href="/#our-story"
               onClick={closeMenu}
-              className="flex items-center gap-4 px-6 py-4 text-base font-medium text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream transition-colors"
+              className="flex items-center gap-4 px-6 py-4 text-base font-medium text-gray-700 hover:text-red-600 hover:bg-gray-50 transition-colors"
             >
               <BookOpen className="w-5 h-5" />
               <span>Our Story</span>
@@ -99,8 +99,8 @@ export function MobileMenu() {
               href="/contact"
               onClick={closeMenu}
               className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors ${pathname === "/contact"
-                ? "text-saffron-crimson bg-parchment-cream"
-                : "text-deep-taupe hover:text-saffron-crimson hover:bg-parchment-cream"
+                  ? "text-red-600 bg-red-50"
+                  : "text-gray-700 hover:text-red-600 hover:bg-gray-50"
                 }`}
             >
               <MessageCircle className="w-5 h-5" />
