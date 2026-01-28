@@ -208,7 +208,7 @@ export default function Home() {
           <p className="text-pure-ivory/90 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 font-sans px-2">
             Saffron is more than just a spice; it's a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
           </p>
-          <Link href="/shop">
+          <Link href="/our-story">
             <Button variant="outline" size="lg" className="rounded-lg px-6 sm:px-8 py-4 sm:py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-xs sm:text-sm font-medium w-full sm:w-auto">
               Read Our Full Story
             </Button>

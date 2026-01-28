@@ -116,7 +116,7 @@ function RootLayoutContent({ children }: { children: React.ReactNode }) {
                 Categories
               </Link>
               <Link
-                href="#our-story"
+                href="/our-story"
                 className="text-xs font-bold tracking-widest text-muted-foreground hover:text-primary transition-colors uppercase"
               >
                 Our Story
