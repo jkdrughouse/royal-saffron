@@ -198,21 +198,44 @@ export default function Home() {
       {/* Lead Capture Banner */}
       <LeadCaptureBanner />
 
-      {/* Legacy Section */}
-      <section id="our-story" className="py-16 sm:py-24 md:py-32 bg-saffron-crimson text-center">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-pure-ivory mb-4 sm:mb-6 flex justify-center">
-            <Award size={32} strokeWidth={1} className="sm:w-10 sm:h-10" />
+      {/* Our Story Section */}
+      <section id="our-story" className="py-16 sm:py-24 md:py-32 bg-saffron-crimson">
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="text-pure-ivory mb-6 sm:mb-8 flex justify-center">
+            <Award size={40} strokeWidth={1} className="sm:w-12 sm:h-12" />
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 sm:mb-8 text-pure-ivory">A Legacy of Purity</h2>
-          <p className="text-pure-ivory/90 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 font-sans px-2">
-            Saffron is more than just a spice; it's a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
-          </p>
-          <Link href="/shop">
-            <Button variant="outline" size="lg" className="rounded-lg px-6 sm:px-8 py-4 sm:py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-xs sm:text-sm font-medium w-full sm:w-auto">
-              Read Our Full Story
-            </Button>
-          </Link>
+
+          {/* Headline */}
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-8 sm:mb-12 text-pure-ivory text-center leading-tight">
+            Rooted by the River, Refined by Six Generations
+          </h2>
+
+          {/* Story Content */}
+          <div className="space-y-6 sm:space-y-8 text-pure-ivory/95">
+            <p className="text-base sm:text-lg md:text-xl leading-relaxed font-light text-center max-w-4xl mx-auto">
+              Jhelum Saffron Co. was born where our history began: on the banks of the Jhelum River, in the heart of Pampore.
+            </p>
+
+            <p className="text-base sm:text-lg leading-relaxed font-light text-center max-w-4xl mx-auto">
+              Known to the world as the "Saffron Gateway" of Kashmir, this land is more than just our location—it is our identity. Our name is a tribute to the river that has nourished our ancestral fields for centuries and stands as a silent witness to the unique purple blooms that define our region.
+            </p>
+
+            <p className="text-base sm:text-lg leading-relaxed font-light text-center max-w-4xl mx-auto">
+              For us, saffron is not just a spice; it is a sacred tradition. Our story spans six generations of cultivators who have lived the art of saffron farming. From the great-grandfathers who first tilled this soil to the current generation, we have preserved the delicate, labor-intensive methods of hand-harvesting that ensure true potency.
+            </p>
+
+            <p className="text-base sm:text-lg leading-relaxed font-light text-center max-w-4xl mx-auto mb-8 sm:mb-12">
+              We do not simply source saffron; we have lived its cultivation for over a century. Today, we honor that legacy by bridging the gap between our history and your home, ensuring that every thread you receive carries the authentic aroma, color, and purity of a heritage that runs as deep as the Jhelum itself.
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <Link href="/shop">
+              <Button variant="outline" size="lg" className="rounded-lg px-6 sm:px-8 py-4 sm:py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-xs sm:text-sm font-medium">
+                Explore Our Collection
+              </Button>
+            </Link>
+          </div>
         </div>
       </section>
 
