@@ -46,10 +46,17 @@ export default function ContactPage() {
                       <h3 className="font-semibold text-ink-charcoal mb-1">Address</h3>
                       <p className="text-deep-taupe text-sm sm:text-base leading-relaxed">
                         Jhelum Kesar Co.<br />
-                        Shop No. 123, Main Market<br />
-                        Srinagar, Jammu & Kashmir<br />
-                        India - 190001
+                        NH44, Lethipora<br />
+                        Jammu and Kashmir - 192122
                       </p>
+                      <a
+                        href="https://share.google/CBYGchlsVy18P5dqu"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-saffron-crimson hover:text-estate-gold transition-colors text-sm inline-flex items-center gap-1 mt-2"
+                      >
+                        View on Google Maps →
+                      </a>
                     </div>
                   </div>
 
@@ -130,7 +137,7 @@ export default function ContactPage() {
                 </div>
                 <p className="text-sm text-deep-taupe mt-4 text-center">
                   <a
-                    href="https://maps.google.com/?q=Srinagar+Jammu+and+Kashmir"
+                    href="https://share.google/CBYGchlsVy18P5dqu"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-saffron-crimson hover:text-estate-gold transition-colors"
