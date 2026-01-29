@@ -11,7 +11,7 @@ export default function OurStoryPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="relative py-20 sm:py-32 md:py-40 bg-saffron-crimson">
+            <section className="relative py-12 sm:py-20 md:py-24 bg-saffron-crimson">
                 <div className="container mx-auto px-4 max-w-5xl">
                     <div className="text-pure-ivory mb-8 sm:mb-12 flex justify-center">
                         <Award size={56} strokeWidth={1} className="sm:w-16 sm:h-16" />
