@@ -41,8 +41,8 @@ export function StickyAddToCart({
             className={`fixed bottom-16 left-0 right-0 z-45 lg:bottom-0 lg:z-40 transform transition-transform duration-300 ${isVisible ? "translate-y-0" : "translate-y-full"
                 }`}
         >
-            <div className="bg-white border-t shadow-2xl">
-                <div className="container mx-auto px-4 py-3">
+            <div className="bg-white border-t shadow-2xl opacity-100">
+                <div className="container mx-auto px-4 py-2">
                     <div className="flex items-center gap-3">
                         {/* Product Thumbnail */}
                         <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-muted/10">
@@ -93,7 +93,10 @@ export function StickyAddToCart({
 
                         {/* Add to Cart Button */}
                         <Button
-                            onClick={onAddToCart}
+                            onClick={() => {
+                                onAddToCart();
+                                setIsDismissed(true);
+                            }}
                             size="sm"
                             className="flex-shrink-0 gap-2 bg-saffron-crimson hover:bg-estate-gold text-white px-4"
                         >
