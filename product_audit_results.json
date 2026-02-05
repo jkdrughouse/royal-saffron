@@ -1,0 +1,136 @@
+{
+  "total": 44,
+  "complete": [
+    "Choco Almond Rocks",
+    "Dried Cherry",
+    "Beetroot Lip Butter",
+    "Rosemary Essential Oil",
+    "White Oud",
+    "Golden Oud",
+    "Acacia Honey",
+    "Gulkhand",
+    "Mix Dry Fruits",
+    "Rose Water",
+    "Shahi Kehwa",
+    "Shilajit",
+    "Walnut Oil",
+    "Walnut with Shells",
+    "Kashmiri Oud",
+    "Herbal Kehwa",
+    "Saffron Face Wash",
+    "Saffron Moisturising Lotion",
+    "Kashmiri Saffron Serum",
+    "Noormark Cream",
+    "Raya Saffron Facial Kit",
+    "Rajma Dal",
+    "Dried Apple",
+    "Flax Seeds",
+    "Pumpkin Seeds",
+    "Instant Mix",
+    "Dried Blueberry",
+    "Dried Blackberry",
+    "Dried Cranberry",
+    "Noormark Walnut Scrub",
+    "Bringraj Hair Oil",
+    "Muesli"
+  ],
+  "incomplete": [
+    {
+      "id": "dried-kiwi",
+      "name": "Dried Kiwi",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "macadamia-nuts-in-shell",
+      "name": "Macadamia Nuts In Shell",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "saffron-lip-butter",
+      "name": "Saffron Lip Butter",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "kashmiri-mamra-badam",
+      "name": "Kashmiri Mamra Badam",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "kashmiri-saffron",
+      "name": "Kashmiri Saffron",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "saffron-honey",
+      "name": "Saffron Honey",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "shahi-heeing",
+      "name": "Shahi Heeing",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "pecan-nuts",
+      "name": "Pecan Nuts",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "chia-seeds",
+      "name": "Chia Seeds",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "sunflower-seeds",
+      "name": "Sunflower Seeds",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "sidr-honey",
+      "name": "Sidr Honey",
+      "issues": [
+        "Missing detailed description"
+      ],
+      "broken_images": []
+    },
+    {
+      "id": "red-chilli-whole",
+      "name": "Red Chilli (Whole)",
+      "issues": [
+        "Missing sensory description"
+      ],
+      "broken_images": []
+    }
+  ],
+  "missing_images": {}
+}
