@@ -26,18 +26,18 @@ export default function Home() {
       description: "Discover the unmatched aroma and color of our premium Super Negin saffron. Hand-harvested for the purest culinary experience."
     },
     {
-      src: "/hero-saffron-premium.webp",
-      alt: "Premium Kashmiri Saffron",
+      src: "/hero-new-2.png",
+      alt: "Premium Kashmir Products",
       title: "PREMIUM",
-      subtitle: "KASHMIRI SAFFRON",
-      description: "The Gold of Spices. Experience the finest quality saffron from the valleys of Kashmir."
+      subtitle: "KASHMIRI PRODUCTS",
+      description: "Experience the finest quality products from the valleys of Kashmir."
     },
     {
-      src: "/hero-shilajit.webp",
-      alt: "Kashmir Shilajit",
+      src: "/hero-new-3.png",
+      alt: "Natural Excellence",
       title: "EXPERIENCE",
-      subtitle: "PURE VITALITY",
-      description: "100% Pure Kashmiri Shilajit. Sourced from the highest altitudes of the Himalayas."
+      subtitle: "PURE QUALITY",
+      description: "Authentic Kashmiri products sourced with care and tradition."
     }
   ];
 
