@@ -1,49 +1,69 @@
-import { writeFile, readFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import path from 'path';
+import { MongoClient, Db } from 'mongodb';
 
-const DATA_DIR = path.join(process.cwd(), 'data');
+const MONGODB_URI = process.env.MONGODB_URI!;
+const DB_NAME = 'jkc_store';
 
-// Ensure data directory exists
-export async function ensureDataDir() {
-  if (!existsSync(DATA_DIR)) {
-    await mkdir(DATA_DIR, { recursive: true });
-  }
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable in .env.local');
 }
 
-// Generic file operations
-export async function readDataFile<T>(filename: string, defaultValue: T): Promise<T> {
-  await ensureDataDir();
-  const filePath = path.join(DATA_DIR, filename);
-  
-  if (!existsSync(filePath)) {
-    await writeFile(filePath, JSON.stringify(defaultValue, null, 2));
-    return defaultValue;
+// Cache the MongoClient across hot-reloads in dev and across serverless invocations
+let cachedClient: MongoClient | null = null;
+let cachedDb: Db | null = null;
+
+async function getDb(): Promise<Db> {
+  if (cachedDb) return cachedDb;
+
+  if (!cachedClient) {
+    cachedClient = new MongoClient(MONGODB_URI);
+    await cachedClient.connect();
   }
-  
-  try {
-    const data = await readFile(filePath, 'utf-8');
-    return JSON.parse(data) as T;
-  } catch (error) {
-    console.error(`Error reading ${filename}:`, error);
-    return defaultValue;
-  }
+
+  cachedDb = cachedClient.db(DB_NAME);
+  return cachedDb;
 }
 
-export async function writeDataFile<T>(filename: string, data: T): Promise<void> {
-  await ensureDataDir();
-  const filePath = path.join(DATA_DIR, filename);
-  await writeFile(filePath, JSON.stringify(data, null, 2));
-}
-
-// Database collections
+// Database collections — same interface as before so all API routes work unchanged
 export const DB = {
-  users: async () => readDataFile<any[]>('users.json', []),
-  orders: async () => readDataFile<any[]>('orders.json', []),
-  leads: async () => readDataFile<any[]>('leads.json', []),
-  reviews: async () => readDataFile<any[]>('reviews.json', []),
-  saveUsers: (data: any[]) => writeDataFile('users.json', data),
-  saveOrders: (data: any[]) => writeDataFile('orders.json', data),
-  saveLeads: (data: any[]) => writeDataFile('leads.json', data),
-  saveReviews: (data: any[]) => writeDataFile('reviews.json', data),
+  users: async (): Promise<any[]> => {
+    const db = await getDb();
+    return db.collection('users').find({}).toArray() as Promise<any[]>;
+  },
+  orders: async (): Promise<any[]> => {
+    const db = await getDb();
+    return db.collection('orders').find({}).toArray() as Promise<any[]>;
+  },
+  leads: async (): Promise<any[]> => {
+    const db = await getDb();
+    return db.collection('leads').find({}).toArray() as Promise<any[]>;
+  },
+  reviews: async (): Promise<any[]> => {
+    const db = await getDb();
+    return db.collection('reviews').find({}).toArray() as Promise<any[]>;
+  },
+
+  saveUsers: async (data: any[]) => {
+    const db = await getDb();
+    const col = db.collection('users');
+    await col.deleteMany({});
+    if (data.length > 0) await col.insertMany(data);
+  },
+  saveOrders: async (data: any[]) => {
+    const db = await getDb();
+    const col = db.collection('orders');
+    await col.deleteMany({});
+    if (data.length > 0) await col.insertMany(data);
+  },
+  saveLeads: async (data: any[]) => {
+    const db = await getDb();
+    const col = db.collection('leads');
+    await col.deleteMany({});
+    if (data.length > 0) await col.insertMany(data);
+  },
+  saveReviews: async (data: any[]) => {
+    const db = await getDb();
+    const col = db.collection('reviews');
+    await col.deleteMany({});
+    if (data.length > 0) await col.insertMany(data);
+  },
 };
