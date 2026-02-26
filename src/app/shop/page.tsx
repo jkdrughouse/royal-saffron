@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { ShoppingCart, Search, X } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { useCart } from "../lib/cart-context";
 import { useWishlist } from "../lib/wishlist-context";
 import { Heart } from "lucide-react";
 
-export default function Shop() {
+function ShopContent() {
     const searchParams = useSearchParams();
     const [activeCategory, setActiveCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
@@ -144,5 +144,14 @@ export default function Shop() {
                 </div>
             )}
         </div>
+    );
+}
+
+// Suspense wrapper required by Next.js App Router for any component using useSearchParams()
+export default function Shop() {
+    return (
+        <Suspense fallback={<div className="container mx-auto px-4 py-16 text-center text-muted-foreground">Loading collection…</div>}>
+            <ShopContent />
+        </Suspense>
     );
 }
