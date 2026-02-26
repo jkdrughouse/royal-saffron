@@ -8,7 +8,7 @@ import { products } from "./lib/products";
 import { Leaf, Award, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
-import { HorizontalCategoryShowcase } from "@/components/horizontal-category-showcase";
+import ShopByCategory from "@/components/ShopByCategory";
 
 
 export default function Home() {
@@ -159,7 +159,7 @@ export default function Home() {
       </section>
 
       {/* Category Showcase */}
-      <HorizontalCategoryShowcase />
+      <ShopByCategory />
 
       {/* Best Sellers */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">

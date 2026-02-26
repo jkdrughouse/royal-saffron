@@ -5,52 +5,85 @@
 @layer base {
   :root {
     /* Backgrounds */
-    --background: 40 20% 97%; /* Parchment Cream #F9F7F2 */
-    --foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
-    
+    --background: 40 20% 97%;
+    /* Parchment Cream #F9F7F2 */
+    --foreground: 20 10% 20%;
+    /* Ink Charcoal #2B2522 */
+
     /* Cards & Popovers */
-    --card: 0 0% 100%; /* Pure Ivory #FFFFFF */
-    --card-foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
-    --popover: 0 0% 100%; /* Pure Ivory #FFFFFF */
-    --popover-foreground: 20 10% 20%; /* Ink Charcoal #2B2522 */
-    
+    --card: 0 0% 100%;
+    /* Pure Ivory #FFFFFF */
+    --card-foreground: 20 10% 20%;
+    /* Ink Charcoal #2B2522 */
+    --popover: 0 0% 100%;
+    /* Pure Ivory #FFFFFF */
+    --popover-foreground: 20 10% 20%;
+    /* Ink Charcoal #2B2522 */
+
     /* Primary (Saffron Red) */
-    --primary: 12 85% 50%; /* Saffron Red #C03221 */
-    --primary-foreground: 40 20% 97%; /* Parchment Cream #F9F7F2 */
-    
+    --primary: 12 85% 50%;
+    /* Saffron Red #C03221 */
+    --primary-foreground: 40 20% 97%;
+    /* Parchment Cream #F9F7F2 */
+
     /* Secondary (Champagne Gold) */
-    --secondary: 40 60% 90%; /* Champagne Gold #EFEBE0 */
-    --secondary-foreground: 12 85% 40%; /* Dark Saffron #993322 */
-    
+    --secondary: 40 60% 90%;
+    /* Champagne Gold #EFEBE0 */
+    --secondary-foreground: 12 85% 40%;
+    /* Dark Saffron #993322 */
+
     /* Muted (Earth Tones) */
-    --muted: 40 20% 92%; /* Muted Earth #EFEBE0 */
-    --muted-foreground: 20 5% 45%; /* Clay Gray #7B736E */
-    
+    --muted: 40 20% 92%;
+    /* Muted Earth #EFEBE0 */
+    --muted-foreground: 20 5% 45%;
+    /* Clay Gray #7B736E */
+
     /* Accent (Soft Gold) */
-    --accent: 40 50% 94%; /* Soft Gold Accent #F5F2E8 */
-    --accent-foreground: 12 85% 50%; /* Saffron Red #C03221 */
-    
+    --accent: 40 50% 94%;
+    /* Soft Gold Accent #F5F2E8 */
+    --accent-foreground: 12 85% 50%;
+    /* Saffron Red #C03221 */
+
     /* Destructive */
-    --destructive: 0 84% 60%; /* Destructive Red #E84040 */
-    --destructive-foreground: 0 0% 98%; /* Light Text #FAFAFA */
-    
+    --destructive: 0 84% 60%;
+    /* Destructive Red #E84040 */
+    --destructive-foreground: 0 0% 98%;
+    /* Light Text #FAFAFA */
+
     /* Borders & Inputs */
-    --border: 40 20% 90%; /* Silk Border #E6E2D9 */
-    --input: 40 20% 90%; /* Input Border #E6E2D9 */
-    --ring: 12 85% 50%; /* Focus Ring (Saffron Red) #C03221 */
-    
+    --border: 40 20% 90%;
+    /* Silk Border #E6E2D9 */
+    --input: 40 20% 90%;
+    /* Input Border #E6E2D9 */
+    --ring: 12 85% 50%;
+    /* Focus Ring (Saffron Red) #C03221 */
+
     /* Border Radius */
     --radius: 0.5rem;
-    
+
     /* Legacy brand colors for backward compatibility */
-    --saffron-crimson: 12 85% 50%; /* Saffron Red */
-    --estate-gold: 40 60% 90%; /* Champagne Gold */
-    --parchment-cream: 40 20% 97%; /* Parchment Cream */
-    --champagne-sand: 40 60% 90%; /* Champagne Gold */
-    --pure-ivory: 0 0% 100%; /* Pure Ivory */
-    --ink-charcoal: 20 10% 20%; /* Ink Charcoal */
-    --deep-taupe: 20 5% 45%; /* Clay Gray */
-    --soft-silk-border: 40 20% 90%; /* Silk Border */
+    --saffron-crimson: 12 85% 50%;
+    /* Saffron Red */
+    --estate-gold: 40 60% 90%;
+    /* Champagne Gold */
+    --parchment-cream: 40 20% 97%;
+    /* Parchment Cream */
+    --champagne-sand: 40 60% 90%;
+    /* Champagne Gold */
+    --pure-ivory: 0 0% 100%;
+    /* Pure Ivory */
+    --ink-charcoal: 20 10% 20%;
+    /* Ink Charcoal */
+    --deep-taupe: 20 5% 45%;
+    /* Clay Gray */
+    --soft-silk-border: 40 20% 90%;
+    /* Silk Border */
+
+    /* Saffron palette */
+    --saffron-primary: 8 76% 52%;
+    --saffron-heading: 220 20% 20%;
+    --saffron-icon: 15 40% 40%;
+    --saffron-cream: 35 60% 95%;
   }
 }
 
@@ -59,7 +92,8 @@
     @apply border-border;
   }
 
-  html, body {
+  html,
+  body {
     max-width: 100vw;
     overflow-x: hidden;
   }
@@ -70,7 +104,12 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-serif);
   }
 

@@ -62,6 +62,12 @@ const config: Config = {
                 "ink-charcoal": "hsl(var(--ink-charcoal))",
                 "deep-taupe": "hsl(var(--deep-taupe))",
                 "soft-silk-border": "hsl(var(--soft-silk-border))",
+                saffron: {
+                    primary: "hsl(var(--saffron-primary))",
+                    heading: "hsl(var(--saffron-heading))",
+                    icon: "hsl(var(--saffron-icon))",
+                    cream: "hsl(var(--saffron-cream))",
+                },
             },
             borderRadius: {
                 lg: "var(--radius)",

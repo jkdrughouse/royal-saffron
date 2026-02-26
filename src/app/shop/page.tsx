@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { ShoppingCart, Search, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,15 @@ import { useWishlist } from "../lib/wishlist-context";
 import { Heart } from "lucide-react";
 
 export default function Shop() {
+    const searchParams = useSearchParams();
     const [activeCategory, setActiveCategory] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
+
+    // Pre-select category from ?category= query param (set by ShopByCategory links)
+    useEffect(() => {
+        const cat = searchParams.get("category");
+        if (cat) setActiveCategory(cat);
+    }, [searchParams]);
     const { addItem } = useCart();
     const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } = useWishlist();
 
