@@ -14,6 +14,7 @@ interface OrderItem {
   quantity: number;
   variant?: number;
   unit?: string;
+  image?: string;
 }
 
 interface Order {
@@ -54,7 +55,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     fetchOrders();
-    
+
     // Check for order success parameter
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get("order")) {
@@ -92,7 +93,7 @@ export default function OrdersPage() {
     try {
       const response = await fetch(`/api/orders/${orderId}/track`);
       if (!response.ok) throw new Error("Failed to fetch tracking");
-      
+
       const data = await response.json();
       setTrackingData({ ...trackingData, [orderId]: data });
     } catch (error) {
@@ -161,7 +162,7 @@ export default function OrdersPage() {
           <p className="text-sm">Your order has been confirmed. We'll process it shortly.</p>
         </div>
       )}
-      
+
       <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl mb-8 sm:mb-12 text-ink-charcoal">
         My Orders
       </h1>
@@ -274,23 +275,37 @@ export default function OrdersPage() {
                     {order.items.map((item, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between py-2 border-b border-soft-silk-border last:border-0"
+                        className="flex items-center gap-3 py-2 border-b border-soft-silk-border last:border-0"
                       >
-                        <div>
-                          <p className="font-medium text-ink-charcoal">{item.name}</p>
-                          {item.variant && (
-                            <p className="text-sm text-deep-taupe">
-                              {item.variant} {item.unit || "g"}
-                            </p>
+                        {/* Product thumbnail */}
+                        <Link href={`/product/${item.productId}`} className="flex-shrink-0">
+                          {item.image ? (
+                            <div className="w-14 h-14 bg-muted/10 rounded-md p-1 hover:opacity-80 transition-opacity">
+                              <img src={item.image} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                            </div>
+                          ) : (
+                            <div className="w-14 h-14 bg-muted/20 rounded-md flex items-center justify-center">
+                              <Package className="w-5 h-5 text-muted-foreground" />
+                            </div>
                           )}
-                        </div>
-                        <div className="text-right">
-                          <p className="font-medium text-ink-charcoal">
-                            ₹{item.price.toFixed(2)} × {item.quantity}
-                          </p>
-                          <p className="text-sm text-deep-taupe">
-                            ₹{(item.price * item.quantity).toFixed(2)}
-                          </p>
+                        </Link>
+                        <div className="flex-1 flex items-center justify-between">
+                          <div>
+                            <Link href={`/product/${item.productId}`} className="font-medium text-ink-charcoal hover:text-saffron-crimson transition-colors">{item.name}</Link>
+                            {item.variant && (
+                              <p className="text-sm text-deep-taupe">
+                                {item.variant} {item.unit || "g"}
+                              </p>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <p className="font-medium text-ink-charcoal">
+                              ₹{item.price.toFixed(2)} × {item.quantity}
+                            </p>
+                            <p className="text-sm text-deep-taupe">
+                              ₹{(item.price * item.quantity).toFixed(2)}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}

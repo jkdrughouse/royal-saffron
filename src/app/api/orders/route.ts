@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { getCurrentUser } from '@/app/lib/auth';
 import { sendEmail, getOrderConfirmationEmailHTML } from '@/app/lib/email';
+import { products } from '@/app/lib/products';
 
 export interface OrderItem {
   productId: string;
@@ -10,11 +11,13 @@ export interface OrderItem {
   quantity: number;
   variant?: number;
   unit?: string;
+  image?: string;
 }
 
 export interface Order {
   id: string;
   userId: string;
+  guestEmail?: string;
   items: OrderItem[];
   subtotal: number;
   shipping: number;
@@ -42,37 +45,40 @@ export interface Order {
   updatedAt: string;
 }
 
-// Create new order
+// Create new order (supports both authenticated users and guests)
 export async function POST(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    
-    if (!user) {
+    const body = await request.json();
+    const { items, shippingAddress, billingAddress, guestEmail } = body;
+
+    // Must be logged in OR provide a guest email
+    if (!user && !guestEmail) {
       return NextResponse.json(
-        { error: 'Not authenticated' },
+        { error: 'Authentication or guest email required' },
         { status: 401 }
       );
     }
 
-    const body = await request.json();
-    const { items, shippingAddress, billingAddress } = body;
-
     if (!items || !Array.isArray(items) || items.length === 0) {
-      return NextResponse.json(
-        { error: 'Order items are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Order items are required' }, { status: 400 });
     }
 
     if (!shippingAddress || !billingAddress) {
-      return NextResponse.json(
-        { error: 'Shipping and billing addresses are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Shipping and billing addresses are required' }, { status: 400 });
     }
 
+    // Enrich items with product image if not provided
+    const enrichedItems: OrderItem[] = items.map((item: OrderItem) => {
+      if (!item.image) {
+        const product = products.find(p => p.id === item.productId);
+        return { ...item, image: product?.image || '' };
+      }
+      return item;
+    });
+
     // Calculate totals
-    const subtotal = items.reduce((sum: number, item: OrderItem) => 
+    const subtotal = enrichedItems.reduce((sum: number, item: OrderItem) =>
       sum + (item.price * item.quantity), 0
     );
     const shipping = subtotal >= 1000 ? 0 : 50;
@@ -81,8 +87,9 @@ export async function POST(request: NextRequest) {
     // Create order
     const order: Order = {
       id: `ORD${Date.now()}${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-      userId: user.id,
-      items,
+      userId: user?.id || 'guest',
+      guestEmail: user ? undefined : guestEmail,
+      items: enrichedItems,
       subtotal,
       shipping,
       total,
@@ -99,14 +106,13 @@ export async function POST(request: NextRequest) {
 
     // Send order confirmation email
     try {
-      const userEmail = user.email;
+      const toEmail = user?.email || guestEmail;
       await sendEmail({
-        to: userEmail,
-        subject: `Order Confirmation #${order.id} - Royal Saffron`,
+        to: toEmail,
+        subject: `Order Confirmation #${order.id} - Jhelum Kesar Co.`,
         html: getOrderConfirmationEmailHTML(order),
       });
     } catch (emailError) {
-      // Don't fail the order if email fails
       console.error('Failed to send order confirmation email:', emailError);
     }
 
@@ -116,10 +122,7 @@ export async function POST(request: NextRequest) {
     );
   } catch (error) {
     console.error('Create order error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
 
@@ -127,28 +130,21 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const user = await getCurrentUser();
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
     }
 
     const orders: Order[] = await DB.orders();
     const userOrders = orders.filter((order: Order) => order.userId === user.id);
 
-    // Sort by most recent first
-    userOrders.sort((a: Order, b: Order) => 
+    userOrders.sort((a: Order, b: Order) =>
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
     return NextResponse.json({ orders: userOrders });
   } catch (error) {
     console.error('Get orders error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
