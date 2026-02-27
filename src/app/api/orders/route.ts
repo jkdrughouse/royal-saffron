@@ -142,7 +142,19 @@ export async function GET(request: NextRequest) {
       new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
 
-    return NextResponse.json({ orders: userOrders });
+    // Backfill missing item images from the local products catalog
+    const enrichedOrders = userOrders.map((order: Order) => ({
+      ...order,
+      items: order.items.map((item: OrderItem) => {
+        if (!item.image) {
+          const product = products.find(p => p.id === item.productId);
+          return { ...item, image: product?.image || '' };
+        }
+        return item;
+      }),
+    }));
+
+    return NextResponse.json({ orders: enrichedOrders });
   } catch (error) {
     console.error('Get orders error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

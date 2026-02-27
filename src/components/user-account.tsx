@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { User, LogOut, Package, LogIn, UserPlus } from "lucide-react";
+import { User, LogOut, Package, LogIn, UserPlus, MapPin } from "lucide-react";
 
 export function UserAccount() {
   const router = useRouter();
@@ -132,6 +132,13 @@ export function UserAccount() {
             >
               <Package className="w-4 h-4" />
               My Orders
+            </button>
+            <button
+              onClick={() => { router.push("/account#addresses"); setShowMenu(false); }}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-ink-charcoal hover:bg-muted rounded transition-colors text-left"
+            >
+              <MapPin className="w-4 h-4" />
+              Address Book
             </button>
             <div className="border-t border-soft-silk-border my-1" />
             <button
