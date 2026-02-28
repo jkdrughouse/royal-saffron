@@ -15,31 +15,7 @@ export function Analytics() {
     }
   }, [pathname, searchParams]);
 
-  // Google Analytics 4 script
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
-
-  if (!gaId) {
-    return null;
-  }
-
-  return (
-    <>
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
-      />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${gaId}', {
-              page_path: window.location.pathname,
-            });
-          `,
-        }}
-      />
-    </>
-  );
+  // GA scripts are loaded in layout.tsx via next/script (strategy="afterInteractive")
+  // No inline scripts here to keep CSP nonce-based policy clean
+  return null;
 }
