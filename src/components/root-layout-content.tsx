@@ -30,7 +30,7 @@ export function RootLayoutContent({ children }: { children: React.ReactNode }) {
         <CartProvider>
             <WishlistProvider>
                 {/* Top Announcement Bar */}
-                <div className="bg-primary text-primary-foreground text-[10px] sm:text-xs font-bold tracking-widest text-center py-2 px-4 uppercase w-full max-w-full overflow-x-hidden">
+                <div className="bg-primary text-black text-xs font-bold tracking-widest text-center py-2 px-4 uppercase w-full max-w-full overflow-x-hidden">
                     Free shipping on all orders over ₹1000
                 </div>
 
@@ -73,7 +73,7 @@ export function RootLayoutContent({ children }: { children: React.ReactNode }) {
                                     unoptimized
                                 />
                             </div>
-                            <span className="font-serif text-lg sm:text-2xl font-bold text-primary tracking-tight">
+                            <span className="font-serif text-lg sm:text-2xl font-bold text-ink-charcoal tracking-tight">
                                 Jhelum Kesar Co.
                             </span>
                         </Link>
@@ -127,7 +127,7 @@ export function RootLayoutContent({ children }: { children: React.ReactNode }) {
                 </header>
 
                 {/* Add padding bottom on mobile to account for bottom nav */}
-                <div className="pb-0 lg:pb-0">{children}</div>
+                <main className="pb-0 lg:pb-0">{children}</main>
 
                 <Footer />
 

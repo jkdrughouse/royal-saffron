@@ -6,6 +6,7 @@ import { useCart } from "../lib/cart-context";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { WhatsAppLogo } from "@/components/whatsapp-logo";
 import { lookupPincode, INDIAN_STATES } from "../lib/pincode";
@@ -216,8 +217,8 @@ export default function Cart() {
                 <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl">Shopping Cart</h1>
                 {items.map((item) => (
                     <Card key={`${item.id}-${item.selectedVariant || 'default'}`} className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6">
-                        <div className="h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 self-center sm:self-auto">
-                            <img src={item.image} className="h-full w-full object-contain mix-blend-multiply" alt={item.name} />
+                        <div className="relative h-32 w-32 sm:h-24 sm:w-24 bg-muted/20 rounded-md p-2 flex-shrink-0 self-center sm:self-auto">
+                            <Image src={item.image} fill sizes="128px" className="object-contain mix-blend-multiply" alt={item.name} />
                         </div>
                         <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">
                             <div className="flex-1">
@@ -281,8 +282,8 @@ export default function Cart() {
 
                             {["name", "email", "phone"].map((field) => (
                                 <div key={field}>
-                                    <label className="block text-sm font-medium mb-1 capitalize">{field} *</label>
-                                    <input type={field === "email" ? "email" : field === "phone" ? "tel" : "text"} value={(formData as any)[field]} onChange={(e) => setFormData({ ...formData, [field]: e.target.value })} className={inputCls(formErrors[field])} />
+                                    <label htmlFor={`shipping-${field}`} className="block text-sm font-medium mb-1 capitalize">{field} *</label>
+                                    <input id={`shipping-${field}`} type={field === "email" ? "email" : field === "phone" ? "tel" : "text"} value={(formData as any)[field]} onChange={(e) => setFormData({ ...formData, [field]: e.target.value })} className={inputCls(formErrors[field])} />
                                     {formErrors[field] && <p className="text-red-500 text-xs mt-1">{formErrors[field]}</p>}
                                 </div>
                             ))}
@@ -295,11 +296,11 @@ export default function Cart() {
 
                             {/* Pincode first → auto-fills state + city */}
                             <div>
-                                <label className="block text-sm font-medium mb-1 flex items-center gap-2">
+                                <label htmlFor="shipping-pincode" className="block text-sm font-medium mb-1 flex items-center gap-2">
                                     Pincode *
                                     {pincodeLoading && <Loader2 className="w-3 h-3 animate-spin text-amber-600" />}
                                 </label>
-                                <input type="text" maxLength={6} value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} onBlur={(e) => handlePincodeBlur(e.target.value, "shipping")} className={inputCls(formErrors.pincode)} placeholder="6-digit pincode" />
+                                <input id="shipping-pincode" type="text" maxLength={6} value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} onBlur={(e) => handlePincodeBlur(e.target.value, "shipping")} className={inputCls(formErrors.pincode)} placeholder="6-digit pincode" />
                                 {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
                             </div>
 
@@ -313,8 +314,8 @@ export default function Cart() {
                                     {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
                                 </div>
                                 <div>
-                                    <label className="block text-sm font-medium mb-1">City / District *</label>
-                                    <input type="text" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className={inputCls(formErrors.city)} />
+                                    <label htmlFor="shipping-city" className="block text-sm font-medium mb-1">City / District *</label>
+                                    <input id="shipping-city" type="text" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} className={inputCls(formErrors.city)} />
                                     {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
                                 </div>
                             </div>
@@ -337,8 +338,8 @@ export default function Cart() {
                                         </div>
                                     ))}
                                     <div>
-                                        <label className="block text-sm font-medium mb-1 flex items-center gap-2">Pincode * {pincodeLoading && <Loader2 className="w-3 h-3 animate-spin text-amber-600" />}</label>
-                                        <input type="text" maxLength={6} value={billingData.pincode} onChange={(e) => setBillingData({ ...billingData, pincode: e.target.value })} onBlur={(e) => handlePincodeBlur(e.target.value, "billing")} className={inputCls(formErrors.billingPincode)} />
+                                        <label htmlFor="billing-pincode" className="block text-sm font-medium mb-1 flex items-center gap-2">Pincode * {pincodeLoading && <Loader2 className="w-3 h-3 animate-spin text-amber-600" />}</label>
+                                        <input id="billing-pincode" type="text" maxLength={6} value={billingData.pincode} onChange={(e) => setBillingData({ ...billingData, pincode: e.target.value })} onBlur={(e) => handlePincodeBlur(e.target.value, "billing")} className={inputCls(formErrors.billingPincode)} />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3">
                                         <div>
@@ -349,8 +350,8 @@ export default function Cart() {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-medium mb-1">City *</label>
-                                            <input type="text" value={billingData.city} onChange={(e) => setBillingData({ ...billingData, city: e.target.value })} className={inputCls(formErrors.billingCity)} />
+                                            <label htmlFor="billing-city" className="block text-sm font-medium mb-1">City *</label>
+                                            <input id="billing-city" type="text" value={billingData.city} onChange={(e) => setBillingData({ ...billingData, city: e.target.value })} className={inputCls(formErrors.billingCity)} />
                                         </div>
                                     </div>
                                 </div>

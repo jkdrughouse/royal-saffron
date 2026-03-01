@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { Package, Truck, CheckCircle, Clock, XCircle, ExternalLink } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -280,8 +281,8 @@ export default function OrdersPage() {
                         {/* Product thumbnail */}
                         <Link href={`/product/${item.productId}`} className="flex-shrink-0">
                           {item.image ? (
-                            <div className="w-14 h-14 bg-muted/10 rounded-md p-1 hover:opacity-80 transition-opacity">
-                              <img src={item.image} alt={item.name} className="w-full h-full object-contain mix-blend-multiply" />
+                            <div className="relative w-14 h-14 bg-muted/10 rounded-md p-1 hover:opacity-80 transition-opacity">
+                              <Image src={item.image} alt={item.name} fill sizes="56px" className="object-contain mix-blend-multiply" />
                             </div>
                           ) : (
                             <div className="w-14 h-14 bg-muted/20 rounded-md flex items-center justify-center">

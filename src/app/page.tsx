@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { products } from "./lib/products";
@@ -9,6 +10,7 @@ import { Leaf, Award, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
 import ShopByCategory from "@/components/ShopByCategory";
+
 
 
 export default function Home() {
@@ -62,37 +64,46 @@ export default function Home() {
       <section className="relative h-[70vh] sm:h-[75vh] md:h-[85vh] min-h-[500px] sm:min-h-[550px] md:min-h-[600px] flex items-center overflow-hidden bg-white">
         <div className="absolute inset-0 z-0">
           {heroImages.map((hero, index) => (
-            <motion.img
+            <motion.div
               key={index}
-              src={hero.src}
-              className="absolute inset-0 w-full h-full object-cover object-center brightness-[0.85]"
-              alt={hero.alt}
-              style={{
-                objectPosition: 'center center',
-                objectFit: 'cover'
-              }}
+              className="absolute inset-0"
               initial={{ opacity: 0 }}
               animate={{
                 opacity: index === currentImageIndex ? 1 : 0,
                 scale: index === currentImageIndex ? 1 : 1.05
               }}
               transition={{ duration: 1, ease: "easeInOut" }}
-            />
+            >
+              <Image
+                src={hero.src}
+                alt={hero.alt}
+                fill
+                priority={index === 0}
+                loading={index === 0 ? "eager" : "lazy"}
+                sizes="100vw"
+                className="object-cover object-center brightness-[0.85]"
+              />
+            </motion.div>
           ))}
         </div>
 
-        {/* Navigation dots */}
-        <div className="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex gap-2 sm:gap-3">
+        {/* Navigation dots — p-4 gives ≥44px tap area (WCAG 2.5.5) */}
+        <div className="absolute bottom-2 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-20 flex items-center">
           {heroImages.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentImageIndex(index)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentImageIndex
-                ? "bg-pure-ivory w-6 sm:w-8"
-                : "bg-pure-ivory/50 hover:bg-pure-ivory/75 w-1.5 sm:w-2"
-                }`}
+              className="p-4 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-0"
               aria-label={`Go to slide ${index + 1}`}
-            />
+              aria-current={index === currentImageIndex ? "true" : undefined}
+            >
+              <span
+                className={`block rounded-full transition-all duration-300 ${index === currentImageIndex
+                  ? "bg-pure-ivory h-2 w-6 sm:w-8"
+                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75 h-1.5 w-1.5 sm:h-2 sm:w-2"
+                  }`}
+              />
+            </button>
           ))}
         </div>
 
@@ -132,6 +143,7 @@ export default function Home() {
       {/* Trust Signals */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
+          <h2 className="sr-only">Why Choose Us</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             <div className="bg-pure-ivory rounded-xl p-6 sm:p-8 text-center shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
               <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#FFF0E6] flex items-center justify-center mx-auto mb-4 sm:mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -182,10 +194,12 @@ export default function Home() {
                     <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
                       <span className="bg-pure-ivory/90 backdrop-blur px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full">Threads</span>
                     </div>
-                    <img
+                    <Image
                       src={product.image}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       alt={product.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
                     />
                   </div>
                   <div className="flex justify-between items-start gap-2">

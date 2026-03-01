@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sign } from 'jsonwebtoken';
+import { JWT_SECRET } from '@/app/lib/auth';
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'contact@jhelumkesarco.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Nationalhighway03#';
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+// Env validation for admin credentials
+if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+    throw new Error('[admin/auth] FATAL: ADMIN_EMAIL or ADMIN_PASSWORD env variable is not set.');
+}
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
 export async function POST(request: NextRequest) {
     try {

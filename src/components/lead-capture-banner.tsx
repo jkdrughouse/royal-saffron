@@ -114,10 +114,11 @@ export function LeadCaptureBanner() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-ink-charcoal mb-1">
+                <label htmlFor="lcb-name" className="block text-sm font-medium text-ink-charcoal mb-1">
                   Name *
                 </label>
                 <input
+                  id="lcb-name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -126,10 +127,11 @@ export function LeadCaptureBanner() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink-charcoal mb-1">
+                <label htmlFor="lcb-email" className="block text-sm font-medium text-ink-charcoal mb-1">
                   Email *
                 </label>
                 <input
+                  id="lcb-email"
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -140,10 +142,11 @@ export function LeadCaptureBanner() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-ink-charcoal mb-1">
+              <label htmlFor="lcb-phone" className="block text-sm font-medium text-ink-charcoal mb-1">
                 Phone *
               </label>
               <input
+                id="lcb-phone"
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -154,10 +157,11 @@ export function LeadCaptureBanner() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-ink-charcoal mb-1">
+              <label htmlFor="lcb-query" className="block text-sm font-medium text-ink-charcoal mb-1">
                 Your Query *
               </label>
               <textarea
+                id="lcb-query"
                 value={formData.query}
                 onChange={(e) => setFormData({ ...formData, query: e.target.value })}
                 rows={4}

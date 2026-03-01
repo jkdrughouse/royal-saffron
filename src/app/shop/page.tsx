@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import {
     ShoppingCart, Search, X, SlidersHorizontal, ChevronDown,
 } from "lucide-react";
@@ -181,8 +182,8 @@ function ShopContent() {
                     <button
                         onClick={() => setShowFilters((v) => !v)}
                         className={`flex items-center gap-1.5 px-3 py-2 rounded-lg border text-sm transition-colors ${showFilters
-                                ? "bg-saffron-crimson text-white border-saffron-crimson"
-                                : "border-gray-200 text-ink-charcoal hover:bg-muted"
+                            ? "bg-saffron-crimson text-white border-saffron-crimson"
+                            : "border-gray-200 text-ink-charcoal hover:bg-muted"
                             }`}
                     >
                         <SlidersHorizontal className="w-4 h-4" />
@@ -211,8 +212,8 @@ function ShopContent() {
                                             setShowSortMenu(false);
                                         }}
                                         className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${sortBy === opt.value
-                                                ? "bg-saffron-crimson/10 text-saffron-crimson font-medium"
-                                                : "text-ink-charcoal hover:bg-muted"
+                                            ? "bg-saffron-crimson/10 text-saffron-crimson font-medium"
+                                            : "text-ink-charcoal hover:bg-muted"
                                             }`}
                                     >
                                         {opt.label}
@@ -231,8 +232,8 @@ function ShopContent() {
                                 onClick={() => changeGrid(size)}
                                 title={`${size} columns`}
                                 className={`flex items-center justify-center w-8 h-8 rounded text-xs font-semibold transition-colors ${gridSize === size
-                                        ? "bg-saffron-crimson text-white"
-                                        : "text-muted-foreground hover:bg-muted/50"
+                                    ? "bg-saffron-crimson text-white"
+                                    : "text-muted-foreground hover:bg-muted/50"
                                     }`}
                             >
                                 {size}×
@@ -282,8 +283,8 @@ function ShopContent() {
                                     setMaxPrice(preset.max);
                                 }}
                                 className={`px-3 py-1.5 rounded-full text-xs border transition-colors ${minPrice === preset.min && maxPrice === preset.max
-                                        ? "bg-saffron-crimson text-white border-saffron-crimson"
-                                        : "border-soft-silk-border text-ink-charcoal hover:bg-muted"
+                                    ? "bg-saffron-crimson text-white border-saffron-crimson"
+                                    : "border-soft-silk-border text-ink-charcoal hover:bg-muted"
                                     }`}
                             >
                                 {preset.label}
@@ -329,8 +330,14 @@ function ShopContent() {
                         <Card key={product.id} className="flex flex-col h-full border-muted/20 shadow-sm hover:shadow-lg transition-all relative group">
                             <Link href={`/product/${product.id}`} className="flex flex-col h-full">
                                 <div className={`aspect-square bg-muted/10 rounded-t-lg cursor-pointer relative overflow-hidden`}>
-                                    <div className={`w-full h-full ${isCompact ? "p-3" : "p-6 md:p-8"} flex items-center justify-center`}>
-                                        <img src={product.image} className="max-w-full max-h-full w-auto h-auto object-contain mix-blend-multiply" alt={product.name} />
+                                    <div className={`relative w-full h-full ${isCompact ? "p-3" : "p-6 md:p-8"}`}>
+                                        <Image
+                                            src={product.image}
+                                            alt={product.name}
+                                            fill
+                                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                                            className="object-contain mix-blend-multiply"
+                                        />
                                     </div>
                                     <button
                                         onClick={(e) => {

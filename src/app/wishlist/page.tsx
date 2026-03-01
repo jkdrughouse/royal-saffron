@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ShoppingCart, Heart, Trash2, ArrowLeft } from "lucide-react";
 import { useCart } from "../lib/cart-context";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function WishlistPage() {
   const { items, removeItem, clearWishlist } = useWishlist();
@@ -56,11 +57,13 @@ export default function WishlistPage() {
         {items.map((product) => (
           <Card key={product.id} className="flex flex-col h-full border-muted/20 shadow-sm hover:shadow-md transition-shadow">
             <Link href={`/product/${product.id}`} className="flex flex-col h-full">
-              <div className="aspect-square p-4 sm:p-6 bg-muted/10 rounded-t-lg cursor-pointer relative group">
-                <img
+              <div className="relative aspect-square p-4 sm:p-6 bg-muted/10 rounded-t-lg cursor-pointer group">
+                <Image
                   src={product.image}
-                  className="w-full h-full object-contain mix-blend-multiply"
                   alt={product.name}
+                  fill
+                  sizes="(max-width: 640px) 50vw, 25vw"
+                  className="object-contain mix-blend-multiply p-4 sm:p-6"
                 />
                 <button
                   onClick={(e) => {
