@@ -1,0 +1,142 @@
+name: Deploy to cPanel + Purge Cloudflare
+
+on:
+  push:
+    branches:
+      - main
+
+# Only one deploy runs at a time; newer pushes cancel older queued ones
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  # ── 1. Build ─────────────────────────────────────────────────────────────
+  build:
+    name: Build Next.js Standalone
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Build
+        env:
+          # Inject required env vars from GitHub Secrets for build-time use
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+        run: npm run build
+
+      # Package the standalone output + public + static assets
+      - name: Package build artefact
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+          cd .next/standalone
+          zip -r ../../jkc-deploy.zip . -x "*.map"
+          cd ../..
+          echo "Build size: $(du -sh jkc-deploy.zip | cut -f1)"
+
+      - name: Upload artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jkc-standalone
+          path: jkc-deploy.zip
+          retention-days: 3
+
+  # ── 2. Deploy to cPanel via FTP ─────────────────────────────────────────
+  deploy:
+    name: Deploy to cPanel
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artefact
+        uses: actions/download-artifact@v4
+        with:
+          name: jkc-standalone
+
+      - name: Unzip
+        run: unzip -q jkc-deploy.zip -d deploy_out
+
+      # Upload via FTP to cPanel home directory
+      # Requires: CPANEL_FTP_HOST, CPANEL_FTP_USER, CPANEL_FTP_PASS secrets
+      - name: Upload via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.CPANEL_FTP_HOST }}
+          username: ${{ secrets.CPANEL_FTP_USER }}
+          password: ${{ secrets.CPANEL_FTP_PASS }}
+          local-dir: './deploy_out/'
+          server-dir: '/jkc_app/'
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/*.map
+
+      # cPanel Application Restart via cPanel UAPI (no SSH needed)
+      # Requires: CPANEL_USER, CPANEL_API_TOKEN secrets
+      - name: Restart Node.js app via cPanel UAPI
+        env:
+          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          CPANEL_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
+        run: |
+          echo "Restarting Node.js application on cPanel..."
+          curl -s --fail \
+            -H "Authorization: cpanel $CPANEL_USER:$CPANEL_TOKEN" \
+            "https://$CPANEL_HOST:2083/execute/NodeJS/restart_app" \
+            -d 'app_name=jkc_app' \
+            | tee /tmp/restart_result.json
+          cat /tmp/restart_result.json | python3 -c "
+          import json,sys
+          r=json.load(sys.stdin)
+          if r.get('errors'):
+              print('RESTART ERROR:', r['errors'])
+              sys.exit(1)
+          print('App restarted successfully')
+          "
+
+  # ── 3. Purge Cloudflare Cache ────────────────────────────────────────────
+  purge-cache:
+    name: Purge Cloudflare Cache
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Purge all cached files
+        env:
+          CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "Purging Cloudflare cache for zone $CF_ZONE_ID ..."
+          RESPONSE=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything": true}')
+          echo "$RESPONSE"
+          if echo "$RESPONSE" | grep -q '"success":true'; then
+            echo "✅ Cloudflare cache purged successfully"
+          else
+            echo "❌ Cache purge failed"
+            exit 1
+          fi
+
+      - name: Post-deploy summary
+        run: |
+          echo "🚀 Deployment complete!"
+          echo "   Site: https://jhelumkesarco.com"
+          echo "   Branch: ${{ github.ref_name }}"
+          echo "   Commit: ${{ github.sha }}"
+          echo "   Triggered by: ${{ github.actor }}"
