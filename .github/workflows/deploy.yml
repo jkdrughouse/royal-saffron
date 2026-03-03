@@ -5,7 +5,6 @@ on:
     branches:
       - main
 
-# Only one deploy runs at a time; newer pushes cancel older queued ones
 concurrency:
   group: deploy-production
   cancel-in-progress: true
@@ -30,31 +29,36 @@ jobs:
 
       - name: Build
         env:
-          # Inject required env vars from GitHub Secrets for build-time use
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
         run: npm run build
 
-      # Package the standalone output + public + static assets
-      - name: Package build artefact
+      - name: Package standalone bundle
         run: |
           cp -r public .next/standalone/public
           cp -r .next/static .next/standalone/.next/static
           cd .next/standalone
           zip -r ../../jkc-deploy.zip . -x "*.map"
           cd ../..
-          echo "Build size: $(du -sh jkc-deploy.zip | cut -f1)"
+          echo "📦 Bundle: $(du -sh jkc-deploy.zip | cut -f1)"
 
-      - name: Upload artefact
+      - name: Upload build artefact
         uses: actions/upload-artifact@v4
         with:
           name: jkc-standalone
           path: jkc-deploy.zip
           retention-days: 3
 
-  # ── 2. Deploy to cPanel via FTP ─────────────────────────────────────────
+  # ── 2. Deploy via FTP + SSH restart ──────────────────────────────────────
+  # Secrets needed:
+  #   CPANEL_FTP_HOST  → jhelumkesarco.com
+  #   CPANEL_FTP_USER  → deploy@jhelumkesarco.com
+  #   CPANEL_FTP_PASS  → GhDeploy@2024JKC!
+  #   SSH_HOST         → server902.shared.spaceship.host (or jhelumkesarco.com)
+  #   SSH_USER         → unodtykawc
+  #   SSH_PRIVATE_KEY  → your private key (generate below)
   deploy:
     name: Deploy to cPanel
     needs: build
@@ -65,48 +69,51 @@ jobs:
         with:
           name: jkc-standalone
 
-      - name: Unzip
-        run: unzip -q jkc-deploy.zip -d deploy_out
-
-      # Upload via FTP to cPanel home directory
-      # Requires: CPANEL_FTP_HOST, CPANEL_FTP_USER, CPANEL_FTP_PASS secrets
-      - name: Upload via FTP
+      - name: Upload bundle via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.CPANEL_FTP_HOST }}
           username: ${{ secrets.CPANEL_FTP_USER }}
           password: ${{ secrets.CPANEL_FTP_PASS }}
-          local-dir: './deploy_out/'
-          server-dir: '/jkc_app/'
-          dangerous-clean-slate: false
+          local-dir: ./
+          server-dir: /jkc_upload/
+          dry-run: false
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/*.map
+            **/*.md
 
-      # cPanel Application Restart via cPanel UAPI (no SSH needed)
-      # Requires: CPANEL_USER, CPANEL_API_TOKEN secrets
-      - name: Restart Node.js app via cPanel UAPI
-        env:
-          CPANEL_HOST: ${{ secrets.CPANEL_HOST }}
-          CPANEL_USER: ${{ secrets.CPANEL_USER }}
-          CPANEL_TOKEN: ${{ secrets.CPANEL_API_TOKEN }}
-        run: |
-          echo "Restarting Node.js application on cPanel..."
-          curl -s --fail \
-            -H "Authorization: cpanel $CPANEL_USER:$CPANEL_TOKEN" \
-            "https://$CPANEL_HOST:2083/execute/NodeJS/restart_app" \
-            -d 'app_name=jkc_app' \
-            | tee /tmp/restart_result.json
-          cat /tmp/restart_result.json | python3 -c "
-          import json,sys
-          r=json.load(sys.stdin)
-          if r.get('errors'):
-              print('RESTART ERROR:', r['errors'])
-              sys.exit(1)
-          print('App restarted successfully')
-          "
+      - name: Extract bundle & restart app via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_KEY_PASSPHRASE }}
+          script: |
+            set -e
+            echo "📂 Extracting new build..."
+            mkdir -p ~/jkc_app
+            cd ~/
+            unzip -o ~/jkc_upload/jkc-deploy.zip -d ~/jkc_app_new
+            rsync -a --delete ~/jkc_app_new/ ~/jkc_app/
+            rm -rf ~/jkc_app_new ~/jkc_upload/jkc-deploy.zip
+
+            echo "🔄 Restarting Node.js app..."
+            # Try cPanel Node.js App restart (passenger-based)
+            if command -v passengerkillall &> /dev/null; then
+              passengerkillall
+              echo "✅ App restarted via Passenger"
+            elif [ -f ~/jkc_app/tmp/restart.txt ]; then
+              touch ~/jkc_app/tmp/restart.txt
+              echo "✅ App restarted via restart.txt"
+            else
+              # Create restart trigger for Passenger
+              mkdir -p ~/jkc_app/tmp
+              touch ~/jkc_app/tmp/restart.txt
+              echo "✅ Restart trigger created"
+            fi
 
   # ── 3. Purge Cloudflare Cache ────────────────────────────────────────────
   purge-cache:
@@ -115,28 +122,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Purge all cached files
-        env:
-          CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          echo "Purging Cloudflare cache for zone $CF_ZONE_ID ..."
+          echo "🧹 Purging Cloudflare cache..."
           RESPONSE=$(curl -s -X POST \
-            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
-            -H "Authorization: Bearer $CF_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
-            --data '{"purge_everything": true}')
+            --data '{"purge_everything":true}')
           echo "$RESPONSE"
           if echo "$RESPONSE" | grep -q '"success":true'; then
-            echo "✅ Cloudflare cache purged successfully"
+            echo "✅ Cloudflare cache purged"
           else
             echo "❌ Cache purge failed"
             exit 1
           fi
 
-      - name: Post-deploy summary
+      - name: Summary
         run: |
-          echo "🚀 Deployment complete!"
-          echo "   Site: https://jhelumkesarco.com"
-          echo "   Branch: ${{ github.ref_name }}"
-          echo "   Commit: ${{ github.sha }}"
-          echo "   Triggered by: ${{ github.actor }}"
+          echo ""
+          echo "🚀 Deploy complete — https://jhelumkesarco.com"
+          echo "   Commit : ${{ github.sha }}"
+          echo "   By     : ${{ github.actor }}"
