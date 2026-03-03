@@ -39,6 +39,17 @@ jobs:
 
       - name: Package standalone bundle
         run: |
+          echo "📂 Contents of .next/:"
+          ls -la .next/ || echo "(empty or missing)"
+          
+          if [ ! -d ".next/standalone" ]; then
+            echo "❌ .next/standalone directory not found!"
+            echo "This means next.config.ts output:'standalone' did not take effect."
+            echo "Checking next.config.ts..."
+            cat next.config.ts | head -10
+            exit 1
+          fi
+          
           cp -r public .next/standalone/public
           cp -r .next/static .next/standalone/.next/static
           cd .next/standalone
