@@ -99,6 +99,15 @@ export default async function RootLayout({
             "https://www.instagram.com/jhelumkesarco"
           ]
         }} />
+        {/* Preload LCP hero image — tells browser to fetch it immediately */}
+        {/* eslint-disable-next-line @next/next/no-head-element */}
+        <link
+          rel="preload"
+          as="image"
+          href="/hero-clean.webp"
+          // @ts-expect-error fetchpriority is valid HTML but not yet in React types
+          fetchpriority="high"
+        />
       </head>
       {gaId && (
         <>

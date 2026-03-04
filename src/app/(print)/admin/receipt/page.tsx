@@ -1,6 +1,79 @@
 import { notFound } from "next/navigation";
 import { DB } from "@/app/lib/db";
 import { Metadata } from "next";
+import PrintActions from "./print-actions";
+import { products } from "@/app/lib/products";
+
+// ── Smart Thank-You Message Engine ───────────────────────────────────────────
+// Ported from the original jkc_receipt_design.html smart-message JS block.
+// Runs server-side so there is no flash / layout shift on the printed receipt.
+
+const SMART_MESSAGES: Record<string, string[]> = {
+    saffron: [
+        "Every pinch of Kashmiri Kesar carries the fragrance of mountain valleys. Store in an airtight container away from light to preserve its vivid colour and aroma for months.",
+        "You've chosen the finest Mongra threads — the gold standard of saffron. A pinch on warm milk or biryani and you'll understand why Kashmir's kesar is prized across the world.",
+    ],
+    gift: [
+        "What a beautiful choice. We've packed every item with extra care — because whoever receives this deserves to feel truly special. Thank you for trusting us to carry your sentiment.",
+        "Gifts from Jhelum Kesar Co. are more than products — they're stories from Kashmir. We hope this brings as much joy to the recipient as it did to choose it.",
+    ],
+    beauty: [
+        "A few drops of liquid kesar go a long way. Add it to warm milk, desserts, or your skincare ritual and let the ancient magic of saffron unfold every day.",
+        "Saffron has adorned royalty for centuries. Your beauty ritual just got a royal upgrade — enjoy the warmth and glow it brings from within.",
+    ],
+    honey: [
+        "Pure Kashmiri honey — raw, unfiltered, and brimming with the highland terroir. Drizzle it over everything and never look back.",
+        "This is honey that remembers where it came from. The bees, the flowers, the mountain air — every jar carries the whole story.",
+    ],
+    tea: [
+        "Brew it slow, sip it slower. Kashmiri Kahwa isn't just tea — it's a ritual, a pause, a moment that belongs entirely to you.",
+        "Add a strand of kesar to your brew and let the colour bloom. This is what winter mornings in Kashmir taste like.",
+    ],
+    spices: [
+        "From our highland farms to your kitchen — every spice in this order carries the altitude, soil, and care of Kashmir. Cook boldly.",
+        "The best recipes start with honest ingredients. These spices are exactly that — unblended, uncut, and full of character.",
+    ],
+    mixed: [
+        "From our fields to your hands — thank you for bringing a little of Kashmir into your home. Each item has been packed with the same care and pride we put into every strand we harvest.",
+        "A beautiful selection! Whether it's for your kitchen, a loved one, or simply a moment of indulgence — we're honoured to be part of it. Enjoy every drop, pinch, and gift.",
+    ],
+};
+
+function pickMessage(itemNames: string[]): string {
+    // Map item names → product categories from the catalog
+    const cats = new Set<string>();
+    for (const name of itemNames) {
+        const product = products.find(
+            (p) => p.name.toLowerCase() === name.toLowerCase()
+        );
+        if (product) cats.add(product.category.toLowerCase());
+    }
+
+    // Map catalog categories to message keys
+    const catMap: Record<string, string> = {
+        saffron: "saffron",
+        "kashmiri special": "gift",
+        beauty: "beauty",
+        fragrance: "beauty",
+        oils: "beauty",
+        honey: "honey",
+        tea: "tea",
+        spices: "spices",
+        food: "mixed",
+        nuts: "mixed",
+        other: "mixed",
+    };
+
+    const mappedKeys = [...cats].map((c) => catMap[c] ?? "mixed");
+    const uniqueKeys = new Set(mappedKeys);
+
+    // One dominant category → specific message; multiple → mixed
+    const key = uniqueKeys.size === 1 ? [...uniqueKeys][0] : "mixed";
+    const pool = SMART_MESSAGES[key] ?? SMART_MESSAGES.mixed;
+
+    // Server-side deterministic pick (seeded by order item count to avoid random hydration mismatches)
+    return pool[itemNames.length % pool.length];
+}
 
 export const metadata: Metadata = { title: "JKC Receipt" };
 
@@ -45,17 +118,24 @@ export default async function ReceiptPage({
 
     const addr = order.shippingAddress;
 
+    // Smart thank-you message
+    const itemNames: string[] = (order.items ?? []).map((i: any) => i.name as string);
+    const thankYouMessage = pickMessage(itemNames);
+
     return (
-        <html lang="en">
-            <head>
-                <meta charSet="UTF-8" />
-                <meta name="viewport" content="width=device-width,initial-scale=1" />
-                <title>JKC Receipt — {order.id}</title>
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Montserrat:wght@400;500;600&display=swap"
-                    rel="stylesheet"
-                />
-                <style>{`
+        <>
+            {/* Load print-specific fonts (Cormorant Garamond + Montserrat) */}
+            <link
+                rel="stylesheet"
+                href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Montserrat:wght@400;500;600&display=swap"
+            />
+            <style>{`
+          /* ── Hard reset: undo globals.css + Tailwind base that bleeds into print route ── */
+          .receipt-shell, .receipt-shell * {
+            box-sizing: border-box;
+            border: none;     /* undo Tailwind's * { border-color } base reset         */
+            outline: none;
+          }
           :root {
             --red: hsl(12,85%,43%);
             --cream: #F9F7F2;
@@ -64,13 +144,8 @@ export default async function ReceiptPage({
             --clay: #7B736E;
             --silk: #E6E2D9;
           }
-          @page { size: A5 landscape; margin: 0; }
-          @media print {
-            html, body { width: 210mm; height: 148mm; }
-            .no-print { display: none !important; }
-          }
-          * { box-sizing: border-box; margin: 0; padding: 0; }
-          body {
+          /* Full-viewport shell that replaces body layout (body styles overridden by globals.css) */
+          .receipt-shell {
             font-family: 'Montserrat', sans-serif;
             background: var(--gold);
             display: flex;
@@ -78,8 +153,18 @@ export default async function ReceiptPage({
             align-items: center;
             justify-content: center;
             min-height: 100vh;
+            width: 100%;
             padding: 20px;
             gap: 16px;
+            position: fixed;   /* escape body positioning constraints from globals.css */
+            inset: 0;
+            overflow: auto;
+          }
+          @page { size: A5 landscape; margin: 0; }
+          @media print {
+            .receipt-shell { position: static; min-height: unset; padding: 0; background: #fff; }
+            html, body { width: 210mm; height: 148mm; background: #fff !important; }
+            .no-print { display: none !important; }
           }
           /* Print action bar */
           .no-print {
@@ -192,14 +277,12 @@ export default async function ReceiptPage({
           .social-col { text-align: right; }
           .social-col span { display: block; font-size: 6.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--red); line-height: 1.8; }
           .fine { font-size: 6px; color: var(--clay); margin-top: 2px; line-height: 1.4; }
-        `}</style>
-            </head>
-            <body>
-                {/* Action bar — hidden on print */}
-                <div className="no-print">
-                    <button className="btn btn-back" onClick={() => window.history.back()}>← Back</button>
-                    <button className="btn btn-print" onClick={() => window.print()}>🖨 Print Receipt</button>
-                </div>
+            `}</style>
+
+            {/* Full-viewport shell — isolates receipt from globals.css body styles */}
+            <div className="receipt-shell">
+                {/* Action bar — client component handles window.print() + window.history.back() */}
+                <PrintActions />
 
                 <div className="receipt">
                     {/* ── LEFT PANEL ── */}
@@ -313,10 +396,7 @@ export default async function ReceiptPage({
                         <div className="footer-row">
                             <div>
                                 <div className="ty">Thank you, {addr?.name?.split(" ")[0]}! 🌸</div>
-                                <div className="ty-sub">
-                                    From our fields to your hands — every item was packed with care and pride
-                                    from the saffron valleys of Kashmir.
-                                </div>
+                                <div className="ty-sub">{thankYouMessage}</div>
                             </div>
                             <div className="social-col">
                                 <span>📷 @jhelumkesar</span>
@@ -330,16 +410,7 @@ export default async function ReceiptPage({
                         </div>
                     </div>
                 </div>
-
-                {/* Auto-print on page load */}
-                <script dangerouslySetInnerHTML={{
-                    __html: `
-          window.addEventListener('load', function() {
-            // Small delay so fonts load before print dialog
-            setTimeout(function() { window.print(); }, 600);
-          });
-        `}} />
-            </body>
-        </html>
+            </div> {/* /receipt-shell */}
+        </>
     );
 }

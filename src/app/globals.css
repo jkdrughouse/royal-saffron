@@ -118,3 +118,32 @@
     max-width: 100%;
   }
 }
+
+/* ── Review Ticker — CSS-only infinite scroll ──────────────────────────── */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-outer {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+
+.ticker-track {
+  display: flex;
+  gap: 1.25rem;
+  width: max-content;
+  animation: ticker-scroll 35s linear infinite;
+}
+
+.ticker-outer:hover .ticker-track {
+  animation-play-state: paused;
+}

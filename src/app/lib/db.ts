@@ -66,4 +66,26 @@ export const DB = {
     await col.deleteMany({});
     if (data.length > 0) await col.insertMany(data);
   },
+  featuredReviews: async (): Promise<any[]> => {
+    const db = await getDb();
+    return db.collection('reviews')
+      .find({ featured: true, rating: { $gte: 4 } })
+      .sort({ createdAt: -1 })
+      .toArray() as Promise<any[]>;
+  },
+  upsertReview: async (review: any) => {
+    const db = await getDb();
+    await db.collection('reviews').replaceOne(
+      { id: review.id },
+      review,
+      { upsert: true }
+    );
+  },
+  patchReview: async (id: string, patch: Record<string, any>) => {
+    const db = await getDb();
+    await db.collection('reviews').updateOne(
+      { id },
+      { $set: patch }
+    );
+  },
 };

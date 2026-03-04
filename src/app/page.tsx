@@ -1,144 +1,26 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { products } from "./lib/products";
 import { Leaf, Award, ShieldCheck } from "lucide-react";
-import { useState, useEffect } from "react";
 import { LeadCaptureBanner } from "@/components/lead-capture-banner";
 import ShopByCategory from "@/components/ShopByCategory";
+import { HeroCarousel } from "@/components/hero-carousel";
+import { ReviewTicker } from "@/components/review-ticker";
 
-
-
+// Server Component — no "use client", no useState, no useEffect
+// Only the <HeroCarousel> child is a client component
 export default function Home() {
   const featuredProducts = [
-    products.find(p => p.id === 'kashmiri-saffron'),
-    products.find(p => p.id === 'acacia-honey'),
-    products.find(p => p.id === 'shilajit'),
-  ].filter((p): p is NonNullable<typeof p> => p !== undefined); // Remove any undefined products
-
-  // Hero images array
-  const heroImages = [
-    {
-      src: "/hero-clean.webp",
-      alt: "Royal Saffron Hero",
-      title: "The Gold of",
-      subtitle: "Spices",
-      description: "Discover the unmatched aroma and color of our premium Super Negin saffron. Hand-harvested for the purest culinary experience."
-    },
-    {
-      src: "/hero-new-2.png",
-      alt: "Premium Kashmir Products",
-      title: "PREMIUM",
-      subtitle: "KASHMIRI PRODUCTS",
-      description: "Experience the finest quality products from the valleys of Kashmir."
-    },
-    {
-      src: "/hero-new-3.png",
-      alt: "Natural Excellence",
-      title: "EXPERIENCE",
-      subtitle: "PURE QUALITY",
-      description: "Authentic Kashmiri products sourced with care and tradition."
-    }
-  ];
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  // Auto-rotate images every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
-    }, 10000); // 10 seconds
-
-    return () => clearInterval(interval);
-  }, [heroImages.length]);
-
-  const currentHero = heroImages[currentImageIndex];
+    products.find((p) => p.id === "kashmiri-saffron"),
+    products.find((p) => p.id === "acacia-honey"),
+    products.find((p) => p.id === "shilajit"),
+  ].filter((p): p is NonNullable<typeof p> => p !== undefined);
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="relative h-[70vh] sm:h-[75vh] md:h-[85vh] min-h-[500px] sm:min-h-[550px] md:min-h-[600px] flex items-center overflow-hidden bg-white">
-        <div className="absolute inset-0 z-0">
-          {heroImages.map((hero, index) => (
-            <motion.div
-              key={index}
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: index === currentImageIndex ? 1 : 0,
-                scale: index === currentImageIndex ? 1 : 1.05
-              }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-            >
-              <Image
-                src={hero.src}
-                alt={hero.alt}
-                fill
-                priority={index === 0}
-                loading={index === 0 ? "eager" : "lazy"}
-                sizes="100vw"
-                className="object-cover object-center brightness-[0.85]"
-              />
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Navigation dots — p-4 gives ≥44px tap area (WCAG 2.5.5) */}
-        <div className="absolute bottom-2 sm:bottom-6 left-1/2 transform -translate-x-1/2 z-20 flex items-center">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className="p-4 flex items-center justify-center focus-visible:outline-2 focus-visible:outline-white focus-visible:outline-offset-0"
-              aria-label={`Go to slide ${index + 1}`}
-              aria-current={index === currentImageIndex ? "true" : undefined}
-            >
-              <span
-                className={`block rounded-full transition-all duration-300 ${index === currentImageIndex
-                  ? "bg-pure-ivory h-2 w-6 sm:w-8"
-                  : "bg-pure-ivory/50 hover:bg-pure-ivory/75 h-1.5 w-1.5 sm:h-2 sm:w-2"
-                  }`}
-              />
-            </button>
-          ))}
-        </div>
-
-        {currentImageIndex === 0 && (
-          <div className="container relative z-10 mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              key={currentImageIndex}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-3xl"
-            >
-              <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-8xl mb-4 sm:mb-6 md:mb-8 text-white leading-tight">
-                {currentHero.title} <br />
-                <span className="italic font-light">{currentHero.subtitle}</span>
-              </h1>
-              <p className="text-sm sm:text-base md:text-xl text-white/90 mb-6 sm:mb-8 md:mb-10 max-w-xl font-light leading-relaxed">
-                {currentHero.description}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                <Link href="/shop" className="w-full sm:w-auto">
-                  <Button size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg bg-saffron-crimson hover:bg-estate-gold border-none text-pure-ivory font-medium shadow-lg hover:shadow-xl transition-all">
-                    Shop Collection
-                  </Button>
-                </Link>
-                <Link href="#our-story" className="w-full sm:w-auto">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg text-pure-ivory border-pure-ivory bg-transparent hover:bg-pure-ivory/10 font-medium">
-                    Our Story
-                  </Button>
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </section>
+      {/* Hero — client island, everything else is static HTML */}
+      <HeroCarousel />
 
       {/* Trust Signals */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">
@@ -172,6 +54,10 @@ export default function Home() {
 
       {/* Category Showcase */}
       <ShopByCategory />
+
+      {/* Customer Reviews Ticker */}
+      <ReviewTicker />
+
 
       {/* Best Sellers */}
       <section className="py-12 sm:py-16 md:py-24 bg-white">
@@ -225,7 +111,7 @@ export default function Home() {
           </div>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-6 sm:mb-8 text-pure-ivory">A Legacy of Purity</h2>
           <p className="text-pure-ivory/90 text-base sm:text-lg leading-relaxed mb-8 sm:mb-12 font-sans px-2">
-            Saffron is more than just a spice; it's a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
+            Saffron is more than just a spice; it&apos;s a labor of love. Each flower produces only three crimson stigmas, which must be hand-picked at dawn before the sun becomes too strong. It takes over 150,000 flowers to produce just one kilogram of our Royal Saffron.
           </p>
           <Link href="/our-story">
             <Button variant="outline" size="lg" className="rounded-lg px-6 sm:px-8 py-4 sm:py-6 bg-pure-ivory text-saffron-crimson border-pure-ivory hover:bg-transparent hover:text-pure-ivory hover:border-pure-ivory transition-all uppercase tracking-wide text-xs sm:text-sm font-medium w-full sm:w-auto">
