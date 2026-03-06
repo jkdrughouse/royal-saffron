@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, Home, Grid3x3, MessageCircle, BookOpen } from "lucide-react";
+import { Menu, X, Home, ShoppingBag, Grid3x3, MessageCircle, BookOpen } from "lucide-react";
 
 export function MobileMenu() {
   const pathname = usePathname();
@@ -74,6 +74,20 @@ export function MobileMenu() {
             >
               <Home className="w-5 h-5 flex-shrink-0" />
               <span>Home</span>
+            </Link>
+
+            {/* Shop */}
+            <Link
+              href="/shop"
+              onClick={closeMenu}
+              className={`flex items-center gap-4 px-6 py-4 text-base font-medium transition-colors border-b border-gray-100 ${pathname === "/shop" || pathname.startsWith("/shop")
+                ? "text-red-600 bg-red-50 font-semibold"
+                : "text-gray-800 hover:text-red-600 hover:bg-gray-50"
+                }`}
+              style={{ display: 'flex', visibility: 'visible' }}
+            >
+              <ShoppingBag className="w-5 h-5 flex-shrink-0" />
+              <span>Shop</span>
             </Link>
 
             {/* Categories */}

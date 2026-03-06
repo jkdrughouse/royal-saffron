@@ -39,6 +39,11 @@ export default function ProductClientSection({ product }: Props) {
             .then(res => res.json())
             .then(data => setReviewCount(data.totalReviews || 0))
             .catch(() => { });
+
+        // Auto-activate reviews tab if URL has #reviews hash
+        if (typeof window !== 'undefined' && window.location.hash === '#reviews') {
+            setActiveTab('reviews');
+        }
     }, [product.id]);
 
     const currentPrice = selectedVariant ? selectedVariant.price : product.price;
@@ -238,7 +243,7 @@ export default function ProductClientSection({ product }: Props) {
                     </div>
                 )}
 
-                <div className="mt-12 sm:mt-16">
+                <div className="mt-12 sm:mt-16" id="reviews">
                     <div className="border-b border-muted">
                         <nav className="flex gap-4 sm:gap-8 -mb-px">
                             {(['description', 'additional', 'reviews'] as const).map((tab) => (

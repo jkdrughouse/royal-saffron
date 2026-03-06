@@ -68,9 +68,18 @@ export const DB = {
   },
   featuredReviews: async (): Promise<any[]> => {
     const db = await getDb();
-    return db.collection('reviews')
+    // First try to get explicitly featured reviews
+    const featured = await db.collection('reviews')
       .find({ featured: true, rating: { $gte: 4 } })
       .sort({ createdAt: -1 })
+      .limit(10)
+      .toArray();
+    // Fall back to top-rated reviews if none are featured
+    if (featured.length > 0) return featured;
+    return db.collection('reviews')
+      .find({ rating: { $gte: 4 } })
+      .sort({ rating: -1, createdAt: -1 })
+      .limit(10)
       .toArray() as Promise<any[]>;
   },
   upsertReview: async (review: any) => {
