@@ -83,21 +83,24 @@ jobs:
           touch deploy/tmp/restart.txt
           echo "$(date -u)" > deploy/tmp/restart.txt
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.CPANEL_FTP_HOST }}
-          username: ${{ secrets.CPANEL_FTP_USER }}
-          password: ${{ secrets.CPANEL_FTP_PASS }}
-          local-dir: ./deploy/
-          server-dir: jkc_app/
-          dry-run: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/*.md
-            **/*.map
+      - name: Deploy via lftp
+        env:
+          FTP_USER: ${{ secrets.CPANEL_FTP_USER }}
+          FTP_PASS: ${{ secrets.CPANEL_FTP_PASS }}
+          FTP_HOST: ${{ secrets.CPANEL_FTP_HOST }}
+        run: |
+          # Install lftp
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+          # Sync using lftp
+          # -R: reverse (upload)
+          # -e: delete remote files that don't exist locally
+          # -v: verbose
+          # -p: allow partial
+          lftp -c "set ftp:ssl-allow no;
+          open -u $FTP_USER,$FTP_PASS $FTP_HOST;
+          mirror -R -e -v --parallel=10 deploy/ jkc_app/"
 
   # ── 3. Purge Cloudflare Cache ────────────────────────────────────────────
   purge-cache:
