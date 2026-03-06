@@ -90,7 +90,7 @@ jobs:
           username: ${{ secrets.CPANEL_FTP_USER }}
           password: ${{ secrets.CPANEL_FTP_PASS }}
           local-dir: ./deploy/
-          server-dir: ${{ secrets.CPANEL_DEPLOY_PATH }}
+          server-dir: jkc_app/
           dry-run: false
           exclude: |
             **/.git*
