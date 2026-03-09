@@ -45,7 +45,7 @@ export type Product = {
     reviewCount?: number;
 };
 
-export const products: Product[] = [
+const rawProducts: Product[] = [
     {
         id: 'choco-almond-rocks',
         name: 'Choco Almond Rocks',
@@ -304,7 +304,7 @@ export const products: Product[] = [
         id: 'acacia-honey',
         name: 'Acacia Honey',
         price: 1050,
-        image: '/products/acacia-honey.png',
+        image: '/products/acacia-honey.webp',
         category: 'Honey',
         description: "Premium quality Acacia Honey from Jehlum Kesar Co.",
         detailedDescription: "Description Acacia Honey Pure, light, and naturally refined — Acacia Honey is prized for its crystal-clear appearance, silky texture, and delicate floral sweetness. Sourced from the nectar of acacia blossoms, this premium honey is naturally slow to crystallize and loved for its clean, mild taste. Rich in natural antioxidants and gentle on digestion, acacia honey is an ideal everyday sweetener. Its subtle flavor makes it perfect for tea, warm water, desserts, salad dressings, and drizzling over fruits or yogurt without overpowering other ingredients. Why you’ll love it: 🌼 Light, mild & naturally sweet 🍯 Slow to crystallize, smooth texture 🌿 100% pure & naturally sourced ☕ Perfect for tea, desserts & daily use A simple, elegant honey — pure nature in every drop. 🍯✨",
@@ -315,10 +315,11 @@ export const products: Product[] = [
             { icon: "🍯", title: "Slow Crystallization", description: "Stays smooth" },
             { icon: "🌼", title: "Mild Floral", description: "Perfect for tea" },
             { icon: "🌿", title: "Pure", description: "No additives" },
-            { icon: "💚", title: "Gentle", description: "Low glycemic" },
+            { icon: "💚", title: "Gentle", description: "Low glycemic index" },
         ],
         images: [
-            { type: 'hero', url: '/products/acacia-honey.png', alt: 'Pure Acacia Honey in glass jar' },
+            { type: 'hero', url: '/products/acacia-honey.webp', alt: 'Pure Acacia Honey in glass jar' },
+            { type: 'lifestyle', url: '/products/acacia-honey-lifestyle-2.webp', alt: 'Acacia honey lifestyle shot' },
         ],
         stockLevel: 'in-stock',
         stockCount: 23,
@@ -359,7 +360,7 @@ export const products: Product[] = [
         id: 'kashmiri-mamra-badam',
         name: 'Kashmiri Mamra Badam',
         price: 1100,
-        image: '/products/kashmiri-mamra-badam.png',
+        image: '/products/kashmiri-mamra-badam.webp',
         category: 'Nuts',
         description: "Premium quality Kashmiri Mamra Badam from Jehlum Kesar Co.",
         detailedDescription: "Description Kashmiri Mamra Badam (Premium Almonds) Kashmiri Mamra Badam are naturally grown, premium almonds sourced from the pristine valleys of Kashmir. Unlike regular almonds, Mamra Badam are small, irregular in shape, and rich in natural oil , which makes them more nutritious and flavorful. These almonds are 100% natural, non-polished, and chemical-free , retaining their original taste and health benefits. Highly valued in Ayurveda, Mamra Badam are known for boosting brain health, immunity, energy, and overall vitality . Why Choose Kashmiri Mamra Badam? 🌰 Authentic Kashmiri origin 💪 High in healthy fats, protein & antioxidants 🧠 Supports brain & memory health 🌱 Naturally grown, no artificial processing ✨ Rich taste with crunchy texture Perfect for daily consumption, soaking overnight, or gifting , Kashmiri Mamra Badam are a true symbol of purity and wellness.",
@@ -377,7 +378,7 @@ export const products: Product[] = [
             { icon: "✨", title: "Premium Kashmir", description: "Authentic Mamra variety" },
         ],
         images: [
-            { type: 'hero', url: '/products/kashmiri-mamra-badam.png', alt: 'Kashmir Mamra Badam almonds' },
+            { type: 'hero', url: '/products/kashmiri-mamra-badam.webp', alt: 'Kashmir Mamra Badam almonds' },
         ],
         stockLevel: 'in-stock',
         stockCount: 29,
@@ -615,7 +616,7 @@ export const products: Product[] = [
         name: 'Walnut with Shells',
         price: 600,
         originalPrice: 700,
-        image: '/products/walnut-with-shells.png',
+        image: '/products/walnut-with-shells.webp',
         category: 'Nuts',
         description: "Premium quality Walnut with Shells from Jehlum Kesar Co.",
         detailedDescription: "Description Kashmiri Walnuts (Akhrot) Experience the pure richness of authentic Kashmiri Walnuts , handpicked from the pristine valleys of Kashmir. Naturally grown in the cool Himalayan climate, these walnuts are known for their light color, crisp texture, and superior taste compared to ordinary varieties. Our Kashmiri walnuts are 100% natural, non-GMO, and free from chemicals or preservatives , making them a perfect choice for daily nutrition. Carefully cleaned and packed to retain freshness, every kernel delivers a rich, nutty flavor and powerful health benefits. 🌰 Why Choose Kashmiri Walnuts? Premium quality, naturally grown in Kashmir Rich in Omega-3, antioxidants & essential nutrients Fresh, crunchy, and full-bodied taste Supports brain health, heart health & immunity Ideal for snacking, baking, cooking & gifting Add a handful of Kashmiri walnuts to your daily diet and enjoy nature’s gift of purity, taste, and wellness —straight from Kashmir to your home.",
@@ -629,9 +630,8 @@ export const products: Product[] = [
             { icon: "✨", title: "Versatile", description: "Snack or cook with" },
         ],
         images: [
-            { type: 'hero', url: '/products/walnut-with-shells.png', alt: 'Premium Kashmiri walnuts in shell' },
-            { type: 'lifestyle', url: '/products/walnut-with-shells-lifestyle.png', alt: 'Walnuts in natural setting' },
-            { type: 'macro', url: '/products/walnut-with-shells-macro.png', alt: 'Close-up of walnut texture' },
+            { type: 'hero', url: '/products/walnut-with-shells.webp', alt: 'Premium Kashmiri walnuts in shell' },
+            { type: 'additional', url: '/products/walnut-with-shells-2.webp', alt: 'Kashmiri walnuts in shell (alternate view)' },
         ],
         stockLevel: 'in-stock',
         stockCount: 28,
@@ -1154,7 +1154,7 @@ export const products: Product[] = [
         id: 'noormark-walnut-scrub',
         name: 'Noormark Walnut Scrub',
         price: 620,
-        image: '/products/noormark-walnut-scrub.png',
+        image: '/products/noormark-walnut-scrub.webp',
         category: 'Beauty',
         description: "Premium quality Noormark Walnut Scrub from Jehlum Kesar Co.",
         detailedDescription: "Noormark Walnut Scrub is a natural exfoliating face scrub enriched with finely ground walnut shells and herbal extracts. Gently removes dead skin cells, unclogs pores, and reveals smoother, brighter skin.",
@@ -1172,6 +1172,9 @@ export const products: Product[] = [
         trustBadges: ['natural-ingredients', 'gentle-exfoliant'],
         averageRating: 4.5,
         reviewCount: 18,
+        images: [
+            { type: 'hero', url: '/products/noormark-walnut-scrub.webp', alt: 'Noormark Walnut Scrub' },
+        ],
     },
     {
         id: 'bringraj-hair-oil',
@@ -1279,3 +1282,34 @@ export const products: Product[] = [
         reviewCount: 18,
     },
 ];
+
+function replaceJehlumWithJhelum(value: string): string {
+    return value.replace(/jehlum/gi, "Jhelum");
+}
+
+function normalizeProductText(product: Product): Product {
+    const normalize = (value: string | undefined) =>
+        typeof value === "string" ? replaceJehlumWithJhelum(value) : value;
+
+    return {
+        ...product,
+        name: normalize(product.name) ?? product.name,
+        category: normalize(product.category) ?? product.category,
+        description: normalize(product.description) ?? product.description,
+        detailedDescription: normalize(product.detailedDescription),
+        painPointHeadline: normalize(product.painPointHeadline),
+        sensoryDescription: normalize(product.sensoryDescription),
+        benefits: product.benefits?.map((b) => ({
+            ...b,
+            title: replaceJehlumWithJhelum(b.title),
+            description: replaceJehlumWithJhelum(b.description),
+        })),
+        images: product.images?.map((img) => ({
+            ...img,
+            alt: replaceJehlumWithJhelum(img.alt),
+            caption: normalize(img.caption),
+        })),
+    };
+}
+
+export const products: Product[] = rawProducts.map(normalizeProductText);

@@ -1,5 +1,6 @@
 import { Award } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 export const metadata = {
@@ -43,6 +44,18 @@ export default function OurStoryPage() {
                             <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-700 font-light">
                                 We do not simply source saffron; we have lived its cultivation for over a century. Today, we honor that legacy by bridging the gap between our history and your home, ensuring that every thread you receive carries the authentic aroma, color, and purity of a heritage that runs as deep as the Jhelum itself.
                             </p>
+
+                            <div className="relative overflow-hidden rounded-2xl border border-soft-silk-border bg-white shadow-sm not-prose mt-10">
+                                <div className="relative w-full aspect-[16/9]">
+                                    <Image
+                                        src="/our-story/our-story.jpeg"
+                                        alt="Saffron harvesting in Kashmir"
+                                        fill
+                                        className="object-cover"
+                                        priority
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
