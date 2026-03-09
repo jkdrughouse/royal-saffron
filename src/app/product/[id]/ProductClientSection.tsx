@@ -120,6 +120,11 @@ export default function ProductClientSection({ product }: Props) {
                                 </>
                             )}
                         </div>
+                        {product.id === "kashmiri-saffron" && currentOriginalPrice && currentOriginalPrice > currentPrice && (
+                            <div className="inline-flex items-center gap-2 px-3 py-1 mt-2 rounded-full bg-saffron-crimson/10 text-saffron-crimson text-xs font-semibold">
+                                <span>20% discount · Limited offer</span>
+                            </div>
+                        )}
                         {product.variants && product.variants.length > 0 && (
                             <p className="text-sm text-muted-foreground mt-2">
                                 Price range: ₹{product.variants[0].price} – ₹{product.variants[product.variants.length - 1].price}
@@ -142,6 +147,9 @@ export default function ProductClientSection({ product }: Props) {
                                 {product.variants.map((variant, index) => (
                                     <option key={index} value={`${variant.weight}-${variant.price}`}>
                                         {variant.weight} {variant.weight === 1 ? 'Gm' : 'Gms'} - ₹{variant.price}
+                                        {variant.originalPrice && variant.originalPrice > variant.price
+                                            ? ` (₹${variant.originalPrice})`
+                                            : ''}
                                     </option>
                                 ))}
                             </select>

@@ -1312,4 +1312,34 @@ function normalizeProductText(product: Product): Product {
     };
 }
 
-export const products: Product[] = rawProducts.map(normalizeProductText);
+function applySaffronDiscount(product: Product): Product {
+    if (product.id !== "kashmiri-saffron") return product;
+
+    const DISCOUNT = 0.2;
+    const applyDiscount = (original: number, current?: number) => {
+        const base = original;
+        const currentPrice = current && current < base ? current : Math.round(base * (1 - DISCOUNT));
+        return { original: base, current: currentPrice };
+    };
+
+    const base = applyDiscount(product.originalPrice ?? product.price, product.price);
+
+    return {
+        ...product,
+        price: base.current,
+        originalPrice: base.original,
+        variants: product.variants?.map((variant) => {
+            const v = applyDiscount(variant.originalPrice ?? variant.price, variant.price);
+            return {
+                ...variant,
+                price: v.current,
+                originalPrice: v.original,
+            };
+        }),
+        trustBadges: Array.from(
+            new Set([...(product.trustBadges ?? []), "limited-offer-20%-off"])
+        ),
+    };
+}
+
+export const products: Product[] = rawProducts.map(normalizeProductText).map(applySaffronDiscount);
