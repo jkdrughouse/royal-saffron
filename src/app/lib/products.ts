@@ -139,7 +139,7 @@ const rawProducts: Product[] = [
         id: 'macadamia-nuts-in-shell',
         name: 'Macadamia Nuts In Shell',
         price: 3000,
-        image: '/products/macadamia-nuts-in-shell.webp',
+        image: '/products/macadamia-nuts-in-shell-display.webp',
         category: 'Nuts',
         description: "Premium quality Macadamia Nuts In Shell from Jehlum Kesar Co.",
         detailedDescription: "Description Macadamia Nuts In Shell (Premium Whole Nuts) Macadamia Nuts In Shell are luxury-grade whole nuts , naturally protected inside their hard shell to lock in freshness, flavor, and nutrition . Known for their rich, buttery taste and smooth crunch , macadamias are among the most premium and nutritious nuts in the world. Keeping them in shell helps preserve their natural oils and quality , ensuring you enjoy the nut at its freshest once cracked. Why Choose Macadamia Nuts In Shell? 🥜 Naturally protected for longer freshness 🧈 Rich, buttery flavor with premium texture 💪 High in healthy monounsaturated fats 🌿 No processing, no additives ✨ Premium quality whole nuts Health Benefits Supports heart health Boosts energy & metabolism Rich in antioxidants, minerals & good fats Helps maintain skin & hair health Ideal for healthy snacking, gourmet cooking, gifting, or roasting at home , Macadamia Nuts In Shell offer a pure, premium nut experience straight from nature.",
@@ -153,7 +153,7 @@ const rawProducts: Product[] = [
             { icon: "💎", title: "Luxury Grade", description: "Premium whole nuts" },
         ],
         images: [
-            { type: 'hero', url: '/products/macadamia-nuts-in-shell.webp', alt: 'Whole macadamia nuts in shell' },
+            { type: 'hero', url: '/products/macadamia-nuts-in-shell-display.webp', alt: 'Packaged macadamia nuts in shell' },
         ],
         stockLevel: 'in-stock',
         stockCount: 18,

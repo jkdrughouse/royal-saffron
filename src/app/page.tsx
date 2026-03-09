@@ -73,29 +73,48 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8">
-            {featuredProducts.map((product) => (
-              <Link key={product.id} href={`/product/${product.id}`}>
-                <div className="group cursor-pointer">
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-pure-ivory mb-4 sm:mb-6 shadow-sm group-hover:shadow-md transition-all">
-                    <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
-                      <span className="bg-pure-ivory/90 backdrop-blur px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full">Threads</span>
+            {featuredProducts.map((product) => {
+              const hasDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
+              const discountPercent = hasDiscount && product.originalPrice
+                ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
+                : null;
+
+              return (
+                <Link key={product.id} href={`/product/${product.id}`}>
+                  <div className="group cursor-pointer">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-pure-ivory mb-4 sm:mb-6 shadow-sm group-hover:shadow-md transition-all">
+                      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10">
+                        <span className="bg-pure-ivory/90 backdrop-blur px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-bold tracking-widest uppercase rounded-full">Threads</span>
+                      </div>
+                      {discountPercent && (
+                        <div className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10">
+                          <span className="inline-flex items-center rounded-full bg-saffron-crimson/90 px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-semibold text-white shadow-sm backdrop-blur">
+                            {discountPercent}% discount · Limited offer
+                          </span>
+                        </div>
+                      )}
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
                     </div>
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                    />
+                    <div className="flex justify-between items-start gap-2">
+                      <h3 className="font-serif text-lg sm:text-xl text-ink-charcoal group-hover:text-saffron-crimson transition-colors flex-1 leading-tight">{product.name}</h3>
+                      <div className="flex flex-col items-end whitespace-nowrap">
+                        <span className="font-mono text-base sm:text-lg font-medium text-ink-charcoal">₹{product.price}</span>
+                        {hasDiscount && product.originalPrice && (
+                          <span className="text-xs text-deep-taupe line-through">₹{product.originalPrice}</span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-sm text-deep-taupe mt-2 line-clamp-2">{product.description}</p>
                   </div>
-                  <div className="flex justify-between items-start gap-2">
-                    <h3 className="font-serif text-lg sm:text-xl text-ink-charcoal group-hover:text-saffron-crimson transition-colors flex-1 leading-tight">{product.name}</h3>
-                    <span className="font-mono text-base sm:text-lg font-medium text-ink-charcoal whitespace-nowrap">₹{product.price}</span>
-                  </div>
-                  <p className="text-sm text-deep-taupe mt-2 line-clamp-2">{product.description}</p>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
