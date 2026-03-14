@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Instagram, Facebook, Twitter } from "lucide-react";
 import { useState } from "react";
+import { footerQuickLinks, getWhatsAppUrl, INSTAGRAM_URL } from "@/app/lib/site-metadata";
 
 export function Footer() {
     const [email, setEmail] = useState("");
@@ -38,26 +39,16 @@ export function Footer() {
                             Quick Links
                         </h3>
                         <ul className="space-y-3">
-                            <li>
-                                <Link href="/shop" className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors">
-                                    Shop All
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="#our-story" className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors">
-                                    Our Story
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/contact" className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors">
-                                    Contact Us
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/shipping" className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors">
-                                    Shipping & Returns
-                                </Link>
-                            </li>
+                            {footerQuickLinks.map((link) => (
+                                <li key={link.href}>
+                                    <Link
+                                        href={link.href}
+                                        className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors"
+                                    >
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
@@ -89,7 +80,7 @@ export function Footer() {
                         {/* Social Media Icons */}
                         <div className="flex gap-4">
                             <a
-                                href="https://www.instagram.com/jhelumkesar/"
+                                href={INSTAGRAM_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-secondary-foreground hover:text-secondary-foreground/80 transition-colors"
@@ -116,7 +107,7 @@ export function Footer() {
                                 <Twitter className="w-5 h-5" />
                             </a>
                             <a
-                                href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_PHONE?.replace(/\D/g, '') || '917889852247'}?text=${encodeURIComponent("Hello! I'm interested in Jhelum Kesar Co. products.")}`}
+                                href={getWhatsAppUrl()}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-secondary-foreground hover:text-[#25D366] transition-colors"

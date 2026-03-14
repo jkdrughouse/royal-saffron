@@ -10,6 +10,7 @@ import {
   Search, Printer, Plus, X
 } from "lucide-react";
 import { products } from "@/app/lib/products";
+import { summarizeOrderMetrics } from "@/app/lib/order-utils";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type OrderStatus = "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
@@ -21,6 +22,19 @@ interface Order {
   shipping: number; discount?: number; total: number; status: OrderStatus;
   shippingAddress: Address; trackingNumber?: string; courierService?: string;
   createdAt: string; updatedAt: string; type?: string; paymentMethod?: string;
+  guestEmail?: string;
+}
+interface CustomerRow {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  source?: "account" | "guest" | "offline";
+  orderCount?: number;
+  totalSpend?: number;
+  lastOrderId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
@@ -33,9 +47,15 @@ const STATUS_COLORS: Record<OrderStatus, string> = {
 };
 
 const STATUS_TABS = ["all", "pending", "confirmed", "processing", "shipped", "delivered", "cancelled"] as const;
+const CUSTOMER_SOURCE_LABELS = {
+  account: "Account",
+  guest: "Guest",
+  offline: "Offline",
+} as const;
 
 // ── POS Form ─────────────────────────────────────────────────────────────────
 function POSForm({ onSuccess }: { onSuccess: (orderId: string) => void }) {
+  const [productSearch, setProductSearch] = useState("");
   const [selectedProductId, setSelectedProductId] = useState("");
   const [selectedVariantIdx, setSelectedVariantIdx] = useState(0);
   const [qty, setQty] = useState(1);
@@ -50,6 +70,15 @@ function POSForm({ onSuccess }: { onSuccess: (orderId: string) => void }) {
 
   const selectedProduct = products.find(p => p.id === selectedProductId);
   const variants = selectedProduct?.variants ?? [];
+  const filteredProducts = useMemo(() => {
+    const query = productSearch.trim().toLowerCase();
+    if (!query) return products;
+    return products.filter(product =>
+      product.name.toLowerCase().includes(query) ||
+      product.category.toLowerCase().includes(query) ||
+      product.description.toLowerCase().includes(query)
+    );
+  }, [productSearch]);
   const unitPrice = variants.length > 0
     ? variants[selectedVariantIdx]?.price ?? selectedProduct?.price ?? 0
     : selectedProduct?.price ?? 0;
@@ -73,7 +102,7 @@ function POSForm({ onSuccess }: { onSuccess: (orderId: string) => void }) {
       if (existing) return prev.map(i => `${i.name}-${i.variant}` === key ? { ...i, quantity: i.quantity + qty } : i);
       return [...prev, item];
     });
-    setSelectedProductId(""); setSelectedVariantIdx(0); setQty(1);
+    setProductSearch(""); setSelectedProductId(""); setSelectedVariantIdx(0); setQty(1);
   }
 
   async function handleSubmit() {
@@ -123,16 +152,29 @@ function POSForm({ onSuccess }: { onSuccess: (orderId: string) => void }) {
         <CardContent className="pt-4 space-y-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Add Products</p>
 
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              className="w-full text-sm border rounded-lg pl-9 pr-3 py-2"
+              placeholder="Search product by name or category..."
+              value={productSearch}
+              onChange={e => setProductSearch(e.target.value)}
+            />
+          </div>
+
           <select
             className="w-full text-sm border rounded-lg px-3 py-2"
             value={selectedProductId}
             onChange={e => { setSelectedProductId(e.target.value); setSelectedVariantIdx(0); }}
           >
             <option value="">— Select product —</option>
-            {products.map(p => (
-              <option key={p.id} value={p.id}>{p.name} · ₹{p.price}</option>
+            {filteredProducts.map(p => (
+              <option key={p.id} value={p.id}>{p.name} · {p.category} · ₹{p.price}</option>
             ))}
           </select>
+          <p className="text-xs text-muted-foreground">
+            {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""} in the dropdown
+          </p>
 
           {selectedProduct && variants.length > 0 && (
             <select
@@ -280,13 +322,13 @@ function POSForm({ onSuccess }: { onSuccess: (orderId: string) => void }) {
 export default function AdminDashboard() {
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [totalUsers, setTotalUsers] = useState(0);
+  const [totalCustomers, setTotalCustomers] = useState(0);
   const [loading, setLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
   const [savingOrderId, setSavingOrderId] = useState<string | null>(null);
   const [trackingEdits, setTrackingEdits] = useState<Record<string, { trackingNumber: string; courierService: string }>>({});
   const [activeTab, setActiveTab] = useState<"orders" | "users" | "new-sale">("orders");
-  const [users, setUsers] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<CustomerRow[]>([]);
   // Filter state
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | OrderStatus>("all");
@@ -300,15 +342,15 @@ export default function AdminDashboard() {
     setLoading(true);
     try {
       const [ordersRes, usersRes] = await Promise.all([
-        fetch("/api/admin/orders"),
-        fetch("/api/admin/users"),
+        fetch("/api/admin/orders", { cache: "no-store" }),
+        fetch("/api/admin/users", { cache: "no-store" }),
       ]);
       if (ordersRes.status === 401 || usersRes.status === 401) { router.replace("/admin/login"); return; }
       const ordersData = await ordersRes.json();
       const usersData = await usersRes.json();
       setOrders(ordersData.orders || []);
-      setTotalUsers(usersData.total || 0);
-      setUsers(usersData.users || []);
+      setTotalCustomers(usersData.total || 0);
+      setCustomers(usersData.users || []);
     } catch (err) { console.error("Failed to load dashboard data:", err); }
     finally { setLoading(false); }
   }, [router]);
@@ -328,7 +370,9 @@ export default function AdminDashboard() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
-      if (res.ok) await loadData();
+      if (!res.ok) return;
+      const data = await res.json();
+      setOrders(prev => prev.map(order => order.id === orderId ? data.order : order));
     } finally { setSavingOrderId(null); }
   };
 
@@ -347,11 +391,12 @@ export default function AdminDashboard() {
     return list;
   }, [orders, statusFilter, searchQuery]);
 
+  const orderMetrics = useMemo(() => summarizeOrderMetrics(orders), [orders]);
   const stats = {
     totalOrders: orders.length,
-    totalRevenue: orders.filter(o => o.status !== "cancelled").reduce((s, o) => s + o.total, 0),
-    pendingOrders: orders.filter(o => ["pending", "confirmed", "processing"].includes(o.status)).length,
-    totalUsers,
+    recognizedRevenue: orderMetrics.recognizedRevenue,
+    openSalesValue: orderMetrics.openSalesValue,
+    totalCustomers,
   };
 
   if (loading) {
@@ -385,11 +430,11 @@ export default function AdminDashboard() {
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { label: "Total Orders", value: stats.totalOrders, icon: ShoppingBag, color: "text-blue-600" },
-            { label: "Revenue", value: `₹${stats.totalRevenue.toLocaleString("en-IN")}`, icon: TrendingUp, color: "text-green-600" },
-            { label: "Pending", value: stats.pendingOrders, icon: Package, color: "text-amber-600" },
-            { label: "Customers", value: stats.totalUsers, icon: Users, color: "text-purple-600" },
-          ].map(({ label, value, icon: Icon, color }) => (
+            { label: "Total Orders", value: stats.totalOrders, note: `${orderMetrics.cancelledOrders} cancelled`, icon: ShoppingBag, color: "text-blue-600" },
+            { label: "Net Revenue", value: `₹${stats.recognizedRevenue.toLocaleString("en-IN")}`, note: "Delivered web + non-cancelled POS", icon: TrendingUp, color: "text-green-600" },
+            { label: "Open Sales", value: `₹${stats.openSalesValue.toLocaleString("en-IN")}`, note: `${orderMetrics.openSalesCount} online orders in pipeline`, icon: Package, color: "text-amber-600" },
+            { label: "Customers", value: stats.totalCustomers, note: "Accounts, guests, and offline", icon: Users, color: "text-purple-600" },
+          ].map(({ label, value, note, icon: Icon, color }) => (
             <Card key={label}>
               <CardContent className="pt-4 pb-4">
                 <div className="flex items-center justify-between mb-1">
@@ -397,17 +442,21 @@ export default function AdminDashboard() {
                   <Icon className={`w-4 h-4 ${color}`} />
                 </div>
                 <p className="text-xl sm:text-2xl font-bold">{value}</p>
+                <p className="text-xs text-muted-foreground mt-1">{note}</p>
               </CardContent>
             </Card>
           ))}
         </div>
+        <p className="text-xs text-muted-foreground">
+          Cancelled value excluded from revenue: ₹{orderMetrics.cancelledValue.toLocaleString("en-IN")}
+        </p>
 
         {/* Tabs */}
         <div className="flex gap-2 border-b">
           {([
             { id: "orders", label: `Orders (${orders.length})` },
             { id: "new-sale", label: "New Sale" },
-            { id: "users", label: `Customers (${totalUsers})` },
+            { id: "users", label: `Customers (${totalCustomers})` },
           ] as const).map(tab => (
             <button
               key={tab.id}
@@ -568,7 +617,7 @@ export default function AdminDashboard() {
                             </p>
                             <div className="flex items-center gap-2">
                               <select
-                                defaultValue={order.status}
+                                value={order.status}
                                 onChange={e => updateOrder(order.id, { status: e.target.value as OrderStatus })}
                                 className="flex-1 text-sm border rounded-lg px-3 py-2 bg-white"
                                 disabled={savingOrderId === order.id}
@@ -622,7 +671,7 @@ export default function AdminDashboard() {
               <h2 className="text-base font-semibold">New Walk-in / Phone Sale</h2>
               <p className="text-sm text-muted-foreground">Add products, enter customer details, and create an offline order with a printable receipt.</p>
             </div>
-            <POSForm onSuccess={(id) => { loadData(); }} />
+            <POSForm onSuccess={() => { void loadData(); }} />
           </div>
         )}
 
@@ -635,21 +684,34 @@ export default function AdminDashboard() {
                   <thead>
                     <tr className="border-b text-left text-muted-foreground text-xs">
                       <th className="py-2 pr-4 font-medium">Name</th>
-                      <th className="py-2 pr-4 font-medium">Email</th>
-                      <th className="py-2 pr-4 font-medium">Phone</th>
-                      <th className="py-2 font-medium">Joined</th>
+                      <th className="py-2 pr-4 font-medium">Source</th>
+                      <th className="py-2 pr-4 font-medium">Contact</th>
+                      <th className="py-2 pr-4 font-medium">Orders</th>
+                      <th className="py-2 pr-4 font-medium">Spend</th>
+                      <th className="py-2 font-medium">Recent Activity</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {users.length === 0 ? (
-                      <tr><td colSpan={4} className="py-8 text-center text-muted-foreground">No users yet</td></tr>
-                    ) : users.map(u => (
-                      <tr key={u.id} className="border-b last:border-0 hover:bg-muted/20">
-                        <td className="py-2 pr-4 font-medium">{u.name}</td>
-                        <td className="py-2 pr-4 text-muted-foreground">{u.email}</td>
-                        <td className="py-2 pr-4 text-muted-foreground">{u.phone}</td>
+                    {customers.length === 0 ? (
+                      <tr><td colSpan={6} className="py-8 text-center text-muted-foreground">No customers yet</td></tr>
+                    ) : customers.map(customer => (
+                      <tr key={customer.id} className="border-b last:border-0 hover:bg-muted/20">
+                        <td className="py-2 pr-4 font-medium">{customer.name}</td>
+                        <td className="py-2 pr-4">
+                          <span className="inline-flex rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                            {CUSTOMER_SOURCE_LABELS[(customer.source || "guest") as keyof typeof CUSTOMER_SOURCE_LABELS] || "Guest"}
+                          </span>
+                        </td>
+                        <td className="py-2 pr-4 text-muted-foreground">
+                          <div>{customer.email || "—"}</div>
+                          <div>{customer.phone || "—"}</div>
+                        </td>
+                        <td className="py-2 pr-4 text-muted-foreground">{customer.orderCount ?? 0}</td>
+                        <td className="py-2 pr-4 text-muted-foreground">₹{(customer.totalSpend ?? 0).toLocaleString("en-IN")}</td>
                         <td className="py-2 text-muted-foreground">
-                          {u.createdAt ? new Date(u.createdAt).toLocaleDateString("en-IN") : "—"}
+                          {customer.lastOrderId ? (
+                            <span className="font-mono text-xs">{customer.lastOrderId}</span>
+                          ) : customer.createdAt ? new Date(customer.createdAt).toLocaleDateString("en-IN") : "—"}
                         </td>
                       </tr>
                     ))}

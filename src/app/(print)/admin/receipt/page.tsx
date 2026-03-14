@@ -77,10 +77,36 @@ function pickMessage(itemNames: string[]): string {
 
 export const metadata: Metadata = { title: "JKC Receipt" };
 
+type ReceiptOrder = {
+    id: string;
+    type?: string;
+    paymentMethod?: string;
+    subtotal?: number;
+    discount?: number;
+    shipping?: number;
+    total?: number;
+    shippingAddress: {
+        name: string;
+        phone: string;
+        address: string;
+        city: string;
+        state: string;
+        pincode: string;
+    };
+    items: Array<{
+        name: string;
+        price: number;
+        quantity: number;
+        variant?: number;
+        unit?: string;
+    }>;
+    createdAt: string;
+};
+
 // Fetch the order server-side
 async function getOrder(orderId: string) {
-    const orders = await DB.orders();
-    return orders.find((o: any) => o.id === orderId) ?? null;
+    const orders = await DB.orders<ReceiptOrder>();
+    return orders.find((order) => order.id === orderId) ?? null;
 }
 
 function formatDate(iso: string) {

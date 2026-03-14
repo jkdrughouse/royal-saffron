@@ -9,18 +9,29 @@ import { DB } from "@/app/lib/db";
 const client = new MongoClient(process.env.MONGODB_URI!);
 const clientPromise = client.connect();
 
+const providers: NextAuthOptions["providers"] = [];
+
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+    providers.push(
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        })
+    );
+}
+
+if (process.env.FACEBOOK_CLIENT_ID && process.env.FACEBOOK_CLIENT_SECRET) {
+    providers.push(
+        FacebookProvider({
+            clientId: process.env.FACEBOOK_CLIENT_ID,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        })
+    );
+}
+
 export const authOptions: NextAuthOptions = {
     adapter: MongoDBAdapter(clientPromise, { databaseName: "jkc_store" }) as any,
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-        }),
-        FacebookProvider({
-            clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
-            clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
-        }),
-    ],
+    providers,
     pages: {
         signIn: "/login",
         error: "/login",

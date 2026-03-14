@@ -106,7 +106,7 @@ export function MobileMenu() {
 
             {/* Our Story */}
             <Link
-              href="/#our-story"
+              href="/our-story"
               onClick={closeMenu}
               className="flex items-center gap-4 px-6 py-4 text-base font-medium text-gray-800 hover:text-red-600 hover:bg-gray-50 transition-colors border-b border-gray-100"
               style={{ display: 'flex', visibility: 'visible' }}

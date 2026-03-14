@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { hashPassword, generateToken } from '@/app/lib/auth';
+import { CustomerRecord, upsertCustomerRecord } from '@/app/lib/customer-utils';
 
 interface User {
   id: string;
@@ -88,6 +89,22 @@ export async function POST(request: NextRequest) {
 
     users.push(newUser);
     await DB.saveUsers(users);
+
+    try {
+      const customers = await DB.customers<CustomerRecord>();
+      const { customers: nextCustomers } = upsertCustomerRecord(customers, {
+        source: 'account',
+        linkedUserId: newUser.id,
+        name: newUser.name,
+        email: newUser.email,
+        phone: newUser.phone,
+        createdAt: newUser.createdAt,
+        updatedAt: newUser.createdAt,
+      });
+      await DB.saveCustomers(nextCustomers);
+    } catch (customerError) {
+      console.error('Customer sync failed after registration:', customerError);
+    }
 
     // Generate token and set cookie
     const token = generateToken({

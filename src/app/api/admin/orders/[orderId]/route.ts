@@ -3,6 +3,21 @@ import { DB } from '@/app/lib/db';
 import { getAdminSession } from '../../me/route';
 import { sendEmail, getOrderStatusUpdateEmailHTML } from '@/app/lib/email';
 
+type StoredOrder = {
+    id: string;
+    userId: string;
+    guestEmail?: string;
+    status?: string;
+    trackingNumber?: string;
+    courierService?: string;
+    updatedAt?: string;
+};
+
+type StoredUser = {
+    id: string;
+    email?: string;
+};
+
 export async function PUT(
     request: NextRequest,
     { params }: { params: Promise<{ orderId: string }> }
@@ -14,10 +29,10 @@ export async function PUT(
 
     try {
         const { status, trackingNumber, courierService } = await request.json();
-        const orders: any[] = await DB.orders();
-        const users: any[] = await DB.users();
+        const orders = await DB.orders<StoredOrder>();
+        const users = await DB.users<StoredUser>();
 
-        const orderIndex = orders.findIndex((o: any) => o.id === orderId);
+        const orderIndex = orders.findIndex((order) => order.id === orderId);
         if (orderIndex === -1) {
             return NextResponse.json({ error: 'Order not found' }, { status: 404 });
         }
@@ -37,11 +52,12 @@ export async function PUT(
 
         // Send email notification if status changed
         if (status && status !== previousStatus) {
-            const user = users.find((u: any) => u.id === order.userId);
-            if (user?.email) {
+            const user = users.find((storedUser) => storedUser.id === order.userId);
+            const notificationEmail = user?.email || order.guestEmail;
+            if (notificationEmail) {
                 try {
                     await sendEmail({
-                        to: user.email,
+                        to: notificationEmail,
                         subject: `Order Update #${order.id} - Jhelum Kesar Co.`,
                         html: getOrderStatusUpdateEmailHTML({
                             id: order.id,

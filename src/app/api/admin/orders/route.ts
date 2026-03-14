@@ -1,6 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { getAdminSession } from '../me/route';
+
+type AdminOrderSummary = {
+    createdAt?: string;
+};
 
 // GET all orders (admin only)
 export async function GET() {
@@ -8,12 +12,15 @@ export async function GET() {
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
-        const orders = await DB.orders();
-        orders.sort((a: any, b: any) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        const orders = await DB.orders<AdminOrderSummary>();
+        orders.sort((a, b) =>
+            new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime()
         );
-        return NextResponse.json({ orders });
+        return NextResponse.json({ orders }, {
+            headers: { 'Cache-Control': 'no-store' },
+        });
     } catch (error) {
+        console.error('Admin orders fetch error:', error);
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

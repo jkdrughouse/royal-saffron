@@ -1,6 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DB } from '@/app/lib/db';
 import { getAdminSession } from '../../me/route';
+import { CustomerRecord, upsertCustomerRecord } from '@/app/lib/customer-utils';
+import { generateReadableOrderId } from '@/app/lib/order-utils';
+
+type OfflineOrderItem = {
+    name: string;
+    price: number;
+    quantity: number;
+    variant?: number;
+    unit?: string;
+};
+
+type OfflineCustomerAddress = {
+    address?: string;
+    city?: string;
+    state?: string;
+    pincode?: string;
+};
+
+type ExistingOrder = {
+    id?: string;
+};
 
 // POST /api/admin/orders/offline — create a walk-in / phone POS order
 export async function POST(request: NextRequest) {
@@ -8,25 +29,27 @@ export async function POST(request: NextRequest) {
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     try {
-        const body = await request.json();
+        const body = await request.json() as {
+            customerName?: string;
+            customerPhone?: string;
+            customerAddress?: OfflineCustomerAddress;
+            items?: OfflineOrderItem[];
+            paymentMethod?: 'cash' | 'upi' | 'card';
+            discount?: number;
+        };
         const { customerName, customerPhone, customerAddress, items, paymentMethod, discount } = body;
 
         if (!customerName || !customerPhone || !items?.length) {
             return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
         }
 
-        // Generate unique OFFLINE order ID: OFFLINE-YYYYMMDD-XXXX
         const now = new Date();
-        const datePart = now.toISOString().slice(0, 10).replace(/-/g, '');
-        const orders = await DB.orders();
-        const todayOfflineCount = orders.filter((o: any) =>
-            o.id?.startsWith(`OFFLINE-${datePart}`)
-        ).length;
-        const seq = String(todayOfflineCount + 1).padStart(4, '0');
-        const orderId = `OFFLINE-${datePart}-${seq}`;
+        const nowIso = now.toISOString();
+        const orders = await DB.orders<ExistingOrder>();
+        const orderId = generateReadableOrderId(orders, 'offline', now);
 
         // Calculate totals
-        const subtotal = items.reduce((sum: number, item: any) =>
+        const subtotal = items.reduce((sum: number, item: OfflineOrderItem) =>
             sum + (item.price * item.quantity), 0
         );
         const discountAmount = discount ?? 0;
@@ -51,14 +74,30 @@ export async function POST(request: NextRequest) {
                 state: customerAddress?.state ?? '',
                 pincode: customerAddress?.pincode ?? '',
             },
-            createdAt: now.toISOString(),
-            updatedAt: now.toISOString(),
+            createdAt: nowIso,
+            updatedAt: nowIso,
         };
 
         // Append to existing orders and persist
-        const allOrders = await DB.orders();
-        allOrders.push(newOrder);
-        await DB.saveOrders(allOrders);
+        orders.push(newOrder);
+        await DB.saveOrders(orders);
+
+        try {
+            const customers = await DB.customers<CustomerRecord>();
+            const { customers: nextCustomers } = upsertCustomerRecord(customers, {
+                source: 'offline',
+                name: customerName,
+                phone: customerPhone,
+                shippingAddress: newOrder.shippingAddress,
+                orderId,
+                orderTotal: total,
+                orderCreatedAt: nowIso,
+                createdAt: nowIso,
+            });
+            await DB.saveCustomers(nextCustomers);
+        } catch (customerError) {
+            console.error('Offline customer sync failed:', customerError);
+        }
 
         return NextResponse.json({ order: newOrder }, { status: 201 });
     } catch (error) {

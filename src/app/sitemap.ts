@@ -1,15 +1,18 @@
 import type { MetadataRoute } from "next";
 import { products } from "@/app/lib/products";
+import { SITE_URL } from "@/app/lib/site-metadata";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://jhelumkesarco.com";
+  const baseUrl = SITE_URL;
 
   const staticRoutes: MetadataRoute.Sitemap = [
     "",
     "/shop",
+    "/categories",
     "/our-story",
     "/contact",
     "/shipping",
+    "/whatsapp",
   ].map((path) => ({
     url: `${baseUrl}${path || "/"}`,
     lastModified: new Date(),
@@ -26,4 +29,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [...staticRoutes, ...productRoutes];
 }
-

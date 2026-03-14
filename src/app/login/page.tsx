@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useEffect, useMemo, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { signIn } from "next-auth/react";
+import { getProviders, signIn } from "next-auth/react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -31,11 +31,37 @@ function FacebookIcon() {
   );
 }
 
+type SocialProviderId = "google" | "facebook";
+type ProviderMap = Awaited<ReturnType<typeof getProviders>>;
+
+const AUTH_ERROR_MESSAGES: Record<string, string> = {
+  AccessDenied: "Access was denied. Please try again or use email sign-in.",
+  Callback: "The sign-in callback did not complete. Please try again.",
+  Configuration: "Social sign-in is not configured yet. Please use email sign-in for now.",
+  OAuthAccountNotLinked: "This email is already linked to another sign-in method. Try email sign-in first.",
+  OAuthCallback: "The provider redirected back with an error. Please try again.",
+  OAuthCreateAccount: "We could not create your social login account. Please try again.",
+  OAuthSignin: "We could not start the social sign-in flow. Please try again.",
+  SessionRequired: "Please sign in to continue.",
+};
+
+function getAuthErrorMessage(errorCode: string | null) {
+  if (!errorCode) {
+    return "";
+  }
+
+  return AUTH_ERROR_MESSAGES[errorCode] || "Sign-in failed. Please try again or use email sign-in.";
+}
+
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
   const redirect = searchParams.get("redirect") || "/orders";
+  const oauthError = useMemo(
+    () => getAuthErrorMessage(searchParams.get("error")),
+    [searchParams]
+  );
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -45,13 +71,43 @@ function LoginForm() {
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [socialLoading, setSocialLoading] = useState<string | null>(null);
+  const [socialLoading, setSocialLoading] = useState<SocialProviderId | null>(null);
+  const [socialError, setSocialError] = useState("");
+  const [providers, setProviders] = useState<ProviderMap>(null);
+  const [providersLoading, setProvidersLoading] = useState(true);
 
-  const handleSocialLogin = async (provider: "google" | "facebook") => {
+  useEffect(() => {
+    let isActive = true;
+
+    void getProviders()
+      .then((nextProviders) => {
+        if (!isActive) return;
+        setProviders(nextProviders);
+        setProvidersLoading(false);
+      })
+      .catch(() => {
+        if (!isActive) return;
+        setSocialError("Social sign-in is temporarily unavailable. Please use email sign-in.");
+        setProvidersLoading(false);
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  const handleSocialLogin = async (provider: SocialProviderId) => {
+    if (!providers?.[provider]) {
+      setSocialError("That sign-in option is not available right now. Please use email sign-in.");
+      return;
+    }
+
+    setSocialError("");
     setSocialLoading(provider);
     try {
       await signIn(provider, { callbackUrl: redirect });
     } catch {
+      setSocialError("We could not start the social sign-in flow. Please try again.");
       setSocialLoading(null);
     }
   };
@@ -115,31 +171,51 @@ function LoginForm() {
         </div>
 
         {/* ── Social Login (optional) ─────────────────────────────── */}
-        <div className="space-y-3 mb-5">
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full flex items-center justify-center gap-3 py-5 border border-soft-silk-border bg-white hover:bg-gray-50 text-ink-charcoal font-medium text-sm transition-all"
-            onClick={() => handleSocialLogin("google")}
-            disabled={!!socialLoading}
-            id="btn-social-google"
-          >
-            <GoogleIcon />
-            {socialLoading === "google" ? "Connecting…" : "Continue with Google"}
-          </Button>
+        {(oauthError || socialError) && (
+          <div className="mb-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            {oauthError || socialError}
+          </div>
+        )}
 
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full flex items-center justify-center gap-3 py-5 border border-soft-silk-border bg-white hover:bg-blue-50 text-ink-charcoal font-medium text-sm transition-all"
-            onClick={() => handleSocialLogin("facebook")}
-            disabled={!!socialLoading}
-            id="btn-social-facebook"
-          >
-            <FacebookIcon />
-            {socialLoading === "facebook" ? "Connecting…" : "Continue with Facebook"}
-          </Button>
-        </div>
+        {providersLoading ? (
+          <div className="mb-5 rounded-lg border border-soft-silk-border bg-muted/20 px-4 py-3 text-sm text-deep-taupe">
+            Checking available sign-in options…
+          </div>
+        ) : providers?.google || providers?.facebook ? (
+          <div className="space-y-3 mb-5">
+            {providers?.google && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full flex items-center justify-center gap-3 py-5 border border-soft-silk-border bg-white hover:bg-gray-50 text-ink-charcoal font-medium text-sm transition-all"
+                onClick={() => handleSocialLogin("google")}
+                disabled={!!socialLoading}
+                id="btn-social-google"
+              >
+                <GoogleIcon />
+                {socialLoading === "google" ? "Connecting…" : "Continue with Google"}
+              </Button>
+            )}
+
+            {providers?.facebook && (
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full flex items-center justify-center gap-3 py-5 border border-soft-silk-border bg-white hover:bg-blue-50 text-ink-charcoal font-medium text-sm transition-all"
+                onClick={() => handleSocialLogin("facebook")}
+                disabled={!!socialLoading}
+                id="btn-social-facebook"
+              >
+                <FacebookIcon />
+                {socialLoading === "facebook" ? "Connecting…" : "Continue with Facebook"}
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="mb-5 rounded-lg border border-soft-silk-border bg-muted/20 px-4 py-3 text-sm text-deep-taupe">
+            Google and Facebook sign-in are not configured yet. Please use email sign-in below.
+          </div>
+        )}
 
         {/* Divider */}
         <div className="relative mb-5">
@@ -268,6 +344,7 @@ function LoginForm() {
               onClick={() => {
                 setIsLogin(!isLogin);
                 setError("");
+                setSocialError("");
                 setFormData({ name: "", email: "", phone: "", password: "", confirmPassword: "" });
               }}
               className="text-saffron-crimson hover:text-estate-gold text-sm font-medium transition-colors"

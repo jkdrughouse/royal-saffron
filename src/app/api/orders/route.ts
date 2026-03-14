@@ -3,6 +3,8 @@ import { DB } from '@/app/lib/db';
 import { getCurrentUser } from '@/app/lib/auth';
 import { sendEmail, getOrderConfirmationEmailHTML } from '@/app/lib/email';
 import { products } from '@/app/lib/products';
+import { CustomerRecord, upsertCustomerRecord } from '@/app/lib/customer-utils';
+import { generateReadableOrderId } from '@/app/lib/order-utils';
 
 export interface OrderItem {
   productId: string;
@@ -18,6 +20,7 @@ export interface Order {
   id: string;
   userId: string;
   guestEmail?: string;
+  type?: 'online' | 'offline';
   items: OrderItem[];
   subtotal: number;
   shipping: number;
@@ -83,12 +86,16 @@ export async function POST(request: NextRequest) {
     );
     const shipping = subtotal >= 1000 ? 0 : 50;
     const total = subtotal + shipping;
+    const now = new Date();
+    const nowIso = now.toISOString();
+    const orders: Order[] = await DB.orders();
 
     // Create order
     const order: Order = {
-      id: `ORD${Date.now()}${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+      id: generateReadableOrderId(orders, 'online', now),
       userId: user?.id || 'guest',
       guestEmail: user ? undefined : guestEmail,
+      type: 'online',
       items: enrichedItems,
       subtotal,
       shipping,
@@ -96,13 +103,32 @@ export async function POST(request: NextRequest) {
       status: 'pending',
       shippingAddress,
       billingAddress,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      createdAt: nowIso,
+      updatedAt: nowIso,
     };
 
-    const orders: Order[] = await DB.orders();
     orders.push(order);
     await DB.saveOrders(orders);
+
+    try {
+      const customers = await DB.customers<CustomerRecord>();
+      const { customers: nextCustomers } = upsertCustomerRecord(customers, {
+        source: user ? 'account' : 'guest',
+        linkedUserId: user?.id,
+        name: shippingAddress.name || user?.name,
+        email: user?.email || guestEmail,
+        phone: shippingAddress.phone || undefined,
+        shippingAddress,
+        billingAddress,
+        orderId: order.id,
+        orderTotal: order.total,
+        orderCreatedAt: order.createdAt,
+        createdAt: user ? nowIso : order.createdAt,
+      });
+      await DB.saveCustomers(nextCustomers);
+    } catch (customerError) {
+      console.error('Customer sync failed after order creation:', customerError);
+    }
 
     // Send order confirmation email
     try {
@@ -127,7 +153,7 @@ export async function POST(request: NextRequest) {
 }
 
 // Get user's orders
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const user = await getCurrentUser();
 
